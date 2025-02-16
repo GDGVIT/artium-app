@@ -8,7 +8,7 @@ class Account extends StatefulWidget {
   const Account({super.key});
 
   @override
-  _AccountState createState() => _AccountState();
+  State<Account> createState() => _AccountState();
 }
 
 class _AccountState extends State<Account> {
@@ -37,7 +37,7 @@ class _AccountState extends State<Account> {
                 const SizedBox(height: 10.0),
                 _buildPageIndicators(),
                 const SizedBox(height: 10.0),
-                _buildPageView(), 
+                _buildPageView(),
               ],
             ),
           ),
@@ -258,7 +258,6 @@ class _AccountState extends State<Account> {
     );
   }
 
-
   // Build the grid for gallery items
   Widget _buildGrid() {
     final List<String> imagePaths = [
@@ -476,7 +475,7 @@ class _GalleryContainer extends StatelessWidget {
         height: extent,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          color: const Color(0xFFF0D0B0A),
+          color: const Color(0x000d0b0a),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

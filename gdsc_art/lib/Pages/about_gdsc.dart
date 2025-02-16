@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../Constants/Colors.dart';
+import '../Constants/colors.dart';
 
 class AboutGDSC extends StatelessWidget {
+  const AboutGDSC({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Container(
           color: CustomColors.primaryBlack,
           child: const Center(

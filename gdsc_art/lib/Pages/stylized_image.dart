@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../Constants/Colors.dart';
+import '../Constants/colors.dart';
 
 class StylizedImage extends StatefulWidget {
+  const StylizedImage({super.key});
+
   @override
   _SelectImagePageState createState() => _SelectImagePageState();
 }
@@ -30,7 +32,7 @@ class _SelectImagePageState extends State<StylizedImage> {
     bool isImageSelected = _image != null;
 
     return Scaffold(
-      backgroundColor: Color(0xFF1B1A1A),
+      backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
@@ -77,17 +79,17 @@ class _SelectImagePageState extends State<StylizedImage> {
                     borderRadius: BorderRadius.circular(12.0),
                     child: Container(
                       height: 350,
-                      color: Color(0xFF333333),
+                      color: const Color(0xFF333333),
                     )),
                 const SizedBox(height: 20),
                 Container(
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: Color(0xFF202020),
+                      color: const Color(0xFF202020),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Container(
-                      color: Color(0xFF202020),
+                      color: const Color(0xFF202020),
                       child: Column(
                         children: [
                           const Align(
@@ -100,32 +102,30 @@ class _SelectImagePageState extends State<StylizedImage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Container(
-                            child: TextField(
-                              controller: _imageName,
-                              decoration: InputDecoration(
-                                hintText: "Enter a Name",
-                                hintStyle: const TextStyle(
-                                  color: CustomColors.primaryBrown,
-                                  fontFamily: "OutfitRegular",
-                                ),
-                                filled: true,
-                                fillColor: Color(0xFF363333),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 14.0, horizontal: 16.0),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              style: const TextStyle(
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: _imageName,
+                            decoration: InputDecoration(
+                              hintText: "Enter a Name",
+                              hintStyle: const TextStyle(
                                 color: CustomColors.primaryBrown,
                                 fontFamily: "OutfitRegular",
                               ),
+                              filled: true,
+                              fillColor: const Color(0xFF363333),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 14.0, horizontal: 16.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            style: const TextStyle(
+                              color: CustomColors.primaryBrown,
+                              fontFamily: "OutfitRegular",
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (_publishedClicked)
@@ -164,7 +164,7 @@ class _SelectImagePageState extends State<StylizedImage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           foregroundColor: CustomColors.primaryCream,
-                          side: BorderSide(color: CustomColors.primaryCream),
+                          side: const BorderSide(color: CustomColors.primaryCream),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),

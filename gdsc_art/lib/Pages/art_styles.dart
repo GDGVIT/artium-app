@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 
 class ArtStylesPage extends StatelessWidget {
+  const ArtStylesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Art Styles',
+        title: const Text('Art Styles',
             style: TextStyle(color: Colors.white, fontFamily: "OutfitMedium")),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
           itemCount: 6,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 8.0,
@@ -33,13 +35,13 @@ class ArtStylesPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: Container(
-                  margin: EdgeInsets.all(6),
+                  margin: const EdgeInsets.all(6),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(
+                          borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(16.0),
                           ),
                           child: Image.asset(
@@ -57,7 +59,7 @@ class ArtStylesPage extends StatelessWidget {
                               ? 'Post - Impressionism'
                               : 'Abstractism',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontFamily: "OutfitMedium",

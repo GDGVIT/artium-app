@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import '../Constants/Colors.dart';
+import '../Constants/colors.dart';
 
 class Gallery extends StatelessWidget {
   const Gallery({super.key});
@@ -71,19 +71,19 @@ class Gallery extends StatelessWidget {
 class GalleryContainer extends StatefulWidget {
   final String imagePath;
   final String title;
-  final String name; 
+  final String name;
   final double extent;
 
   const GalleryContainer({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.name,
     required this.extent,
-  }) : super(key: key);
+  });
 
   @override
-  _GalleryContainerState createState() => _GalleryContainerState();
+  State<GalleryContainer> createState() => _GalleryContainerState();
 }
 
 class _GalleryContainerState extends State<GalleryContainer> {
@@ -133,14 +133,14 @@ class _GalleryContainerState extends State<GalleryContainer> {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 10.0, 
+                        radius: 10.0,
                         backgroundColor: CustomColors.primaryWhite,
                         child: Text(
                           widget.name.substring(0, 1),
                           style: const TextStyle(
                             color: CustomColors.primaryBlack,
                             fontFamily: "OutfitBold",
-                            fontSize: 12, 
+                            fontSize: 12,
                           ),
                         ),
                       ),

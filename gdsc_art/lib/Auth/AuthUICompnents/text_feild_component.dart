@@ -6,7 +6,7 @@ class TextFieldComponent extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
 
-  TextFieldComponent({
+  const TextFieldComponent({super.key, 
     required this.labelText,
     required this.controller,
     this.obscureText = false,

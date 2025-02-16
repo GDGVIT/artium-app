@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../Constants/Colors.dart';
+import '../../Constants/colors.dart';
 
 class ToggleSection extends StatelessWidget {
   final bool isLogin;

@@ -6,7 +6,7 @@ class ArtStyleInfoBox extends StatelessWidget {
   final String description;
   final VoidCallback onPressed;
 
-  ArtStyleInfoBox({
+  const ArtStyleInfoBox({super.key, 
     required this.title,
     required this.description,
     required this.onPressed,

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/LoginSingupToogle.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/AuthBtn.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/TextFeildComponent.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/login_signup_toggle.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_btn.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/text_feild_component.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
-import 'package:gdsc_artwork/Constants/commonToast.dart';
+import 'package:gdsc_artwork/Constants/common_toast.dart';
 import 'package:gdsc_artwork/ViewModel/login_and_signup_provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleView;
 
-  LoginPage({required this.toggleView});
+  const LoginPage({super.key, required this.toggleView});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 35.0),
+              const SizedBox(height: 35.0),
               ToggleSection(isLogin: true, toggleView: widget.toggleView),
               const SizedBox(height: 40.0),
               if (showOtpSection)
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 20.0),
         provider.isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : AuthButton(
                 buttonText: 'Confirm',
                 onPressed: () async {
@@ -230,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 30.0),
         provider.isLoadingOtp
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : AuthButton(
                 buttonText: 'Verify OTP',
                 onPressed: () async {

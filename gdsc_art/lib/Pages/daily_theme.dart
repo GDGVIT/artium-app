@@ -1,132 +1,130 @@
 import 'package:flutter/material.dart';
-import '../Constants/Colors.dart';
+import '../Constants/colors.dart';
 
 class StackedImageCard extends StatelessWidget {
   final String imagePath;
 
-  const StackedImageCard({required this.imagePath});
+  const StackedImageCard({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            top: 290.0,
-            left: 10.0,
-            right: 10.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(18.0),
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2),
-                  BlendMode.darken,
-                ),
-                child: Container(
-                    height: 80.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: Opacity(
-                      opacity: 0.6,
-                      child: Image.asset(
-                        imagePath,
-                        height: 355.0,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          top: 290.0,
+          left: 10.0,
+          right: 10.0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18.0),
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2),
+                BlendMode.darken,
               ),
-            ),
-          ),
-          Positioned(
-            top: 320.0,
-            left: 20.0,
-            right: 20.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.0),
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.1),
-                  BlendMode.darken,
-                ),
-                child: Container(
-                  height: 60.0,
+              child: SizedBox(
+                  height: 80.0,
                   width: MediaQuery.of(context).size.width,
                   child: Opacity(
-                    opacity: 0.3,
+                    opacity: 0.6,
                     child: Image.asset(
                       imagePath,
                       height: 355.0,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
-                  ),
-                ),
-              ),
+                  )),
             ),
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
+        ),
+        Positioned(
+          top: 320.0,
+          left: 20.0,
+          right: 20.0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16.0),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.15),
+                Colors.black.withOpacity(0.1),
                 BlendMode.darken,
               ),
-              child: Image.asset(
-                imagePath,
-                height: 355.0,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              child: SizedBox(
+                height: 60.0,
+                width: MediaQuery.of(context).size.width,
+                child: Opacity(
+                  opacity: 0.3,
+                  child: Image.asset(
+                    imagePath,
+                    height: 355.0,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),
-          const Positioned(
-            bottom: 20.0,
-            right: 20.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Opacity(
-                  opacity: 1,
-                  child: Text(
-                    'FRIDA KAHLO',
-                    style: TextStyle(
-                      color: CustomColors.primaryCream,
-                      fontFamily: "OutfitRegular",
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-                Opacity(
-                  opacity: 1,
-                  child: Text(
-                    'Butch 1953, 1890',
-                    style: TextStyle(
-                      fontFamily: "OutfitRegular",
-                      color: CustomColors.primaryWhite,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5.0),
-                Opacity(
-                  opacity: 1,
-                  child: Text(
-                    'The Two Fridas, 1939',
-                    style: TextStyle(
-                      color: CustomColors.primaryCream,
-                      fontFamily: "OutfitRegolar",
-                      fontSize: 14.0,
-                      decoration: TextDecoration.underline,
-                      decorationColor: CustomColors.primaryCream,
-                    ),
-                  ),
-                )
-              ],
+        ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.15),
+              BlendMode.darken,
+            ),
+            child: Image.asset(
+              imagePath,
+              height: 355.0,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
           ),
-        ],
-      ),
+        ),
+        const Positioned(
+          bottom: 20.0,
+          right: 20.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Opacity(
+                opacity: 1,
+                child: Text(
+                  'FRIDA KAHLO',
+                  style: TextStyle(
+                    color: CustomColors.primaryCream,
+                    fontFamily: "OutfitRegular",
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+              Opacity(
+                opacity: 1,
+                child: Text(
+                  'Butch 1953, 1890',
+                  style: TextStyle(
+                    fontFamily: "OutfitRegular",
+                    color: CustomColors.primaryWhite,
+                    fontSize: 12.0,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5.0),
+              Opacity(
+                opacity: 1,
+                child: Text(
+                  'The Two Fridas, 1939',
+                  style: TextStyle(
+                    color: CustomColors.primaryCream,
+                    fontFamily: "OutfitRegolar",
+                    fontSize: 14.0,
+                    decoration: TextDecoration.underline,
+                    decorationColor: CustomColors.primaryCream,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -138,6 +136,7 @@ class InfoBoxWithButtons extends StatelessWidget {
   final VoidCallback onLearnMore;
 
   const InfoBoxWithButtons({
+    super.key,
     required this.title,
     required this.description,
     required this.onUseStyle,
@@ -221,8 +220,10 @@ class InfoBoxWithButtons extends StatelessWidget {
 }
 
 class DailyTheme extends StatefulWidget {
+  const DailyTheme({super.key});
+
   @override
-  _DailyThemeState createState() => _DailyThemeState();
+  State<DailyTheme> createState() => _DailyThemeState();
 }
 
 class _DailyThemeState extends State<DailyTheme> {
@@ -269,12 +270,12 @@ class _DailyThemeState extends State<DailyTheme> {
                           _showLearnMore = false;
                         });
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_ios,
                         color: CustomColors.primaryCream,
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Center(
                         child: Text(
                           'Sunset Art',
@@ -290,7 +291,7 @@ class _DailyThemeState extends State<DailyTheme> {
                   ],
                 ),
               const SizedBox(height: 20.0),
-              StackedImageCard(imagePath: 'images/themeSampleImage.png'),
+              const StackedImageCard(imagePath: 'images/themeSampleImage.png'),
               const SizedBox(height: 45.0),
               InfoBoxWithButtons(
                 title: 'Sunset Art Style',
@@ -311,7 +312,7 @@ class _DailyThemeState extends State<DailyTheme> {
                   description:
                       'Mexican painter known for her many portraits, self-portraits, and works inspired by the nature and artifacts of Mexico.',
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               const Text(
@@ -322,10 +323,10 @@ class _DailyThemeState extends State<DailyTheme> {
                   fontSize: 24,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              OtherThemes()
+              const OtherThemes()
             ],
           ),
         ),
@@ -340,6 +341,7 @@ class LearnMore extends StatelessWidget {
   final String description;
 
   const LearnMore({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.description,
@@ -416,7 +418,7 @@ class LearnMore extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20.0),
@@ -483,7 +485,7 @@ class LearnMore extends StatelessWidget {
   Widget _buildArtSection(BuildContext context, String imagePath,
       String artistName, String artistDetails, String artName) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         color: CustomColors.tertiaryBlack,
         borderRadius: BorderRadius.circular(20.0),
@@ -546,9 +548,11 @@ class LearnMore extends StatelessWidget {
 }
 
 class OtherThemes extends StatelessWidget {
+  const OtherThemes({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 600,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -567,7 +571,7 @@ class OtherThemes extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: Container(
-                    margin: EdgeInsets.all(6),
+                    margin: const EdgeInsets.all(6),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [

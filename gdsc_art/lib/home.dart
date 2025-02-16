@@ -9,19 +9,21 @@ import 'package:gdsc_artwork/UIComponents/sideBar.dart';
 import 'package:gdsc_artwork/Pages/home_content.dart';
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomeContent(),
-    DailyTheme(),
-    About(),
-    Gallery(),
-    Account(),
+    const HomeContent(),
+    const DailyTheme(),
+    const About(),
+    const Gallery(),
+    const Account(),
   ];
 
   final List<String> _titles = [

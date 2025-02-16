@@ -1,5 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gdsc_artwork/Constants/Colors.dart';
+import 'package:gdsc_artwork/Constants/colors.dart';
 
 commonToast(String message) {
   Fluttertoast.showToast(

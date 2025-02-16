@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 
 class About extends StatelessWidget {
+  const About({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class About extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
             const Padding(
               padding: EdgeInsets.only(left: 8.0),
               child: Text(
@@ -57,19 +59,19 @@ class About extends StatelessWidget {
                     height: 80,
                     color: Colors.grey[300],
                   ),
-                  SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   const Text(
                     '+',
                     style: TextStyle(
                         color: CustomColors.primaryWhite, fontSize: 20),
                   ),
-                  SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   Container(
                     width: 80,
                     height: 80,
                     color: Colors.grey[300],
                   ),
-                  SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   const Text(
                     "=",
                     style: TextStyle(

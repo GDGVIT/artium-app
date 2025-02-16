@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart' hide CarouselController;
-import 'package:gdsc_artwork/Constants/Colors.dart';
+import 'package:gdsc_artwork/Constants/colors.dart';
 import 'package:gdsc_artwork/Pages/select_style_page.dart';
 import 'package:gdsc_artwork/UIComponents/sidebar.dart';
-import 'package:carousel_slider/carousel_slider.dart' as carousel ;
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
 import 'package:gdsc_artwork/UIComponents/art_style_info_box.dart';
 
 class HomeContent extends StatefulWidget {
+  const HomeContent({super.key});
+
   @override
-  _HomeContentState createState() => _HomeContentState();
+  State<HomeContent> createState() => _HomeContentState();
 }
 
 class _HomeContentState extends State<HomeContent> {
@@ -53,7 +55,7 @@ class _HomeContentState extends State<HomeContent> {
                         )),
                   ],
                 ),
-                Wrap(
+                const Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 0,
                   children: [
@@ -75,11 +77,11 @@ class _HomeContentState extends State<HomeContent> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                Container(
+                SizedBox(
                   height: 248,
                   child: buildImageSlider(images),
                 ),
-                SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: images.asMap().entries.map((entry) {
@@ -106,7 +108,7 @@ class _HomeContentState extends State<HomeContent> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SelectStylePage()),
+                          builder: (context) => const SelectStylePage()),
                     );
                   },
                 ),
@@ -117,12 +119,12 @@ class _HomeContentState extends State<HomeContent> {
                       child: Container(
                         height: 2.0,
                         color: CustomColors.primaryBrown,
-                        margin: EdgeInsets.only(left: 50.0),
+                        margin: const EdgeInsets.only(left: 50.0),
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
+                      child: const Text(
                         'or',
                         style: TextStyle(
                           color: CustomColors.primaryBrown,
@@ -135,12 +137,12 @@ class _HomeContentState extends State<HomeContent> {
                       child: Container(
                         height: 2.0,
                         color: CustomColors.primaryBrown,
-                        margin: EdgeInsets.only(right: 50.0),
+                        margin: const EdgeInsets.only(right: 50.0),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(

@@ -49,7 +49,7 @@ class NetworkApiServices extends BaseApiServices {
       print("Response received: $responseJson");
     } catch (e) {
       print(e.toString());
-      throw e;
+      rethrow;
     }
     return responseJson;
   }
@@ -65,7 +65,7 @@ class NetworkApiServices extends BaseApiServices {
       print("Response received: $responseJson");
     } catch (e) {
       print(e.toString());
-      throw e;
+      rethrow;
     }
 
     return responseJson;

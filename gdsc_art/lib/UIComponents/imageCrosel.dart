@@ -11,7 +11,7 @@ class CustomImageSlider extends StatefulWidget {
   final double skewAngle;
 
   const CustomImageSlider({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     required this.widgets,
@@ -19,7 +19,7 @@ class CustomImageSlider extends StatefulWidget {
     required this.onClicked,
     this.obscure = 0.4,
     this.skewAngle = 0.25,
-  }) : super(key: key);
+  });
 
   @override
   _CustomImageSliderState createState() => _CustomImageSliderState();

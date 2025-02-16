@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/commonToast.dart';
+import 'package:gdsc_artwork/Constants/common_toast.dart';
 import 'package:gdsc_artwork/model/repo/repo.dart';
 import 'package:provider/provider.dart';
 import 'user_notifier.dart';
@@ -27,7 +27,6 @@ class LoginAndSignupProvider with ChangeNotifier {
 
         User user = User.fromJson(response['user']);
         print("Parsed user: $user");
-
         Provider.of<UserNotifier>(context, listen: false).setUser(user);
 
         Navigator.pushReplacementNamed(context, '/home');

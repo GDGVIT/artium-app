@@ -6,9 +6,9 @@ class OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.75,
-      child: Row(
+      child: const Row(
         children: [
           Expanded(
             child: Divider(

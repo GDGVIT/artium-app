@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/AuthBtn.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/AuthGoogle.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/LoginSingupToogle.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/Ordivider.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/TextFeildComponent.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_btn.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_google.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/login_signup_toggle.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/ordivider.dart';
+import 'package:gdsc_artwork/Auth/AuthUICompnents/text_feild_component.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
-import 'package:gdsc_artwork/Constants/commonToast.dart';
+import 'package:gdsc_artwork/Constants/common_toast.dart';
 import 'package:gdsc_artwork/ViewModel/login_and_signup_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -14,10 +14,10 @@ import 'package:provider/provider.dart';
 class SignupPage extends StatefulWidget {
   final VoidCallback toggleView;
 
-  SignupPage({required this.toggleView});
+  const SignupPage({super.key, required this.toggleView});
 
   @override
-  _SignupPageState createState() => _SignupPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
@@ -139,7 +139,7 @@ class _SignupPageState extends State<SignupPage> {
           child: Container(
             width: 80,
             height: 80,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.grey,
             ),
@@ -150,7 +150,7 @@ class _SignupPageState extends State<SignupPage> {
                       fit: BoxFit.cover,
                     ),
                   )
-                : Icon(
+                : const Icon(
                     Icons.camera_alt,
                     color: Colors.white,
                   ),
@@ -207,7 +207,7 @@ class _SignupPageState extends State<SignupPage> {
         Align(
           alignment: Alignment.centerLeft,
           child: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
               setState(() {
                 showEmailPasswordSection = false;
@@ -229,7 +229,7 @@ class _SignupPageState extends State<SignupPage> {
         Consumer<LoginAndSignupProvider>(
           builder: (context, provider, child) {
             return provider.isLoading
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : AuthButton(
                     buttonText: 'Signup',
                     onPressed: () => _signUp(context),
@@ -237,7 +237,7 @@ class _SignupPageState extends State<SignupPage> {
           },
         ),
         const SizedBox(height: 15.0),
-        OrDivider(),
+        const OrDivider(),
         const SizedBox(height: 15.0),
         GoogleSignInButton(onPressed: () {}, isLogin: false),
       ],
@@ -251,7 +251,7 @@ class _SignupPageState extends State<SignupPage> {
         Center(
           child: Text(
             'An OTP has been sent to your email ${emailController.text}',
-            style: TextStyle(
+            style: const TextStyle(
               color: CustomColors.secondaryBrown,
               fontFamily: "OutfitRegular",
               fontSize: 16,
@@ -268,7 +268,7 @@ class _SignupPageState extends State<SignupPage> {
         Consumer<LoginAndSignupProvider>(
           builder: (context, provider, child) {
             return provider.isLoadingOtp
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : AuthButton(
                     buttonText: 'Confirm',
                     onPressed: () => _verifyOtp(context),

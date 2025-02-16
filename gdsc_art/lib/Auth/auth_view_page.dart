@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Auth/LoginPage.dart';
-import 'package:gdsc_artwork/Auth/SignupPage.dart';
+import 'package:gdsc_artwork/Auth/login_page.dart';
+import 'package:gdsc_artwork/Auth/signup_page.dart';
 import 'package:gdsc_artwork/ViewModel/user_notifier.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
+  const AuthPage({super.key});
+
   @override
-  _AuthPageState createState() => _AuthPageState();
+  State<AuthPage> createState() => _AuthPageState();
 }
 
 class _AuthPageState extends State<AuthPage> {
@@ -37,7 +39,7 @@ class _AuthPageState extends State<AuthPage> {
             top: 40,
             right: 10,
             child: IconButton(
-              icon: Icon(Icons.close, color: Colors.white),
+              icon: const Icon(Icons.close, color: Colors.white),
               onPressed: skipAuth,
             ),
           ),

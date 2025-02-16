@@ -5,7 +5,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isCentered;
 
-  CustomAppBar({required this.title, this.isCentered = true});
+  const CustomAppBar({super.key, required this.title, this.isCentered = true});
 
   @override
   Widget build(BuildContext context) {

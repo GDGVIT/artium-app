@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Pages/select_image_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../Constants/Colors.dart';
+import '../Constants/colors.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class SelectStylePage extends StatefulWidget {
+  const SelectStylePage({super.key});
+
   @override
   _SelectImagePageState createState() => _SelectImagePageState();
 }
@@ -29,7 +31,7 @@ class _SelectImagePageState extends State<SelectStylePage> {
     bool isImageSelected = _image != null;
 
     return Scaffold(
-      backgroundColor: Color(0xFF1B1A1A),
+      backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
@@ -38,7 +40,7 @@ class _SelectImagePageState extends State<SelectStylePage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
+        title: const Text(
           "Create",
           style: TextStyle(
             color: CustomColors.primaryWhite,
@@ -76,7 +78,7 @@ class _SelectImagePageState extends State<SelectStylePage> {
                   height: 350,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF333333),
+                    color: const Color(0xFF333333),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: _image == null
@@ -114,10 +116,10 @@ class _SelectImagePageState extends State<SelectStylePage> {
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Color(0xFF333333),
+                    color: const Color(0xFF333333),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: SliderWithTitle(
+                  child: const SliderWithTitle(
                     title: "ART STYLE SIZE",
                     initialValue: 50.0,
                     width: double.infinity,
@@ -137,7 +139,8 @@ class _SelectImagePageState extends State<SelectStylePage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             foregroundColor: CustomColors.primaryCream,
-                            side: BorderSide(color: CustomColors.primaryCream),
+                            side: const BorderSide(
+                                color: CustomColors.primaryCream),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -160,7 +163,8 @@ class _SelectImagePageState extends State<SelectStylePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SelectImagePage()),
+                                  builder: (context) =>
+                                      const SelectImagePage()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
@@ -197,7 +201,8 @@ class SliderWithTitle extends StatefulWidget {
   final double fontSize;
   final String tooltipMessage;
 
-  SliderWithTitle({
+  const SliderWithTitle({
+    super.key,
     required this.title,
     required this.initialValue,
     required this.width,
@@ -206,7 +211,7 @@ class SliderWithTitle extends StatefulWidget {
   });
 
   @override
-  _SliderWithTitleState createState() => _SliderWithTitleState();
+  State<SliderWithTitle> createState() => _SliderWithTitleState();
 }
 
 class _SliderWithTitleState extends State<SliderWithTitle> {
@@ -246,7 +251,7 @@ class _SliderWithTitleState extends State<SliderWithTitle> {
                 content: Text(
                   widget.tooltipMessage,
                   softWrap: true,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   ),
                 ),
@@ -280,7 +285,7 @@ class CustomSlider extends StatelessWidget {
   final double value;
   final ValueChanged<double> onChanged;
 
-  CustomSlider({required this.value, required this.onChanged});
+  const CustomSlider({super.key, required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

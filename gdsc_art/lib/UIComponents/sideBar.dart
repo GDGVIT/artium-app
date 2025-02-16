@@ -8,7 +8,7 @@ class Sidebar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
 
-  Sidebar({
+  const Sidebar({super.key, 
     required this.selectedIndex,
     required this.onItemSelected,
   });
@@ -115,7 +115,7 @@ class Sidebar extends StatelessWidget {
             snapshot.data == true) {
           profileImage = NetworkImage('http://localhost:8000$profileImageUrl');
         } else {
-          profileImage = AssetImage('images/userprofile.png');
+          profileImage = const AssetImage('/images/userprofile.png');
         }
 
         return Padding(
