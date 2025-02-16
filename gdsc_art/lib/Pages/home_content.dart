@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:gdsc_artwork/Constants/Colors.dart';
 import 'package:gdsc_artwork/Pages/select_style_page.dart';
 import 'package:gdsc_artwork/UIComponents/sidebar.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel ;
 import 'package:gdsc_artwork/UIComponents/art_style_info_box.dart';
 
 class HomeContent extends StatefulWidget {
@@ -165,8 +165,8 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Widget buildImageSlider(List<String> images) {
-    return CarouselSlider.builder(
-      options: CarouselOptions(
+    return carousel.CarouselSlider.builder(
+      options: carousel.CarouselOptions(
           autoPlay: false,
           viewportFraction: 0.65,
           enableInfiniteScroll: true,

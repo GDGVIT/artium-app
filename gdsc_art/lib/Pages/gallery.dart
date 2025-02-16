@@ -71,14 +71,14 @@ class Gallery extends StatelessWidget {
 class GalleryContainer extends StatefulWidget {
   final String imagePath;
   final String title;
-  final String name; // Add the name property
+  final String name; 
   final double extent;
 
   const GalleryContainer({
     Key? key,
     required this.imagePath,
     required this.title,
-    required this.name, // Initialize the name property
+    required this.name,
     required this.extent,
   }) : super(key: key);
 
@@ -133,14 +133,14 @@ class _GalleryContainerState extends State<GalleryContainer> {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 10.0, // Reduced radius
+                        radius: 10.0, 
                         backgroundColor: CustomColors.primaryWhite,
                         child: Text(
                           widget.name.substring(0, 1),
                           style: const TextStyle(
                             color: CustomColors.primaryBlack,
                             fontFamily: "OutfitBold",
-                            fontSize: 12, // Adjusted text size
+                            fontSize: 12, 
                           ),
                         ),
                       ),

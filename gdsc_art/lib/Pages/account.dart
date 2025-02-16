@@ -35,9 +35,9 @@ class _AccountState extends State<Account> {
                     user ?? User(name: "Guest", email: "guest@gmail.com"),
                     context),
                 const SizedBox(height: 10.0),
-                _buildPageIndicators(), // Page indicators at the top
+                _buildPageIndicators(),
                 const SizedBox(height: 10.0),
-                _buildPageView(), // PageView for Saved and Published content
+                _buildPageView(), 
               ],
             ),
           ),
@@ -258,9 +258,6 @@ class _AccountState extends State<Account> {
     );
   }
 
-  Widget _buildGallerySection(BuildContext context) {
-    return _buildPageView();
-  }
 
   // Build the grid for gallery items
   Widget _buildGrid() {
@@ -350,13 +347,13 @@ class _AccountState extends State<Account> {
                 children: [
                   Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 8.0,
                         ),
                         child: Text(
                           "Sample Title",
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: CustomColors.secondaryCream,
                             fontFamily: "OutfitMedium",
                             fontSize: 16,

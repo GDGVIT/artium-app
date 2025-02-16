@@ -13,6 +13,7 @@ class _SelectImagePageState extends State<StylizedImage> {
   final TextEditingController _imageName = TextEditingController();
   bool _publishedClicked = false;
 
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -89,7 +90,7 @@ class _SelectImagePageState extends State<StylizedImage> {
                       color: Color(0xFF202020),
                       child: Column(
                         children: [
-                          Align(
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Name",
@@ -118,7 +119,7 @@ class _SelectImagePageState extends State<StylizedImage> {
                                   borderSide: BorderSide.none,
                                 ),
                               ),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: CustomColors.primaryBrown,
                                 fontFamily: "OutfitRegular",
                               ),
@@ -128,7 +129,7 @@ class _SelectImagePageState extends State<StylizedImage> {
                             height: 10,
                           ),
                           if (_publishedClicked)
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -169,7 +170,7 @@ class _SelectImagePageState extends State<StylizedImage> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Save Art",
                           style: TextStyle(
                             color: CustomColors.primaryCream,

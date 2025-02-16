@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:overlapped_carousel/overlapped_carousel.dart';
+import 'package:flutter/material.dart'hide CarouselController;
+import 'package:overlapped_carousel/overlapped_carousel.dart' as Cntroller;
 
 class CustomImageSlider extends StatefulWidget {
   final double width;
@@ -57,8 +57,8 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
+    // var screenWidth = MediaQuery.of(context).size.width;
+    // var screenHeight = MediaQuery.of(context).size.height;
 
     return
         // Stack(
@@ -87,8 +87,8 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
         SizedBox(
       height: 200,
       width: 500,
-      child: OverlappedCarousel(
-        widgets: widget.widgets, //List of widgets
+      child: Cntroller.OverlappedCarousel(
+        widgets: widget.widgets,
         currentIndex: 2,
         onClicked: (index) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -103,7 +103,7 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
     );
     // ),
 
-    //       OverlappedCarousel(
+    //       Overlapped(
     //     widgets: widget.widgets,
     //     currentIndex: currentIndex,
     //     onClicked: (index) {

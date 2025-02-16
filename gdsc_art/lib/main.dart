@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:gdsc_artwork/Auth/AuthViewPage.dart';
 import 'package:gdsc_artwork/Home.dart';
 import 'package:gdsc_artwork/Pages/account.dart';
@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserNotifier()),
         ChangeNotifierProvider(create: (_) => LoginAndSignupProvider()),
       ],
+      
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
