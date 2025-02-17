@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Auth/login_page.dart';
 import 'package:gdsc_artwork/Auth/signup_page.dart';
-import 'package:gdsc_artwork/ViewModel/user_notifier.dart';
+import 'package:gdsc_artwork/Providers/user_notifier.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {

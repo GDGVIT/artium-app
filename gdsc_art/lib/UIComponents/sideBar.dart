@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../Constants/Colors.dart';
-import 'package:gdsc_artwork/ViewModel/user_notifier.dart';
+import 'package:gdsc_artwork/Providers/user_notifier.dart';
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
 
-  const Sidebar({super.key, 
+  const Sidebar({
+    super.key,
     required this.selectedIndex,
     required this.onItemSelected,
   });
@@ -115,7 +116,7 @@ class Sidebar extends StatelessWidget {
             snapshot.data == true) {
           profileImage = NetworkImage('http://localhost:8000$profileImageUrl');
         } else {
-          profileImage = const AssetImage('/images/userprofile.png');
+          profileImage = const AssetImage('images/userprofile.png');
         }
 
         return Padding(

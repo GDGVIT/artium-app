@@ -2,8 +2,10 @@ import 'package:flutter/material.dart' hide CarouselController;
 import 'package:gdsc_artwork/Auth/auth_view_page.dart';
 import 'package:gdsc_artwork/Home.dart';
 import 'package:gdsc_artwork/Pages/account.dart';
-import 'package:gdsc_artwork/ViewModel/login_and_signup_provider.dart';
-import 'package:gdsc_artwork/ViewModel/user_notifier.dart';
+import 'package:gdsc_artwork/Providers/gallery_provider.dart';
+import 'package:gdsc_artwork/Providers/login_and_signup_provider.dart';
+import 'package:gdsc_artwork/Providers/theme_provider.dart';
+import 'package:gdsc_artwork/Providers/user_notifier.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,8 +21,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserNotifier()),
         ChangeNotifierProvider(create: (_) => LoginAndSignupProvider()),
+        ChangeNotifierProvider(create: (_) => GalleryProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/auth',
         routes: {
           '/auth': (context) => const AuthPage(),
-          '/home': (context) => Home(),
+          '/home': (context) => const Home(),
           '/account': (context) => const Account(),
         },
       ),

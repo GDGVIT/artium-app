@@ -1,130 +1,361 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Constants/colors.dart';
+import '../Providers/theme_provider.dart';
 
-class StackedImageCard extends StatelessWidget {
-  final String imagePath;
+class DailyTheme extends StatefulWidget {
+  const DailyTheme({super.key});
 
-  const StackedImageCard({super.key, required this.imagePath});
+  @override
+  State<DailyTheme> createState() => _DailyThemeState();
+}
+
+class _DailyThemeState extends State<DailyTheme> {
+  bool _showLearnMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ThemeProvider>().fetchThemeOfDay();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: CustomColors.primaryBlack,
+      body: Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (provider.hasError) {
+            return Center(
+              child: Text(
+                provider.errorMessage ?? 'Error loading theme',
+                style: const TextStyle(color: CustomColors.primaryWhite),
+              ),
+            );
+          }
+
+          final theme = provider.theme;
+          if (theme == null) return const SizedBox();
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  if (!_showLearnMore) ...[
+                    const Text(
+                      'THEME OF THE DAY',
+                      style: TextStyle(
+                        color: CustomColors.primaryCream,
+                        fontFamily: "OutfitRegular",
+                        fontSize: 24,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Text(
+                      theme.title,
+                      style: const TextStyle(
+                        color: CustomColors.primaryBrown,
+                        fontFamily: "OutfitRegular",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                  if (_showLearnMore)
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () =>
+                              setState(() => _showLearnMore = false),
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: CustomColors.primaryCream,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            theme.title,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: CustomColors.primaryCream,
+                              fontFamily: "OutfitBold",
+                              fontSize: 26,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 48.0),
+                      ],
+                    ),
+                  const SizedBox(height: 20.0),
+                  ThemeCarousel(images: theme.themeImages),
+                  const SizedBox(height: 45.0),
+                  InfoBoxWithButtons(
+                    title: theme.title,
+                    description: theme.description,
+                    onUseStyle: () {},
+                    onLearnMore: () {
+                      setState(() => _showLearnMore = !_showLearnMore);
+                    },
+                  ),
+                  if (_showLearnMore) ...[
+                    const SizedBox(height: 100.0),
+                    LearnMore(
+                      imagePath: theme.workImages.first,
+                      title: theme.workTitle,
+                      description: theme.workDescription,
+                      infoLink: theme.infoLink,
+                    ),
+                  ],
+                  if (!_showLearnMore) ...[
+                    const SizedBox(height: 40.0),
+                    const Text(
+                      "OTHER THEMES",
+                      style: TextStyle(
+                        color: CustomColors.primaryWhite,
+                        fontFamily: "OutfitRegular",
+                        fontSize: 24,
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    const OtherThemes(),
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ThemeCarousel extends StatefulWidget {
+  final List<String> images;
+
+  const ThemeCarousel({super.key, required this.images});
+
+  @override
+  State<ThemeCarousel> createState() => _ThemeCarouselState();
+}
+
+class _ThemeCarouselState extends State<ThemeCarousel> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.none,
       children: [
-        Positioned(
-          top: 290.0,
-          left: 10.0,
-          right: 10.0,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(18.0),
-            child: ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2),
-                BlendMode.darken,
-              ),
-              child: SizedBox(
-                  height: 80.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: Opacity(
-                    opacity: 0.6,
-                    child: Image.asset(
-                      imagePath,
-                      height: 355.0,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+        SizedBox(
+          height: 355.0,
+          child: PageView.builder(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            itemCount: widget.images.length,
+            onPageChanged: (index) {
+              setState(() => _currentPage = index);
+            },
+            itemBuilder: (context, index) {
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: 290.0,
+                    left: 10.0,
+                    right: 10.0,
+                    child: _buildImageLayer(
+                      widget.images[index],
+                      height: 80.0,
+                      opacity: 0.6,
+                      blur: 3.0,
                     ),
-                  )),
-            ),
+                  ),
+                  Positioned(
+                    top: 320.0,
+                    left: 20.0,
+                    right: 20.0,
+                    child: _buildImageLayer(
+                      widget.images[index],
+                      height: 60.0,
+                      opacity: 0.3,
+                      blur: 2.0,
+                    ),
+                  ),
+                  _buildImageLayer(
+                    widget.images[index],
+                    height: 355.0,
+                    opacity: 1.0,
+                    blur: 0.0,
+                  ),
+                ],
+              );
+            },
           ),
         ),
         Positioned(
-          top: 320.0,
-          left: 20.0,
-          right: 20.0,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.0),
-            child: ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.1),
-                BlendMode.darken,
-              ),
-              child: SizedBox(
-                height: 60.0,
-                width: MediaQuery.of(context).size.width,
-                child: Opacity(
-                  opacity: 0.3,
-                  child: Image.asset(
-                    imagePath,
-                    height: 355.0,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+          right: 10,
+          top: 0,
+          bottom: 0,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(
+                widget.images.length,
+                (index) => Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _currentPage == index
+                        ? CustomColors.primaryCream
+                        : CustomColors.primaryCream.withOpacity(0.5),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.15),
-              BlendMode.darken,
-            ),
-            child: Image.asset(
-              imagePath,
-              height: 355.0,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        const Positioned(
-          bottom: 20.0,
-          right: 20.0,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Opacity(
-                opacity: 1,
-                child: Text(
-                  'FRIDA KAHLO',
-                  style: TextStyle(
-                    color: CustomColors.primaryCream,
-                    fontFamily: "OutfitRegular",
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Opacity(
-                opacity: 1,
-                child: Text(
-                  'Butch 1953, 1890',
-                  style: TextStyle(
-                    fontFamily: "OutfitRegular",
-                    color: CustomColors.primaryWhite,
-                    fontSize: 12.0,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5.0),
-              Opacity(
-                opacity: 1,
-                child: Text(
-                  'The Two Fridas, 1939',
-                  style: TextStyle(
-                    color: CustomColors.primaryCream,
-                    fontFamily: "OutfitRegolar",
-                    fontSize: 14.0,
-                    decoration: TextDecoration.underline,
-                    decorationColor: CustomColors.primaryCream,
-                  ),
-                ),
-              )
-            ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildImageLayer(
+    String imageUrl, {
+    required double height,
+    required double opacity,
+    required double blur,
+  }) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18.0),
+      child: ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          Colors.black.withOpacity(0.2),
+          BlendMode.darken,
+        ),
+        child: Opacity(
+          opacity: opacity,
+          child: FadeInImage.assetNetwork(
+            placeholder: 'images/sampleLogo.png',
+            image: 'http://localhost:8000$imageUrl',
+            height: height,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            imageErrorBuilder: (context, error, stackTrace) => Container(
+              height: height,
+              color: Colors.grey[300],
+              child: const Icon(Icons.error),
+            ),
+            fadeInDuration: const Duration(milliseconds: 300),
+            placeholderFit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OtherThemes extends StatefulWidget {
+  const OtherThemes({super.key});
+
+  @override
+  State<OtherThemes> createState() => _OtherThemesState();
+}
+
+class _OtherThemesState extends State<OtherThemes> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ThemeProvider>().fetchThemes();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, _) {
+        final themes = provider.randomThemes;
+
+        return SizedBox(
+          height: 600,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: themes.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 0.9,
+              ),
+              itemBuilder: (context, index) {
+                final theme = themes[index];
+                return Card(
+                  color: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.all(6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(16.0),
+                            ),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: 'images/sampleLogo.png',
+                              image:
+                                  'http://localhost:8000${theme.themeImages.first}',
+                              fit: BoxFit.cover,
+                              imageErrorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[800],
+                                  child: const Icon(Icons.error,
+                                      color: Colors.white),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            theme.title,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: CustomColors.primaryCream,
+                              fontFamily: "OutfitMedium",
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -152,7 +383,6 @@ class InfoBoxWithButtons extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             title,
@@ -165,7 +395,6 @@ class InfoBoxWithButtons extends StatelessWidget {
           const SizedBox(height: 10.0),
           Text(
             description,
-            textAlign: TextAlign.left,
             style: const TextStyle(
               color: CustomColors.primaryWhite,
               fontSize: 13.0,
@@ -184,12 +413,6 @@ class InfoBoxWithButtons extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10.0),
-                  textStyle: const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
                 child: const Text('Use this style'),
               ),
@@ -202,12 +425,6 @@ class InfoBoxWithButtons extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 18.0, vertical: 10.0),
-                  textStyle: const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
                 child: const Text('Learn more'),
               ),
@@ -219,394 +436,113 @@ class InfoBoxWithButtons extends StatelessWidget {
   }
 }
 
-class DailyTheme extends StatefulWidget {
-  const DailyTheme({super.key});
-
-  @override
-  State<DailyTheme> createState() => _DailyThemeState();
-}
-
-class _DailyThemeState extends State<DailyTheme> {
-  bool _showLearnMore = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.primaryBlack,
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              if (!_showLearnMore)
-                const Center(
-                  child: Text(
-                    'THEME OF THE DAY',
-                    style: TextStyle(
-                      color: CustomColors.primaryCream,
-                      fontFamily: "OutfitRegular",
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 5.0),
-              if (!_showLearnMore)
-                const Center(
-                  child: Text(
-                    'Sunset Art',
-                    style: TextStyle(
-                      color: CustomColors.primaryBrown,
-                      fontFamily: "OutfitRegular",
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              if (_showLearnMore)
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _showLearnMore = false;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: CustomColors.primaryCream,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Center(
-                        child: Text(
-                          'Sunset Art',
-                          style: TextStyle(
-                            color: CustomColors.primaryCream,
-                            fontFamily: "OutfitBold",
-                            fontSize: 26,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 48.0),
-                  ],
-                ),
-              const SizedBox(height: 20.0),
-              const StackedImageCard(imagePath: 'images/themeSampleImage.png'),
-              const SizedBox(height: 45.0),
-              InfoBoxWithButtons(
-                title: 'Sunset Art Style',
-                description:
-                    'Explore the beauty of sunset through different styles.',
-                onUseStyle: () {},
-                onLearnMore: () {
-                  setState(() {
-                    _showLearnMore = !_showLearnMore;
-                  });
-                },
-              ),
-              const SizedBox(height: 20.0),
-              if (_showLearnMore)
-                const LearnMore(
-                  imagePath: 'images/fridakhalo.png',
-                  title: 'FRIDA KAHLO',
-                  description:
-                      'Mexican painter known for her many portraits, self-portraits, and works inspired by the nature and artifacts of Mexico.',
-                ),
-              const SizedBox(
-                height: 40,
-              ),
-              const Text(
-                "OTHER THEMES",
-                style: TextStyle(
-                  color: CustomColors.primaryWhite,
-                  fontFamily: "OutfitRegular",
-                  fontSize: 24,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const OtherThemes()
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class LearnMore extends StatelessWidget {
   final String imagePath;
   final String title;
   final String description;
+  final String infoLink;
 
   const LearnMore({
     super.key,
     required this.imagePath,
     required this.title,
     required this.description,
+    required this.infoLink,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 500,
-          child: Stack(
-            children: [
-              Positioned(
-                top: 250.0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: const BoxDecoration(
-                    color: CustomColors.tertiaryBlack,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        title,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: CustomColors.primaryWhite,
-                          fontSize: 20.0,
-                          fontFamily: 'OutfitBold',
-                        ),
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        description,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: CustomColors.primaryWhite,
-                          fontSize: 14.0,
-                          fontFamily: 'OutfitRegular',
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Handle learn more action
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: CustomColors.primaryCream,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 12.0),
-                          textStyle: const TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        child: const Text('Learn more'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.asset(
-                    imagePath,
-                    height: 300.0,
-                    width: 200,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20.0),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF9A8873), Color(0xFFEAD0B3)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Column(
-            children: [
-              const Text(
-                'HISTORIC PIECES OF\nFRIDA KAHLO',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: CustomColors.primaryBlack,
-                  fontSize: 18.0,
-                  fontFamily: 'OutfitMedium',
-                ),
-              ),
-              const SizedBox(height: 4.0),
-              Container(
-                  height: 1.0, width: 100.0, color: CustomColors.primaryBlack),
-              const SizedBox(height: 20.0),
-              _buildArtSection(
-                  context,
-                  'images/sampleImage2.png',
-                  'FRIDA KAHLO',
-                  'Dutch, 1853 - 1890',
-                  'The Broken Column, 1939'),
-              const SizedBox(height: 20.0),
-              _buildArtSection(
-                  context,
-                  'images/sampleImage2.png',
-                  'FRIDA KAHLO',
-                  'Dutch, 1853 - 1890',
-                  'Self-Portrait with Thorn Necklace, 1940'),
-              const SizedBox(height: 20.0),
-              _buildArtSection(context, 'images/sampleImage2.png',
-                  'FRIDA KAHLO', 'Dutch, 1853 - 1890', 'The Two Fridas, 1939'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildArtSection(BuildContext context, String imagePath,
-      String artistName, String artistDetails, String artName) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         color: CustomColors.tertiaryBlack,
         borderRadius: BorderRadius.circular(20.0),
       ),
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(18.0),
-            child: Image.asset(
-              imagePath,
-              height: 180.0,
-              width: double.infinity,
-              fit: BoxFit.cover,
+          Container(
+            margin: const EdgeInsets.only(top: 200),
+            padding: const EdgeInsets.all(16.0),
+            decoration: const BoxDecoration(
+              color: CustomColors.tertiaryBlack,
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-          ),
-          const SizedBox(height: 10.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 8.0), // Padding around text
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  artistName,
-                  style: const TextStyle(
-                    color: CustomColors.primaryWhite,
-                    fontSize: 16.0,
-                    fontFamily: 'OutfitBold',
+                const SizedBox(height: 50),
+                Center(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: CustomColors.primaryWhite,
+                      fontSize: 20.0,
+                      fontFamily: 'OutfitBold',
+                    ),
                   ),
                 ),
-                const SizedBox(height: 5.0),
+                const SizedBox(height: 16.0),
                 Text(
-                  artistDetails,
+                  description,
                   style: const TextStyle(
                     color: CustomColors.primaryWhite,
                     fontSize: 14.0,
                     fontFamily: 'OutfitRegular',
                   ),
                 ),
-                const SizedBox(height: 5.0),
-                Text(
-                  artName,
-                  style: const TextStyle(
-                    color: CustomColors.primaryCream,
-                    fontSize: 14.0,
-                    fontFamily: 'OutfitRegular',
-                    decoration: TextDecoration.underline,
-                    decorationColor: CustomColors.primaryCream,
+                const SizedBox(height: 24.0),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await launchUrl(Uri.parse(infoLink));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.primaryCream,
+                      foregroundColor: CustomColors.primaryBlack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 12.0,
+                      ),
+                    ),
+                    child: const Text(
+                      'Learn More',
+                      style: TextStyle(
+                        fontFamily: 'OutfitMedium',
+                        fontSize: 14.0,
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 16.0),
               ],
+            ),
+          ),
+          Positioned(
+            top: -50,
+            left: 16,
+            right: 16,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'images/sampleLogo.png',
+                image: 'http://localhost:8000$imagePath',
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) => Container(
+                  height: 300,
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.error),
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
-  }
-}
-
-class OtherThemes extends StatelessWidget {
-  const OtherThemes({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 600,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            itemCount: 6,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              childAspectRatio: 0.9,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                  color: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.all(6),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(16.0),
-                            ),
-                            child: Image.asset(
-                              index % 2 == 0
-                                  ? 'images/galleryImage1.png'
-                                  : 'images/galleryImage2.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          child: Text(
-                            index % 2 == 0
-                                ? 'Post - Impressionism'
-                                : 'Abstractism',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: CustomColors.primaryCream,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "OutfitMedium",
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ));
-            },
-          ),
-        ));
   }
 }

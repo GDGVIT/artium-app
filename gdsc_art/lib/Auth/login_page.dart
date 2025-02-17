@@ -5,7 +5,7 @@ import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_btn.dart';
 import 'package:gdsc_artwork/Auth/AuthUICompnents/text_feild_component.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/ViewModel/login_and_signup_provider.dart';
+import 'package:gdsc_artwork/Providers/login_and_signup_provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleView;

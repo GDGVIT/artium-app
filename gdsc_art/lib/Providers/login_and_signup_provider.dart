@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/model/repo/repo.dart';
+import 'package:gdsc_artwork/Repo/repo.dart';
 import 'package:provider/provider.dart';
 import 'user_notifier.dart';
 import 'dart:convert';

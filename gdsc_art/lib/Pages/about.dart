@@ -41,7 +41,7 @@ class About extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(left: 8.0),
               child: Text(
-                'This is an implementation of an arbitrary style transfer algorithm running purely in the browser using Tensor Flow.js. As with all neural style transfer algorithms, a neural network attempts to "draw" one picture, the Content (usually a photograph), in the style of another, the Style (usually a painting).',
+                'Our project utilizes Neural Style Transfer (NST), powered by a pre-trained VGG19 network. NST combines the content of one image with the artistic style of another, using convolutional neural networks, Gram matrices, and loss functions to create unique, visually captivating images that blend structure and texture.',
                 style: TextStyle(
                   color: CustomColors.primaryWhite,
                   fontSize: 16,

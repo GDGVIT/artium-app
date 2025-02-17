@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:gdsc_artwork/ViewModel/user_notifier.dart';
+import 'package:gdsc_artwork/Providers/user_notifier.dart';
 import 'package:provider/provider.dart';
 
 class Account extends StatefulWidget {
