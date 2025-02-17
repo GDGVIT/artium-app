@@ -18,16 +18,18 @@ class UserNotifier extends ChangeNotifier {
 
 class User {
   final String name;
+  final String id;
   final String email;
-  final String? profileImage;
+  final String? image;
 
-  User({required this.name, required this.email, this.profileImage});
+  User({required this.name, required this.email, this.image, required this.id});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      id: json['id'],
       name: json['name'],
       email: json['email'],
-      profileImage: json['image'],
+      image: json['image'],
     );
   }
 }

@@ -237,9 +237,9 @@ class _SignupPageState extends State<SignupPage> {
           },
         ),
         const SizedBox(height: 15.0),
-        const OrDivider(),
-        const SizedBox(height: 15.0),
-        GoogleSignInButton(onPressed: () {}, isLogin: false),
+        // const OrDivider(),
+        // const SizedBox(height: 15.0),
+        // GoogleSignInButton(onPressed: () {}, isLogin: false),
       ],
     );
   }

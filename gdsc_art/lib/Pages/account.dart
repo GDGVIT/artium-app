@@ -32,7 +32,8 @@ class _AccountState extends State<Account> {
               children: [
                 const SizedBox(height: 5.0),
                 _buildUserDetails(
-                    user ?? User(name: "Guest", email: "guest@gmail.com"),
+                    user ??
+                        User(name: "Guest", email: "guest@gmail.com", id: ''),
                     context),
                 const SizedBox(height: 10.0),
                 _buildPageIndicators(),
@@ -89,9 +90,9 @@ class _AccountState extends State<Account> {
                 radius: 30,
                 backgroundColor: Colors.white,
                 child: ClipOval(
-                  child: user.profileImage != null
+                  child: user.image != null
                       ? Image.network(
-                          "http://localhost:8000${user.profileImage!}",
+                          "http://localhost:8000${user.image!}",
                           fit: BoxFit.fill,
                           width: 55,
                           height: 55,

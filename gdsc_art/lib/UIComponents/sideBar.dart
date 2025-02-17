@@ -104,7 +104,7 @@ class Sidebar extends StatelessWidget {
   }
 
   Widget _buildProfileHeader(User? user) {
-    final profileImageUrl = user?.profileImage;
+    final profileImageUrl = user?.image;
 
     return FutureBuilder<bool>(
       future: profileImageUrl != null

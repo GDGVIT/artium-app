@@ -22,7 +22,7 @@ class _AuthPageState extends State<AuthPage> {
 
   void skipAuth() {
     Provider.of<UserNotifier>(context, listen: false)
-        .setUser(User(name: 'Guest', email: '', profileImage: ''));
+        .setUser(User(name: 'Guest', email: '', image: '', id: ''));
     Navigator.pushReplacementNamed(context, '/home');
   }
 

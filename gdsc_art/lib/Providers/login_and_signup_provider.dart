@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/Repo/repo.dart';
+import 'package:gdsc_artwork/Repo/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'user_notifier.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -11,6 +12,14 @@ class LoginAndSignupProvider with ChangeNotifier {
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
+  Future<void> _saveAuthData(String token, User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+    await prefs.setString('userId', user.id);
+    await prefs.setString('userName', user.name);
+    await prefs.setString('userEmail', user.email);
+    await prefs.setString('userImage', user.image ?? '');
+  }
 
   Future<void> userLog(dynamic data, BuildContext context) async {
     _isLoading = true;
@@ -27,6 +36,10 @@ class LoginAndSignupProvider with ChangeNotifier {
 
         User user = User.fromJson(response['user']);
         print("Parsed user: $user");
+        await _saveAuthData(
+          response['token'],
+          User.fromJson(response['user']),
+        );
         Provider.of<UserNotifier>(context, listen: false).setUser(user);
 
         Navigator.pushReplacementNamed(context, '/home');
