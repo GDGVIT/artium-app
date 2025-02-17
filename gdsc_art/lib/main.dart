@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:gdsc_artwork/Auth/auth_view_page.dart';
 import 'package:gdsc_artwork/Home.dart';
+import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/welcome.dart';
 import 'package:gdsc_artwork/Pages/account.dart';
 import 'package:gdsc_artwork/Providers/gallery_provider.dart';
@@ -38,12 +39,13 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Outfit',
         ),
-        initialRoute: isLoggedIn ? '/onboarding' : '/auth',
+        initialRoute: isLoggedIn ? '/welcome' : '/auth',
         routes: {
           '/auth': (context) => const AuthPage(),
           '/home': (context) => const Home(),
           '/account': (context) => const Account(),
-          '/onboarding': (context) => const Welcome(),
+          '/welcome': (context) => const Welcome(),
+          '/onboarding': (context) => const OnBoarding(),
         },
         onGenerateRoute: (settings) {
           if (!isLoggedIn && settings.name != '/auth') {

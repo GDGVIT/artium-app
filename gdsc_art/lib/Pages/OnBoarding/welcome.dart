@@ -142,8 +142,8 @@ class Welcome extends StatelessWidget {
                   const Spacer(),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushReplacementNamed(context, '/auth'),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, '/onboarding'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomColors.primaryBrown,
                         foregroundColor: CustomColors.primaryWhite,
