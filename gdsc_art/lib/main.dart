@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Outfit',
         ),
-        initialRoute: isLoggedIn ? '/welcome' : '/auth',
+        initialRoute: isLoggedIn ? '/home' : '/welcome',
         routes: {
           '/auth': (context) => const AuthPage(),
           '/home': (context) => const Home(),

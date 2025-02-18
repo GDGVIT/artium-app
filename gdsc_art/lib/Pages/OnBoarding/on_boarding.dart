@@ -63,21 +63,6 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
             ),
           ),
-          Positioned(
-            top: 40,
-            right: 20,
-            child: TextButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/auth'),
-              child: const Text(
-                'Skip',
-                style: TextStyle(
-                  color: CustomColors.primaryCream,
-                  fontSize: 16,
-                  fontFamily: 'OutfitRegular',
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

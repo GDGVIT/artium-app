@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gdsc_artwork/UIComponents/header.dart';
 import '../../Constants/colors.dart';
 
 class Welcome extends StatelessWidget {
@@ -91,34 +92,7 @@ class Welcome extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Artium',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'OutfitBold',
-                          color: CustomColors.primaryCream,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/auth'),
-                        child: const Text(
-                          'Skip',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'OutfitRegular',
-                            color: CustomColors.primaryCream,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Main content
+                  Header(),
                   SizedBox(height: size.height * 0.15),
                   const Text(
                     'Welcome to\nArtium!',

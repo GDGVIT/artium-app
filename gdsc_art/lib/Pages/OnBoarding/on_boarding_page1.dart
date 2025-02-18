@@ -73,7 +73,7 @@ class OnBoardingPage1 extends StatelessWidget {
             child: Transform.rotate(
               angle: -10 * (3.14 / 180),
               child: Opacity(
-                opacity: 0.9,
+                opacity: 0.7,
                 child: SizedBox(
                   width: 400,
                   height: 350,
@@ -147,10 +147,31 @@ class OnBoardingPage1 extends StatelessWidget {
                       right: -size.width * 0.4,
                       child: Transform.scale(
                         scale: 0.95,
-                        child: const ArtCard(
-                          imageUrl: 'images/img-1.png',
-                          title: 'Retro Pop',
-                          opacity: 0.7,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    const Color(0xFF151315).withOpacity(0.75),
+                                blurRadius: 22,
+                                spreadRadius: 2,
+                                offset: const Offset(0, 5),
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 15,
+                                spreadRadius: -2,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                            color: const Color(0xFF151315).withOpacity(0.75),
+                          ),
+                          child: const ArtCard(
+                            imageUrl: 'images/img-1.png',
+                            title: 'Retro Pop',
+                            opacity: 0.7,
+                          ),
                         ),
                       ),
                     ),
@@ -158,10 +179,31 @@ class OnBoardingPage1 extends StatelessWidget {
                       left: -size.width * 0.4,
                       child: Transform.scale(
                         scale: 0.95,
-                        child: const ArtCard(
-                          imageUrl: 'images/img-2.png',
-                          title: 'Impressionism',
-                          opacity: 0.7,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    const Color(0xFF151315).withOpacity(0.75),
+                                blurRadius: 22,
+                                spreadRadius: 2,
+                                offset: const Offset(0, 5),
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 15,
+                                spreadRadius: -2,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                            color: const Color(0xFF151315).withOpacity(0.75),
+                          ),
+                          child: const ArtCard(
+                            imageUrl: 'images/img-2.png',
+                            title: 'Impressionism',
+                            opacity: 0.7,
+                          ),
                         ),
                       ),
                     ),

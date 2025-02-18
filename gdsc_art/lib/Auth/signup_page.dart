@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_btn.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_google.dart';
 import 'package:gdsc_artwork/Auth/AuthUICompnents/login_signup_toggle.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/ordivider.dart';
 import 'package:gdsc_artwork/Auth/AuthUICompnents/text_feild_component.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 import 'package:gdsc_artwork/Constants/common_toast.dart';
