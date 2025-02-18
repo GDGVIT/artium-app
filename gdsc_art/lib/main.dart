@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:gdsc_artwork/Auth/auth_view_page.dart';
-import 'package:gdsc_artwork/Home.dart';
+import 'package:gdsc_artwork/home.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/welcome.dart';
 import 'package:gdsc_artwork/Pages/account.dart';

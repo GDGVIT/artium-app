@@ -89,6 +89,10 @@ class OnBoardingPage5 extends StatelessWidget {
               ),
             ),
           ),
+          Positioned(
+            top: size.height * 0.78,
+            child: SvgPicture.asset('images/onb5-1.svg'),
+          ),
           Padding(
             padding: EdgeInsets.fromLTRB(
               size.width * 0.08,
