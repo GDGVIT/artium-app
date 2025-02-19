@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Model/gallery_model.dart';

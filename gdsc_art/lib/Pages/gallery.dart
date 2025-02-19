@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gdsc_artwork/Constants/colors.dart';
 import 'package:gdsc_artwork/Providers/gallery_provider.dart';
+import 'package:gdsc_artwork/UIComponents/dynamic_aspect_ratio_image.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -84,7 +85,9 @@ class _GalleryState extends State<Gallery> {
                           provider.arts.length + (provider.hasMore ? 2 : 0),
                       itemBuilder: (context, index) {
                         if (index >= provider.arts.length) {
-                          return const ShimmerGalleryItem();
+                          return const ShimmerGalleryItem(
+                            aspectRatio: 1.0,
+                          );
                         }
                         final art = provider.arts[index];
                         return GalleryContainer(
@@ -92,6 +95,7 @@ class _GalleryState extends State<Gallery> {
                           title: art.title,
                           name: art.artist.name,
                           likes: art.likes,
+                          aspectRatio: art.aspectRatio ?? 1.0,
                         );
                       },
                     ),
@@ -114,20 +118,30 @@ class _GalleryState extends State<Gallery> {
   }
 
   Widget _buildShimmerGrid() {
-    return MasonryGridView.count(
-      crossAxisCount: 2,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 10,
-      itemBuilder: (context, index) => const ShimmerGalleryItem(),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: MasonryGridView.count(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (context, index) => ShimmerGalleryItem(
+          aspectRatio: index.isEven ? 0.8 : 1.2,
+        ),
+      ),
     );
   }
 }
 
 class ShimmerGalleryItem extends StatelessWidget {
-  const ShimmerGalleryItem({super.key});
+  final double aspectRatio;
+
+  const ShimmerGalleryItem({
+    super.key,
+    this.aspectRatio = 1.0,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +157,7 @@ class ShimmerGalleryItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AspectRatio(
-              aspectRatio: 1,
+              aspectRatio: aspectRatio,
               child: Container(
                 decoration: const BoxDecoration(
                   color: Colors.black,
@@ -198,6 +212,7 @@ class GalleryContainer extends StatelessWidget {
   final String title;
   final String name;
   final int likes;
+  final double aspectRatio;
 
   const GalleryContainer({
     super.key,
@@ -205,6 +220,7 @@ class GalleryContainer extends StatelessWidget {
     required this.title,
     required this.name,
     required this.likes,
+    this.aspectRatio = 1.0,
   });
 
   @override
@@ -220,28 +236,9 @@ class GalleryContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const ShimmerGalleryItem();
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[900],
-                    child: const Center(
-                      child: Icon(
-                        Icons.error_outline,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                  );
-                },
-              ),
+            DynamicAspectRatioImage(
+              imageUrl: imageUrl,
+              defaultAspectRatio: aspectRatio,
             ),
             Container(
               padding: const EdgeInsets.all(8.0),
