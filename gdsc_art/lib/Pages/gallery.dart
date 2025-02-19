@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gdsc_artwork/Constants/colors.dart';
@@ -81,12 +83,19 @@ class _GalleryState extends State<Gallery> {
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
-                      itemCount:
-                          provider.arts.length + (provider.hasMore ? 2 : 0),
+                      itemCount: provider.arts.length +
+                          (provider.hasMore
+                              ? min(provider.remainingItems, provider.limit)
+                              : 0),
                       itemBuilder: (context, index) {
                         if (index >= provider.arts.length) {
-                          return const ShimmerGalleryItem(
-                            aspectRatio: 1.0,
+                          final isEven = index.isEven;
+                          final randomAspectRatio = isEven
+                              ? (0.8 + (index % 3) * 0.1)
+                              : (1.2 + (index % 3) * 0.1);
+
+                          return ShimmerGalleryItem(
+                            aspectRatio: randomAspectRatio,
                           );
                         }
                         final art = provider.arts[index];
@@ -104,7 +113,7 @@ class _GalleryState extends State<Gallery> {
                     const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text(
-                        'No more artworks to load',
+                        "You've reached the end!",
                         style: TextStyle(color: CustomColors.primaryWhite),
                       ),
                     ),
@@ -128,7 +137,9 @@ class _GalleryState extends State<Gallery> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: 10,
         itemBuilder: (context, index) => ShimmerGalleryItem(
-          aspectRatio: index.isEven ? 0.8 : 1.2,
+          aspectRatio: index.isEven
+              ? 0.8 + (index % 3) * 0.1 + (index % 3) * 0.1
+              : 1.2 + (index % 3) * 0.1 + (index % 3) * 0.1,
         ),
       ),
     );

@@ -18,6 +18,7 @@ class GalleryProvider extends ChangeNotifier {
   List<GalleryModel> _arts = [];
   bool _hasError = false;
   String? _errorMessage;
+  int _totalCount = 0;
 
   List<GalleryModel> get arts => _arts;
   bool get isInitialLoading => _isInitialLoading;
@@ -25,6 +26,9 @@ class GalleryProvider extends ChangeNotifier {
   bool get hasError => _hasError;
   bool get hasMore => _hasMore;
   String? get errorMessage => _errorMessage;
+  int get limit => _limit;
+  int get totalCount => _totalCount;
+  int get remainingItems => _totalCount - _arts.length;
 
   Future<void> fetchArts({bool refresh = false}) async {
     if (refresh) {
@@ -49,6 +53,8 @@ class GalleryProvider extends ChangeNotifier {
       });
 
       if (response['status'] == 'success') {
+        _totalCount = response['count'];
+
         final List<GalleryModel> newArts = (response['arts'] as List)
             .map((art) => GalleryModel(
                   id: art['_id'],
