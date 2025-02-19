@@ -9,27 +9,47 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: CustomColors.primaryBlack,
-      elevation: 0,
-      centerTitle: isCentered,
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 24.0,
-          fontFamily: 'OutfitMedium',
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: CustomColors.primaryBlack,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      leading: Builder(
-        builder: (BuildContext context) {
-          return IconButton(
-            icon: const Icon(Icons.menu, color: CustomColors.primaryWhite),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          );
-        },
+      child: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Color(0xff141414),
+        elevation: 0,
+        centerTitle: isCentered,
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24.0,
+            fontFamily: 'OutfitMedium',
+          ),
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+        ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu, color: CustomColors.primaryWhite),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -82,9 +82,12 @@ class _DynamicAspectRatioImageState extends State<DynamicAspectRatioImage> {
                     ),
                   ),
                 )
-              : Image.network(
-                  widget.imageUrl,
-                  fit: BoxFit.cover,
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Image.network(
+                    widget.imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
     );
   }

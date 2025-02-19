@@ -238,7 +238,7 @@ class GalleryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomColors.tertiaryBlack,
+        color: Color(0xff202020),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: ClipRRect(
@@ -247,12 +247,17 @@ class GalleryContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DynamicAspectRatioImage(
-              imageUrl: imageUrl,
-              defaultAspectRatio: aspectRatio,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DynamicAspectRatioImage(
+                imageUrl: imageUrl,
+                defaultAspectRatio: aspectRatio,
+              ),
             ),
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+              color: Color(0xff202020),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -261,7 +266,7 @@ class GalleryContainer extends StatelessWidget {
                     style: const TextStyle(
                       color: CustomColors.primaryCream,
                       fontFamily: "OutfitBold",
-                      fontSize: 11,
+                      fontSize: 16,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
