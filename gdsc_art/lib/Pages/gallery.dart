@@ -1,144 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-// import 'package:gdsc_artwork/Constants/colors.dart';
-// import 'package:gdsc_artwork/Providers/gallery_provider.dart';
-// import 'package:provider/provider.dart';
-// import 'package:shimmer/shimmer.dart';
-
-// class Gallery extends StatefulWidget {
-//   const Gallery({super.key});
-
-//   @override
-//   State<Gallery> createState() => _GalleryState();
-// }
-
-// class _GalleryState extends State<Gallery> {
-//   final ScrollController scrollController = ScrollController();
-//   bool isLoadingMore = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     scrollController.addListener(onScroll);
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       context.read<GalleryProvider>().fetchArts(page: 1);
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     scrollController.dispose();
-//     super.dispose();
-//   }
-
-//   Future<void> onScroll() async {
-//     if (isLoadingMore) return;
-
-//     if (scrollController.position.pixels >=
-//         scrollController.position.maxScrollExtent * 0.95) {
-//       setState(() {
-//         isLoadingMore = true;
-//       });
-
-//       await context.read<GalleryProvider>().loadNextPage();
-
-//       setState(() {
-//         isLoadingMore = false;
-//       });
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: CustomColors.primaryBlack,
-//       body: RefreshIndicator(
-//         onRefresh: () async {
-//           await context.read<GalleryProvider>().refreshGallery();
-//         },
-//         child: Consumer<GalleryProvider>(
-//           builder: (context, provider, child) {
-//             if (provider.isInitialLoading) {
-//               return _buildShimmerGrid();
-//             }
-
-//             if (provider.hasError) {
-//               return Center(
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Text(
-//                       provider.errorMessage ?? 'Error loading gallery',
-//                       style: const TextStyle(color: CustomColors.primaryWhite),
-//                     ),
-//                     ElevatedButton(
-//                       onPressed: () => provider.refreshGallery(),
-//                       child: const Text('Retry'),
-//                     ),
-//                   ],
-//                 ),
-//               );
-//             }
-
-//             return SingleChildScrollView(
-//               controller: scrollController,
-//               child: Column(
-//                 children: [
-//                   Container(
-//                     padding: const EdgeInsets.all(16.0),
-//                     child: MasonryGridView.count(
-//                       crossAxisCount: 2,
-//                       mainAxisSpacing: 10,
-//                       crossAxisSpacing: 10,
-//                       shrinkWrap: true,
-//                       physics: const NeverScrollableScrollPhysics(),
-//                       itemCount: provider.arts.length,
-//                       itemBuilder: (context, index) {
-//                         final art = provider.arts[index];
-//                         return GalleryContainer(
-//                           imageUrl: art.imageUrl,
-//                           title: art.title,
-//                           name: art.artist.name,
-//                           likes: art.likes,
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                   if (isLoadingMore)
-//                     Padding(
-//                       padding: const EdgeInsets.all(16.0),
-//                       child: _buildShimmerGrid(itemCount: 4),
-//                     ),
-//                   if (!provider.hasMore && provider.arts.isNotEmpty)
-//                     const Padding(
-//                       padding: EdgeInsets.all(16.0),
-//                       child: Text(
-//                         'No more artworks to load',
-//                         style: TextStyle(color: CustomColors.primaryWhite),
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildShimmerGrid({int itemCount = 10}) {
-//     return MasonryGridView.count(
-//       crossAxisCount: 2,
-//       mainAxisSpacing: 10,
-//       crossAxisSpacing: 10,
-//       shrinkWrap: true,
-//       physics: const NeverScrollableScrollPhysics(),
-//       itemCount: itemCount,
-//       itemBuilder: (context, index) => const ShimmerGalleryItem(),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gdsc_artwork/Constants/colors.dart';
@@ -154,17 +13,15 @@ class Gallery extends StatefulWidget {
 }
 
 class _GalleryState extends State<Gallery> {
-  ScrollController _scrollController = ScrollController();
-  late GalleryProvider galleryProvider;
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     _scrollController.addListener(_onScrollUpdated);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      galleryProvider = Provider.of<GalleryProvider>(context, listen: false);
-      galleryProvider.fetchArts();
+      Provider.of<GalleryProvider>(context, listen: false).fetchArts();
     });
   }
 
@@ -175,10 +32,24 @@ class _GalleryState extends State<Gallery> {
   }
 
   Future<void> _onScrollUpdated() async {
-    var maxScroll = _scrollController.position.maxScrollExtent;
-    var currentPosition = _scrollController.position.pixels;
-    if (currentPosition >= maxScroll * 0.95) {
-      Provider.of<GalleryProvider>(context, listen: false).loadNextPage();
+    if (_isLoadingMore) return;
+
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final provider = Provider.of<GalleryProvider>(context, listen: false);
+
+    if (currentScroll >= maxScroll * 0.9 &&
+        provider.hasMore &&
+        !provider.isLoadingMore) {
+      setState(() {
+        _isLoadingMore = true;
+      });
+
+      await provider.loadNextPage();
+
+      setState(() {
+        _isLoadingMore = false;
+      });
     }
   }
 
@@ -201,31 +72,37 @@ class _GalleryState extends State<Gallery> {
               controller: _scrollController,
               child: Column(
                 children: [
-                  MasonryGridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    itemCount:
-                        provider.arts.length + (provider.hasMore ? 2 : 0),
-                    itemBuilder: (context, index) {
-                      if (index >= provider.arts.length) {
-                        return const ShimmerGalleryItem();
-                      }
-                      final art = provider.arts[index];
-                      return GalleryContainer(
-                        imageUrl: art.imageUrl,
-                        title: art.title,
-                        name: art.artist.name,
-                        likes: art.likes,
-                      );
-                    },
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: MasonryGridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      itemCount:
+                          provider.arts.length + (provider.hasMore ? 2 : 0),
+                      itemBuilder: (context, index) {
+                        if (index >= provider.arts.length) {
+                          return const ShimmerGalleryItem();
+                        }
+                        final art = provider.arts[index];
+                        return GalleryContainer(
+                          imageUrl: art.imageUrl,
+                          title: art.title,
+                          name: art.artist.name,
+                          likes: art.likes,
+                        );
+                      },
+                    ),
                   ),
-                  if (provider.isLoadingMore)
+                  if (!provider.hasMore && provider.arts.isNotEmpty)
                     const Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: Text(
+                        'No more artworks to load',
+                        style: TextStyle(color: CustomColors.primaryWhite),
+                      ),
                     ),
                 ],
               ),
