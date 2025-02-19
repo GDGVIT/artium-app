@@ -1,8 +1,9 @@
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Services/netwrok_services.dart';
 
 class GalleryRepo {
   final BaseApiServices _apiServices = NetworkApiServices();
-  String baseURL = "http://localhost:8000";
+  String baseURL = BaseUrl.baseUrl;
   Future<dynamic> gallery(Map<String, dynamic>? params) async {
     try {
       String url = "$baseURL/art/gallery";

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Constants/common_toast.dart';
 import 'package:gdsc_artwork/Repo/auth.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'user_notifier.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+String baseUrl = BaseUrl.baseUrl;
 
 class LoginAndSignupProvider with ChangeNotifier {
   final appRepo = AppRepo();
@@ -123,7 +126,7 @@ class LoginAndSignupProvider with ChangeNotifier {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8000/auth/verify?email=$email&otp=$otp'),
+        Uri.parse('$baseUrl/auth/verify?email=$email&otp=$otp'),
       );
 
       if (response.statusCode == 200) {
@@ -154,8 +157,7 @@ class LoginAndSignupProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final url =
-          Uri.parse('http://localhost:8000/auth/reset-password?email=$email');
+      final url = Uri.parse('$baseUrl/auth/reset-password?email=$email');
       final response = await http.get(
         url,
       );
@@ -186,8 +188,7 @@ class LoginAndSignupProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final url =
-          Uri.parse('http://localhost:8000/auth/set-forgotten-password');
+      final url = Uri.parse('$baseUrl/auth/set-forgotten-password');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},

@@ -1,8 +1,9 @@
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Services/netwrok_services.dart';
 
 class AppRepo {
   final BaseApiServices _apiServices = NetworkApiServices();
-  String baseURL = "http://localhost:8000";
+  String baseURL = BaseUrl.baseUrl;
   Future<dynamic> userLogin(dynamic data) async {
     var reponse = await _apiServices.postApi("$baseURL/auth/login", data);
     try {

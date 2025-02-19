@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../Constants/Colors.dart';
 import 'package:gdsc_artwork/Providers/user_notifier.dart';
+
+String baseUrl = BaseUrl.baseUrl;
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
@@ -108,13 +111,13 @@ class Sidebar extends StatelessWidget {
 
     return FutureBuilder<bool>(
       future: profileImageUrl != null
-          ? _isValidImageUrl('http://localhost:8000$profileImageUrl')
+          ? _isValidImageUrl('$baseUrl$profileImageUrl')
           : Future.value(false),
       builder: (context, snapshot) {
         ImageProvider profileImage;
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.data == true) {
-          profileImage = NetworkImage('http://localhost:8000$profileImageUrl');
+          profileImage = NetworkImage('$baseUrl$profileImageUrl');
         } else {
           profileImage = const AssetImage('images/userprofile.png');
         }

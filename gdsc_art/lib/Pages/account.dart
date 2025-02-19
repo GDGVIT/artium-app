@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Providers/user_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  String baseUrl = BaseUrl.baseUrl;
   bool isPressed = false;
   int? selectedIndex;
   int currentPageIndex = 0;
@@ -92,7 +94,7 @@ class _AccountState extends State<Account> {
                 child: ClipOval(
                   child: user.image != null
                       ? Image.network(
-                          "http://localhost:8000${user.image!}",
+                          baseUrl + user.image!,
                           fit: BoxFit.fill,
                           width: 55,
                           height: 55,

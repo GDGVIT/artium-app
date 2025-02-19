@@ -6,13 +6,20 @@ import '../Constants/colors.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class SelectStylePage extends StatefulWidget {
-  const SelectStylePage({super.key});
+  final dynamic styleImage;
+  final String? styleThemeTitle;
+
+  const SelectStylePage({
+    super.key,
+    this.styleImage,
+    this.styleThemeTitle,
+  });
 
   @override
-  _SelectImagePageState createState() => _SelectImagePageState();
+  State<SelectStylePage> createState() => _SelectStylePageState();
 }
 
-class _SelectImagePageState extends State<SelectStylePage> {
+class _SelectStylePageState extends State<SelectStylePage> {
   File? _image;
 
   Future<void> _pickImage() async {
@@ -24,6 +31,13 @@ class _SelectImagePageState extends State<SelectStylePage> {
         _image = File(pickedFile.path);
       });
     }
+  }
+
+  String? _getImageUrl() {
+    if (widget.styleImage is String) {
+      return 'http://10.0.2.2:8000${widget.styleImage}';
+    }
+    return null;
   }
 
   @override
@@ -49,145 +63,176 @@ class _SelectImagePageState extends State<SelectStylePage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                const Text(
-                  "ART STYLE",
-                  style: TextStyle(
-                    color: CustomColors.primaryCream,
-                    fontFamily: "OutfitRegular",
-                    fontSize: 25,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const Text(
-                  "Select an art style to stylize with",
-                  style: TextStyle(
-                    color: CustomColors.primaryBrown,
-                    fontFamily: "OutfitRegular",
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  height: 350,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF333333),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: _image == null
-                      ? Center(
-                          child: ElevatedButton(
-                            onPressed: _pickImage,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              side: const BorderSide(color: Colors.white),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            child: const Text(
-                              "Upload Image",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "OutfitRegular",
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Image.file(
-                            _image!,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 300,
-                          ),
-                        ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF333333),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: const SliderWithTitle(
-                    title: "ART STYLE SIZE",
-                    initialValue: 50.0,
-                    width: double.infinity,
-                    fontSize: 14,
-                    tooltipMessage: "hello there this is rujin",
-                  ),
-                ),
-                const SizedBox(height: 50),
-                Opacity(
-                  opacity: _image == null ? 0.5 : 1.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: isImageSelected ? _pickImage : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: CustomColors.primaryCream,
-                            side: const BorderSide(
-                                color: CustomColors.primaryCream),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: const Text(
-                            "Change Art",
-                            style: TextStyle(
-                              color: CustomColors.primaryCream,
-                              fontFamily: "OutfitRegular",
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      "ART STYLE",
+                      style: TextStyle(
+                        color: CustomColors.primaryCream,
+                        fontFamily: "OutfitRegular",
+                        fontSize: 25,
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SelectImagePage()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: CustomColors.primaryCream,
-                            foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      "Select an art style to stylize with",
+                      style: TextStyle(
+                        color: CustomColors.primaryBrown,
+                        fontFamily: "OutfitRegular",
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            height: 350,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF333333),
+                              borderRadius: BorderRadius.circular(12.0),
+                              image: _getImageUrl() != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(_getImageUrl()!),
+                                      fit: BoxFit.cover,
+                                      opacity: 0.3,
+                                    )
+                                  : null,
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 14.0),
-                            textStyle: const TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: "OutfitMedium",
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_photo_alternate_outlined,
+                                  size: 48,
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  _image == null
+                                      ? "or Click to upload own style"
+                                      : "Click to change image",
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontFamily: "OutfitRegular",
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: const Text('Proceed'),
                         ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        if (_image != null)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: Image.file(
+                              _image!,
+                              height: 350,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF333333),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: const SliderWithTitle(
+                        title: "ART STYLE SIZE",
+                        initialValue: 50.0,
+                        width: double.infinity,
+                        fontSize: 14,
+                        tooltipMessage: "Change art style size",
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    Opacity(
+                      opacity: _image == null ? 0.5 : 1.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: isImageSelected ? _pickImage : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                foregroundColor: CustomColors.primaryCream,
+                                side: const BorderSide(
+                                    color: CustomColors.primaryCream),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              child: const Text(
+                                "Change Art",
+                                style: TextStyle(
+                                  color: CustomColors.primaryCream,
+                                  fontFamily: "OutfitRegular",
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final styleBase64 = _image != null
+                                    ? _image!
+                                    : widget.styleImage is String
+                                        ? widget.styleImage
+                                        : null;
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SelectImagePage(
+                                      styleImage: styleBase64,
+                                      styleThemeTitle:
+                                          widget.styleThemeTitle ?? '',
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: CustomColors.primaryCream,
+                                foregroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14.0),
+                                textStyle: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontFamily: "OutfitMedium",
+                                ),
+                              ),
+                              child: const Text('Proceed'),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide CarouselController;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gdsc_artwork/Auth/auth_view_page.dart';
+import 'package:gdsc_artwork/Providers/create_art_provider.dart';
 import 'package:gdsc_artwork/home.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/welcome.dart';
@@ -13,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
   runApp(MyApp(isLoggedIn: token != null));
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginAndSignupProvider()),
         ChangeNotifierProvider(create: (_) => GalleryProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => CreateArtProvider())
       ],
       child: MaterialApp(
         title: 'Art Gallery',

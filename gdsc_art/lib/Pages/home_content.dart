@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide CarouselController;
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Constants/colors.dart';
 import 'package:gdsc_artwork/Pages/select_style_page.dart';
 import 'package:gdsc_artwork/UIComponents/sidebar.dart';
@@ -7,6 +8,8 @@ import 'package:gdsc_artwork/UIComponents/art_style_info_box.dart';
 import 'package:provider/provider.dart';
 import 'package:gdsc_artwork/Providers/theme_provider.dart';
 import 'package:gdsc_artwork/Data/theme_data.dart';
+
+String baseUrl = BaseUrl.baseUrl;
 
 class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
@@ -33,7 +36,7 @@ class _HomeContentState extends State<HomeContent> {
 
     return provider.randomThemes
         .map((theme) => {
-              'image': 'http://localhost:8000${theme.themeImages.first}',
+              'image': baseUrl + theme.themeImages.first,
               'title': theme.title,
               'description': theme.description,
             })
@@ -129,10 +132,16 @@ class _HomeContentState extends State<HomeContent> {
                     description:
                         themeData[currentImageIndex]['description'] ?? '',
                     onPressed: () {
+                      final currentTheme =
+                          themeProvider.randomThemes[currentImageIndex];
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SelectStylePage()),
+                          builder: (context) => SelectStylePage(
+                            styleImage: currentTheme.themeImages.first,
+                            styleThemeTitle: currentTheme.title,
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -168,7 +177,17 @@ class _HomeContentState extends State<HomeContent> {
                   ),
                   const SizedBox(height: 5),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SelectStylePage(
+                            styleImage: '',
+                            styleThemeTitle: '',
+                          ),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: CustomColors.primaryCream,
                       foregroundColor: Colors.black,

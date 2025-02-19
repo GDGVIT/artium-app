@@ -1,8 +1,9 @@
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Services/netwrok_services.dart';
 
 class ThemeRepo {
   final BaseApiServices _apiServices = NetworkApiServices();
-  String baseURL = "http://localhost:8000";
+  String baseURL = BaseUrl.baseUrl;
 
   Future<dynamic> themeOfDay() async {
     try {

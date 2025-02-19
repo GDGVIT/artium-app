@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constants/colors.dart';
 import '../Providers/theme_provider.dart';
+
+String baseUrl = BaseUrl.baseUrl;
 
 class DailyTheme extends StatefulWidget {
   const DailyTheme({super.key});
@@ -250,7 +253,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
           opacity: opacity,
           child: FadeInImage.assetNetwork(
             placeholder: 'images/sampleLogo.png',
-            image: 'http://localhost:8000$imageUrl',
+            image: '$baseUrl+$imageUrl',
             height: height,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -322,8 +325,7 @@ class _OtherThemesState extends State<OtherThemes> {
                             ),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'images/sampleLogo.png',
-                              image:
-                                  'http://localhost:8000${theme.themeImages.first}',
+                              image: baseUrl + theme.themeImages.first,
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
                                 return Container(
@@ -529,7 +531,7 @@ class LearnMore extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               child: FadeInImage.assetNetwork(
                 placeholder: 'images/sampleLogo.png',
-                image: 'http://localhost:8000$imagePath',
+                image: baseUrl + imagePath,
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,
