@@ -5,6 +5,11 @@ class ThemeConstants {
     "Surrealism",
     "Impressionism",
     "Cubism",
-    "Post Impression"
+    "Post Impression",
+    "Abstractionism",
+    "Ukiyo-e",
+    "Modern Indian",
+    "Baroque",
+    "Symbolism",
   ];
 }

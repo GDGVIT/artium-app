@@ -38,42 +38,50 @@ class CreateArtRepo {
     required String title,
     required String description,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/art/create'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({
-        'theme': theme,
-        'image': image,
-        'title': title,
-        'description': description,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to save art');
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/art/create'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'theme': theme,
+          'image': image,
+          'title': title,
+          'description': description,
+        }),
+      );
+      print(response.body);
+      if (response.statusCode == 201) {
+        print(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      return {'error': e.toString()};
     }
+    return {'error': 'Unexpected error occurred'};
   }
 
   Future<Map<String, dynamic>> publishArt({
     required String token,
     required String artSlug,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/art/publish/$artSlug'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to publish art');
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/art/publish/$artSlug'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      return {'error': e.toString()};
     }
+    return {'error': 'Unexpected error occurred'};
   }
 }

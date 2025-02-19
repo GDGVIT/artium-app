@@ -253,7 +253,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
           opacity: opacity,
           child: FadeInImage.assetNetwork(
             placeholder: 'images/sampleLogo.png',
-            image: '$baseUrl+$imageUrl',
+            image: '$baseUrl$imageUrl',
             height: height,
             width: double.infinity,
             fit: BoxFit.cover,
