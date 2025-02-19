@@ -1,10 +1,11 @@
 class GalleryModel {
   final String id;
   final String title;
-  int likes;
+  final int likes;
   final String imageUrl;
   final String description;
   final ArtistModel artist;
+  double? aspectRatio;
 
   GalleryModel({
     required this.id,
@@ -13,6 +14,7 @@ class GalleryModel {
     required this.imageUrl,
     required this.description,
     required this.artist,
+    this.aspectRatio,
   });
 
   factory GalleryModel.fromJson(Map<String, dynamic> json) {
