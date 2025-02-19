@@ -6,7 +6,8 @@ class ArtStyleInfoBox extends StatelessWidget {
   final String description;
   final VoidCallback onPressed;
 
-  const ArtStyleInfoBox({super.key, 
+  const ArtStyleInfoBox({
+    super.key,
     required this.title,
     required this.description,
     required this.onPressed,
@@ -41,6 +42,8 @@ class ArtStyleInfoBox extends StatelessWidget {
           Text(
             textAlign: TextAlign.left,
             description,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: CustomColors.primaryWhite,
               fontSize: 13.0,
