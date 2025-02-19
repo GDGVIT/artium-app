@@ -242,7 +242,7 @@ class ArtCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 260,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),

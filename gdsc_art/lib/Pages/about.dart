@@ -54,10 +54,10 @@ class About extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 80,
                     height: 80,
-                    color: Colors.grey[300],
+                    child: Image.asset('images/rec-1.png'),
                   ),
                   const SizedBox(width: 20.0),
                   const Text(
@@ -66,10 +66,10 @@ class About extends StatelessWidget {
                         color: CustomColors.primaryWhite, fontSize: 20),
                   ),
                   const SizedBox(width: 20.0),
-                  Container(
+                  SizedBox(
                     width: 80,
                     height: 80,
-                    color: Colors.grey[300],
+                    child: Image.asset('images/rec-3.png'),
                   ),
                   const SizedBox(width: 20.0),
                   const Text(
@@ -78,10 +78,10 @@ class About extends StatelessWidget {
                         color: CustomColors.primaryWhite, fontSize: 20),
                   ),
                   const SizedBox(width: 20.0),
-                  Container(
+                  SizedBox(
                     width: 80,
                     height: 80,
-                    color: Colors.grey[300],
+                    child: Image.asset('images/rec-2.png'),
                   ),
                 ],
               ),
