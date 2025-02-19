@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart'hide CarouselController;
-import 'package:overlapped_carousel/overlapped_carousel.dart' as Cntroller;
+import 'dart:developer';
+
+import 'package:flutter/material.dart' hide CarouselController;
+import 'package:overlapped_carousel/overlapped_carousel.dart' as controller;
 
 class CustomImageSlider extends StatefulWidget {
   final double width;
@@ -39,8 +41,8 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
       currentIndex = index;
     });
     widget.onClicked(index.toInt());
-    print("$index");
-    print("$currentIndex");
+    log("$index");
+    log("$currentIndex");
   }
 
   void moveLeft() {
@@ -87,7 +89,7 @@ class _CustomImageSliderState extends State<CustomImageSlider> {
         SizedBox(
       height: 200,
       width: 500,
-      child: Cntroller.OverlappedCarousel(
+      child: controller.OverlappedCarousel(
         widgets: widget.widgets,
         currentIndex: 2,
         onClicked: (index) {

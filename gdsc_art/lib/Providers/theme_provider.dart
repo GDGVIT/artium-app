@@ -43,7 +43,6 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> fetchThemes() async {
     try {
       final response = await _repo.themes();
-      print('Themes: $response');
       if (response['status'] == 'success') {
         final allThemes = (response['themes'] as List)
             .map((theme) => ThemeModel.fromJson(theme))

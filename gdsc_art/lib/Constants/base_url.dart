@@ -2,11 +2,11 @@ import 'dart:io' show Platform;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BaseUrl {
-  static String get baseUrl {
+  static String? get baseUrl {
     final environment = dotenv.env['ENVIRONMENT'] ?? 'debug';
 
     if (environment == 'prod') {
-      return dotenv.env['API_URL_PROD'] ?? 'https://artium.rupaaksrinivas.tech';
+      return dotenv.env['API_URL_PROD'];
     }
 
     if (Platform.isAndroid) {

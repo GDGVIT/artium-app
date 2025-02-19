@@ -3,7 +3,7 @@ import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:http/http.dart' as http;
 
 class CreateArtRepo {
-  static String baseUrl = BaseUrl.baseUrl;
+  static String? baseUrl = BaseUrl.baseUrl;
 
   Future<Map<String, dynamic>> stylizeImage({
     required String token,

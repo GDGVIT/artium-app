@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Constants/common_toast.dart';
@@ -8,7 +10,7 @@ import 'user_notifier.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-String baseUrl = BaseUrl.baseUrl;
+String? baseUrl = BaseUrl.baseUrl;
 
 class LoginAndSignupProvider with ChangeNotifier {
   final appRepo = AppRepo();
@@ -29,16 +31,16 @@ class LoginAndSignupProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      print("Starting login with data: $data");
+      log("Starting login with data: $data");
       var response = await appRepo.userLogin(data);
-      print("Response from login: $response");
+      log("Response from login: $response");
 
       if (response['status'] == 'success') {
         _isLoading = false;
         notifyListeners();
 
         User user = User.fromJson(response['user']);
-        print("Parsed user: $user");
+        log("Parsed user: $user");
         await _saveAuthData(
           response['token'],
           User.fromJson(response['user']),
@@ -54,7 +56,7 @@ class LoginAndSignupProvider with ChangeNotifier {
     } catch (error) {
       _isLoading = false;
       notifyListeners();
-      print("Error during login: $error");
+      log("Error during login: $error");
 
       String errorMessage = "Something went wrong";
       try {
@@ -63,7 +65,7 @@ class LoginAndSignupProvider with ChangeNotifier {
           errorMessage = errorResponse['message'];
         }
       } catch (e) {
-        print("Error parsing error response: $e");
+        log("Error parsing error response: $e");
 
         final RegExp regExp = RegExp(r'"message":"([^"]+)"');
         final match = regExp.firstMatch(error.toString());
@@ -80,9 +82,9 @@ class LoginAndSignupProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      print("Starting signup with data: $data");
+      log("Starting signup with data: $data");
       var response = await appRepo.userSignup(data);
-      print("Response from signup: $response");
+      log("Response from signup: $response");
 
       if (response['status'] == 'success') {
         _isLoading = false;
@@ -97,7 +99,7 @@ class LoginAndSignupProvider with ChangeNotifier {
     } catch (error) {
       _isLoading = false;
       notifyListeners();
-      print("Error during signup: $error");
+      log("Error during signup: $error");
 
       String errorMessage = "Something went wrong";
       try {
@@ -106,7 +108,7 @@ class LoginAndSignupProvider with ChangeNotifier {
           errorMessage = errorResponse['message'];
         }
       } catch (e) {
-        print("Error parsing error response: $e");
+        log("Error parsing error response: $e");
 
         final RegExp regExp = RegExp(r'"message":"([^"]+)"');
         final match = regExp.firstMatch(error.toString());

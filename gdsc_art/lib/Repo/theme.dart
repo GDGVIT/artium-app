@@ -3,7 +3,7 @@ import 'package:gdsc_artwork/Services/netwrok_services.dart';
 
 class ThemeRepo {
   final BaseApiServices _apiServices = NetworkApiServices();
-  String baseURL = BaseUrl.baseUrl;
+  String? baseURL = BaseUrl.baseUrl;
 
   Future<dynamic> themeOfDay() async {
     try {
