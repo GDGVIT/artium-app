@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../Constants/Colors.dart';
 import 'package:gdsc_artwork/Providers/user_notifier.dart';
 
-String baseUrl = BaseUrl.baseUrl;
+String? baseUrl = BaseUrl.baseUrl;
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;

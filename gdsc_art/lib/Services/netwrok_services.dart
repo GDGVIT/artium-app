@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 abstract class BaseApiServices {
@@ -24,11 +25,10 @@ class NetworkApiServices extends BaseApiServices {
       case 403:
       case 404:
       case 500:
-        print("${response.statusCode} Error: ${response.body}");
+        log("${response.statusCode} Error: ${response.body}");
         throw Exception(response.body);
       default:
-        print(
-            "Unhandled Status Code (${response.statusCode}): ${response.body}");
+        log("Unhandled Status Code (${response.statusCode}): ${response.body}");
         throw Exception(
             "Unhandled Status Code (${response.statusCode}): ${response.body}");
     }
@@ -39,16 +39,16 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseJson;
 
     try {
-      print("Sending POST request to $url with data $data");
+      log("Sending POST request to $url with data $data");
       http.Response response = await http.post(
         Uri.parse(url),
         body: jsonEncode(data),
         headers: {"Content-Type": "application/json"},
       );
       responseJson = apiResponse(response);
-      print("Response received: $responseJson");
+      log("Response received: $responseJson");
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
       rethrow;
     }
     return responseJson;
@@ -59,12 +59,12 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseJson;
 
     try {
-      print("Sending GET request to $url");
+      log("Sending GET request to $url");
       http.Response response = await http.get(Uri.parse(url));
       responseJson = apiResponse(response);
-      print("Response received: $responseJson");
+      log("Response received: $responseJson");
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
       rethrow;
     }
 

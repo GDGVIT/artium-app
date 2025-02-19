@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:gdsc_artwork/Providers/theme_provider.dart';
 import 'package:gdsc_artwork/Data/theme_data.dart';
 
-String baseUrl = BaseUrl.baseUrl;
+String? baseUrl = BaseUrl.baseUrl;
 
 class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
@@ -36,7 +36,7 @@ class _HomeContentState extends State<HomeContent> {
 
     return provider.randomThemes
         .map((theme) => {
-              'image': baseUrl + theme.themeImages.first,
+              'image': baseUrl! + theme.themeImages.first,
               'title': theme.title,
               'description': theme.description,
             })

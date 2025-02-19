@@ -92,7 +92,7 @@ import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Model/gallery_model.dart';
 import 'package:gdsc_artwork/Repo/gallery.dart';
 
-String baseUrl = BaseUrl.baseUrl;
+String? baseUrl = BaseUrl.baseUrl;
 
 class GalleryProvider extends ChangeNotifier {
   final GalleryRepo _repo = GalleryRepo();
@@ -138,7 +138,7 @@ class GalleryProvider extends ChangeNotifier {
                   id: art['_id'],
                   title: art['title'],
                   likes: art['likes'],
-                  imageUrl: baseUrl + art['image'],
+                  imageUrl: baseUrl! + art['image'],
                   description: art['description'],
                   artist: ArtistModel(
                     id: art['artist']['_id'],

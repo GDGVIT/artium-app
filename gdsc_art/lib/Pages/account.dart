@@ -13,7 +13,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
-  String baseUrl = BaseUrl.baseUrl;
+  String? baseUrl = BaseUrl.baseUrl;
   bool isPressed = false;
   int? selectedIndex;
   int currentPageIndex = 0;
@@ -94,7 +94,7 @@ class _AccountState extends State<Account> {
                 child: ClipOval(
                   child: user.image != null
                       ? Image.network(
-                          baseUrl + user.image!,
+                          baseUrl! + user.image!,
                           fit: BoxFit.fill,
                           width: 55,
                           height: 55,
