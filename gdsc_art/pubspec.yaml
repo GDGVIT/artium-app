@@ -114,6 +114,9 @@ flutter:
     - family: OutfitLight
       fonts:
         - asset: fonts/Outfit-Light.ttf
+    - family: OutfitRegular
+      fonts:
+        - asset: fonts/OutfitRegular.ttf
     
        
   #   - family: Trajan Pro
