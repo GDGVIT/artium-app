@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Repo/create_art.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +12,6 @@ class CreateArtProvider with ChangeNotifier {
   String? _error;
   String? _stylizedImage;
   String? _artSlug;
-  final TextEditingController themeController = TextEditingController();
 
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -67,14 +68,13 @@ class CreateArtProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> saveArt({
-    String? theme,
-    required String title,
-    required String description,
-    required BuildContext context,
-  }) async {
+  Future<dynamic> saveArt(
+      {required String title,
+      required String description,
+      required BuildContext context,
+      required String theme,
+      required String image}) async {
     if (!await checkAuth(context)) return false;
-    if (_stylizedImage == null) return false;
 
     try {
       _isLoading = true;
@@ -83,19 +83,17 @@ class CreateArtProvider with ChangeNotifier {
       final token = await _getToken();
       final response = await _repo.saveArt(
         token: token!,
-        theme: theme ?? themeController.text,
-        image: _stylizedImage!,
+        theme: theme,
+        image: image,
         title: title,
         description: description,
       );
-
       if (response['status'] == 'success') {
         _artSlug = response['art']['slug'];
         return true;
       }
-      return false;
     } catch (e) {
-      _error = e.toString();
+      log(e.toString());
       return false;
     } finally {
       _isLoading = false;
@@ -133,11 +131,5 @@ class CreateArtProvider with ChangeNotifier {
     _stylizedImage = null;
     _artSlug = null;
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    themeController.dispose();
-    super.dispose();
   }
 }

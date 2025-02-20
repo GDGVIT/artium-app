@@ -22,44 +22,37 @@ class StylizedImage extends StatefulWidget {
 }
 
 class _StylizedImageState extends State<StylizedImage> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController themeController = TextEditingController();
+  bool saveSuccess = false;
   bool _publishedClicked = false;
 
   void _handleSave() async {
-    if (_titleController.text.isEmpty) return;
+    if (titleController.text.isEmpty) return;
+    if (descriptionController.text.isEmpty) return;
 
     final provider = context.read<CreateArtProvider>();
     final success = await provider.saveArt(
-      theme: widget.styleThemeTitle,
-      title: _titleController.text,
-      description: _descriptionController.text,
+      theme: widget.styleThemeTitle == '' ? themeController.text : '',
+      title: titleController.text,
+      description: descriptionController.text,
       context: context,
+      image: widget.stylisedImage ?? '',
     );
-
     if (success) {
+      saveSuccess = true;
       commonToast('Art Saved Succesfully');
     }
   }
 
   void _handlePublish() async {
-    if (_titleController.text.isEmpty) {
-      setState(() => _publishedClicked = true);
-      return;
-    }
-
     final provider = context.read<CreateArtProvider>();
-    final saveSuccess = await provider.saveArt(
-      theme: widget.styleThemeTitle,
-      title: _titleController.text,
-      description: _descriptionController.text,
-      context: context,
-    );
-
-    if (saveSuccess && mounted) {
+    _publishedClicked = true;
+    if (saveSuccess) {
       final publishSuccess = await provider.publishArt(context);
-      if (publishSuccess && mounted) {
-        commonToast('Art Published!');
+      if (publishSuccess) {
+        commonToast('Art submitted for review!');
         Navigator.pushReplacementNamed(context, '/home');
       }
     }
@@ -67,6 +60,8 @@ class _StylizedImageState extends State<StylizedImage> {
 
   @override
   Widget build(BuildContext context) {
+    print('object');
+    print(widget.styleThemeTitle);
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(
@@ -90,7 +85,6 @@ class _StylizedImageState extends State<StylizedImage> {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -117,53 +111,6 @@ class _StylizedImageState extends State<StylizedImage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if (widget.styleThemeTitle == null) ...[
-                      Container(
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF202020),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: DropdownButtonFormField<String>(
-                          value: provider.themeController.text.isEmpty
-                              ? null
-                              : provider.themeController.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Select Theme',
-                            labelStyle: TextStyle(
-                              color: CustomColors.primaryCream,
-                              fontFamily: "OutfitRegular",
-                            ),
-                            border: OutlineInputBorder(),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: CustomColors.primaryCream),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: CustomColors.primaryCream),
-                            ),
-                          ),
-                          dropdownColor: const Color(0xFF202020),
-                          style: const TextStyle(
-                            color: CustomColors.primaryWhite,
-                            fontFamily: "OutfitRegular",
-                          ),
-                          items: ThemeConstants.availableThemes
-                              .map((theme) => DropdownMenuItem(
-                                    value: theme,
-                                    child: Text(theme),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            if (value != null) {
-                              provider.themeController.text = value;
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12.0),
                       child: provider.stylizedImage != null
@@ -202,7 +149,7 @@ class _StylizedImageState extends State<StylizedImage> {
                             ),
                             const SizedBox(height: 10),
                             TextField(
-                              controller: _titleController,
+                              controller: titleController,
                               decoration: InputDecoration(
                                 hintText: "Enter a Name",
                                 hintStyle: const TextStyle(
@@ -231,17 +178,155 @@ class _StylizedImageState extends State<StylizedImage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "X",
+                                    "Name is missing",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontFamily: "OutfitRegular",
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 2,
+                                ],
+                              )
+                          ],
+                        ),
+                      ),
+                    ),
+                    widget.styleThemeTitle == ''
+                        ? Container(
+                            padding: const EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF202020),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Container(
+                              color: const Color(0xFF202020),
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Theme",
+                                      style: TextStyle(
+                                        color: CustomColors.primaryCream,
+                                        fontFamily: "OutfitRegular",
+                                      ),
+                                    ),
                                   ),
+                                  const SizedBox(height: 10),
+                                  DropdownButtonFormField<String>(
+                                    value: themeController.text.isEmpty
+                                        ? ThemeConstants.availableThemes[0]
+                                        : themeController.text,
+                                    decoration: InputDecoration(
+                                      hintText: "Select Theme",
+                                      hintStyle: const TextStyle(
+                                        color: CustomColors.primaryBrown,
+                                        fontFamily: "OutfitRegular",
+                                      ),
+                                      filled: true,
+                                      fillColor: const Color(0xFF363333),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        vertical: 14.0,
+                                        horizontal: 16.0,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                    dropdownColor: const Color(0xFF363333),
+                                    style: const TextStyle(
+                                      color: CustomColors.primaryCream,
+                                      fontFamily: "OutfitRegular",
+                                    ),
+                                    items: ThemeConstants.availableThemes
+                                        .map((theme) => DropdownMenuItem(
+                                              value: theme,
+                                              child: Text(theme),
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        themeController.text = value;
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  if (_publishedClicked)
+                                    const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Choose a Theme",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: "OutfitRegular",
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF202020),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Container(
+                        color: const Color(0xFF202020),
+                        child: Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Description",
+                                style: TextStyle(
+                                  color: CustomColors.primaryCream,
+                                  fontFamily: "OutfitRegular",
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              maxLines: 5,
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                hintText: "Describe your art",
+                                hintStyle: const TextStyle(
+                                  color: CustomColors.primaryBrown,
+                                  fontFamily: "OutfitRegular",
+                                ),
+                                filled: true,
+                                fillColor: const Color(0xFF363333),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 14.0, horizontal: 16.0),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                color: CustomColors.primaryBrown,
+                                fontFamily: "OutfitRegular",
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            if (_publishedClicked)
+                              const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
                                   Text(
-                                    "cannot Publish an untitled piece!",
+                                    "Description is missing",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontFamily: "OutfitRegular",
