@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   ];
 
   final List<String> _titles = [
-    'ART Gallery',
+    'Art Gallery',
     'Themes',
     'About Us',
     'Gallery',

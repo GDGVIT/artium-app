@@ -122,8 +122,11 @@ class _DailyThemeState extends State<DailyTheme> {
                       description: theme.description,
                       onUseStyle: () {},
                       onLearnMore: () {
-                        setState(() => _showLearnMore = !_showLearnMore);
+                        if (theme.history.isNotEmpty) {
+                          setState(() => _showLearnMore = true);
+                        }
                       },
+                      showLearnMore: theme.history.isNotEmpty,
                     ),
                   ),
                   if (_showLearnMore) ...[
@@ -187,7 +190,7 @@ class _DailyThemeState extends State<DailyTheme> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'historic pieces of\n frida kahlo'
+                                        'historic pieces of\n${theme.history[0].artist.name}'
                                             .toUpperCase(),
                                         style: const TextStyle(
                                           color: Color(0xff161516),
@@ -209,12 +212,12 @@ class _DailyThemeState extends State<DailyTheme> {
                                     ],
                                   ),
                                 ),
-                                for (int i = 0; i < 3; i++) ...[
+                                for (var history in theme.history) ...[
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12.0),
                                     child: Container(
-                                      padding: EdgeInsets.all(32),
+                                      padding: const EdgeInsets.all(32),
                                       decoration: BoxDecoration(
                                         color: CustomColors.secondaryBlack,
                                         borderRadius: BorderRadius.circular(16),
@@ -223,14 +226,24 @@ class _DailyThemeState extends State<DailyTheme> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          // Image Placeholder
-                                          Container(
-                                            width: double.infinity,
-                                            height: 231,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(18),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            child: FadeInImage.assetNetwork(
+                                              placeholder:
+                                                  'images/sampleLogo.png',
+                                              image: '$baseUrl${history.src}',
+                                              height: 231,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                              imageErrorBuilder: (context,
+                                                      error, stackTrace) =>
+                                                  Container(
+                                                height: 231,
+                                                width: double.infinity,
+                                                color: Colors.grey[300],
+                                                child: const Icon(Icons.error),
+                                              ),
                                             ),
                                           ),
                                           Padding(
@@ -243,21 +256,22 @@ class _DailyThemeState extends State<DailyTheme> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'frida kahlo'.toUpperCase(),
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          'OutfitRegular',
-                                                      color: CustomColors
-                                                          .primaryCream,
-                                                      fontSize: 16),
+                                                  history.artist.name
+                                                      .toUpperCase(),
+                                                  style: const TextStyle(
+                                                    fontFamily: 'OutfitRegular',
+                                                    color: CustomColors
+                                                        .primaryCream,
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
-                                                const Text(
-                                                  'Dutch, 1853 - 1890',
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          'OutfitRegular',
-                                                      color: Colors.white,
-                                                      fontSize: 12),
+                                                Text(
+                                                  history.artist.period,
+                                                  style: const TextStyle(
+                                                    fontFamily: 'OutfitRegular',
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                  ),
                                                 )
                                               ],
                                             ),
@@ -266,8 +280,8 @@ class _DailyThemeState extends State<DailyTheme> {
                                             text: TextSpan(
                                               children: [
                                                 TextSpan(
-                                                  text: 'The Broken Column',
-                                                  style: TextStyle(
+                                                  text: theme.workTitle,
+                                                  style: const TextStyle(
                                                     color: CustomColors
                                                         .primaryCream,
                                                     fontFamily: 'OutfitMedium',
@@ -279,8 +293,8 @@ class _DailyThemeState extends State<DailyTheme> {
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: ', 1939',
-                                                  style: TextStyle(
+                                                  text: ', ${history.art.year}',
+                                                  style: const TextStyle(
                                                     color: CustomColors
                                                         .primaryCream,
                                                     fontFamily: 'OutfitLight',
@@ -605,6 +619,7 @@ class InfoBoxWithButtons extends StatelessWidget {
   final String description;
   final VoidCallback onUseStyle;
   final VoidCallback onLearnMore;
+  final bool showLearnMore;
 
   const InfoBoxWithButtons({
     super.key,
@@ -612,6 +627,7 @@ class InfoBoxWithButtons extends StatelessWidget {
     required this.description,
     required this.onUseStyle,
     required this.onLearnMore,
+    required this.showLearnMore,
   });
 
   @override
@@ -641,49 +657,49 @@ class InfoBoxWithButtons extends StatelessWidget {
               fontFamily: 'OutfitRegular',
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: onUseStyle,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.primaryCream,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+          if (showLearnMore) ...[
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: onUseStyle,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.primaryCream,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Use this style',
-                  style: TextStyle(
-                    color: CustomColors.secondaryBlack,
-                    fontFamily: 'OutfitSemiBold',
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: onLearnMore,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.secondaryBlack,
-                  foregroundColor: CustomColors.primaryCream,
-                  side: const BorderSide(color: CustomColors.primaryCream),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(
-                      width: 2,
+                  child: const Text(
+                    'Use this style',
+                    style: TextStyle(
+                      color: CustomColors.secondaryBlack,
+                      fontFamily: 'OutfitSemiBold',
                     ),
                   ),
                 ),
-                child: const Text(
-                  'Learn more',
-                  style: TextStyle(
-                    color: CustomColors.primaryCream,
-                    fontFamily: 'OutfitSemiBold',
+                ElevatedButton(
+                  onPressed: onLearnMore,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.secondaryBlack,
+                    foregroundColor: CustomColors.primaryCream,
+                    side: const BorderSide(color: CustomColors.primaryCream),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Learn more',
+                    style: TextStyle(
+                      color: CustomColors.primaryCream,
+                      fontFamily: 'OutfitSemiBold',
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ]
         ],
       ),
     );

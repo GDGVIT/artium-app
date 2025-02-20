@@ -16,8 +16,9 @@ class ArtStyleInfoBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 2),
-      padding: const EdgeInsets.all(14.0),
+      margin: const EdgeInsets.only(left: 32, right: 32, top: 32),
+      padding:
+          const EdgeInsets.only(left: 24.0, right: 24, top: 12, bottom: 24),
       decoration: BoxDecoration(
         color: CustomColors.secondaryBlack,
         borderRadius: BorderRadius.circular(12.0),
@@ -26,19 +27,20 @@ class ArtStyleInfoBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            title,
+            title.toUpperCase(),
             style: const TextStyle(
-              color: CustomColors.secondaryCream,
+              color: CustomColors.primaryWhite,
               fontSize: 19.0,
               fontFamily: 'OutfitMedium',
             ),
           ),
           const SizedBox(height: 4.0),
           Container(
-            height: 2.0,
-            color: CustomColors.primaryBrown,
+            height: 1.0,
+            color: CustomColors.primaryWhite.withOpacity(0.5),
             margin: const EdgeInsets.symmetric(vertical: 8.0),
           ),
+          const SizedBox(height: 4.0),
           Text(
             textAlign: TextAlign.left,
             description,
@@ -66,7 +68,14 @@ class ArtStyleInfoBox extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            child: const Text('Use this style'),
+            child: const Text(
+              'Use this style',
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'OutfitSemiBold',
+                color: CustomColors.primaryWhite,
+              ),
+            ),
           ),
         ],
       ),
