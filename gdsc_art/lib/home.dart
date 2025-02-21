@@ -43,6 +43,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(
         title: _titles[_selectedIndex],
         isCentered: _selectedIndex != 0,

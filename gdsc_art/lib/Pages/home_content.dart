@@ -46,183 +46,199 @@ class _HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xff0D0C0D),
       drawer: Sidebar(
         selectedIndex: 0,
         onItemSelected: (index) {},
       ),
-      body: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
-          final themeData = getThemeData(themeProvider);
+      body: Stack(
+        children: [
+          Positioned(
+            top: -10,
+            right: 0,
+            child: Image.asset('images/home_top_right.png'),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Image.asset('images/home_bottom.png'),
+          ),
+          Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
+              final themeData = getThemeData(themeProvider);
 
-          return Padding(
-            padding: const EdgeInsets.only(top: 25.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Wrap(
-                    spacing: 0,
-                    alignment: WrapAlignment.center,
+              return Padding(
+                padding: const EdgeInsets.only(top: 25.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Discover',
-                        style: TextStyle(
-                          color: CustomColors.secondaryCream,
-                          fontSize: 24.0,
-                          fontFamily: 'OutfitMedium',
+                      const Wrap(
+                        spacing: 0,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Text(
+                            'Discover',
+                            style: TextStyle(
+                              color: CustomColors.secondaryCream,
+                              fontSize: 24.0,
+                              fontFamily: 'OutfitMedium',
+                            ),
+                          ),
+                          SizedBox(width: 10.0),
+                          Text('art styles.',
+                              style: TextStyle(
+                                color: CustomColors.primaryWhite,
+                                fontSize: 24.0,
+                                fontFamily: 'OutfitMedium',
+                              )),
+                        ],
+                      ),
+                      const Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 0,
+                        children: [
+                          Text(
+                            'Stylize',
+                            style: TextStyle(
+                              color: CustomColors.primaryBrown,
+                              fontSize: 24.0,
+                              fontFamily: 'OutfitMedium',
+                            ),
+                          ),
+                          SizedBox(width: 10.0),
+                          Text('images.',
+                              style: TextStyle(
+                                color: CustomColors.primaryWhite,
+                                fontSize: 24.0,
+                                fontFamily: 'OutfitMedium',
+                              )),
+                        ],
+                      ),
+                      const SizedBox(height: 20.0),
+                      SizedBox(
+                        height: 248,
+                        child: buildImageSlider(themeData),
+                      ),
+                      const SizedBox(height: 15.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: themeData.asMap().entries.map((entry) {
+                          return GestureDetector(
+                            child: Container(
+                              width: 8.0,
+                              height: 8.0,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: currentImageIndex == entry.key
+                                    ? Colors.grey
+                                    : Colors.grey.withOpacity(0.5),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      ArtStyleInfoBox(
+                        title: themeData[currentImageIndex]['title'] ?? '',
+                        description:
+                            themeData[currentImageIndex]['description'] ?? '',
+                        onPressed: () {
+                          final currentTheme =
+                              themeProvider.randomThemes[currentImageIndex];
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SelectStylePage(
+                                styleImage: currentTheme.themeImages.first,
+                                styleThemeTitle: currentTheme.title,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width * 0.2,
+                                  top: 4),
+                              child: Divider(
+                                color: CustomColors.primaryWhite,
+                                thickness: 1.0,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              'or',
+                              style: TextStyle(
+                                color: CustomColors.primaryWhite,
+                                fontSize: 18.0,
+                                fontFamily: 'OutfitMedium',
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  top: 4),
+                              child: Divider(
+                                color: CustomColors.primaryWhite,
+                                thickness: 1.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SelectStylePage(
+                                styleImage: '',
+                                styleThemeTitle: '',
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.primaryCream,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 32.0, vertical: 8.0),
+                          textStyle: const TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: "OutfitMedium",
+                          ),
+                        ),
+                        child: const Text(
+                          'Create your own style',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'OutfitSemiBold',
+                            color: CustomColors.primaryBlack,
+                          ),
                         ),
                       ),
-                      SizedBox(width: 10.0),
-                      Text('art styles.',
-                          style: TextStyle(
-                            color: CustomColors.primaryWhite,
-                            fontSize: 24.0,
-                            fontFamily: 'OutfitMedium',
-                          )),
                     ],
                   ),
-                  const Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 0,
-                    children: [
-                      Text(
-                        'Stylize',
-                        style: TextStyle(
-                          color: CustomColors.primaryBrown,
-                          fontSize: 24.0,
-                          fontFamily: 'OutfitMedium',
-                        ),
-                      ),
-                      SizedBox(width: 10.0),
-                      Text('images.',
-                          style: TextStyle(
-                            color: CustomColors.primaryWhite,
-                            fontSize: 24.0,
-                            fontFamily: 'OutfitMedium',
-                          )),
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  SizedBox(
-                    height: 248,
-                    child: buildImageSlider(themeData),
-                  ),
-                  const SizedBox(height: 15.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: themeData.asMap().entries.map((entry) {
-                      return GestureDetector(
-                        child: Container(
-                          width: 8.0,
-                          height: 8.0,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: currentImageIndex == entry.key
-                                ? Colors.grey
-                                : Colors.grey.withOpacity(0.5),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  ArtStyleInfoBox(
-                    title: themeData[currentImageIndex]['title'] ?? '',
-                    description:
-                        themeData[currentImageIndex]['description'] ?? '',
-                    onPressed: () {
-                      final currentTheme =
-                          themeProvider.randomThemes[currentImageIndex];
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SelectStylePage(
-                            styleImage: currentTheme.themeImages.first,
-                            styleThemeTitle: currentTheme.title,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.2,
-                              top: 4),
-                          child: Divider(
-                            color: CustomColors.primaryWhite,
-                            thickness: 1.0,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'or',
-                          style: TextStyle(
-                            color: CustomColors.primaryWhite,
-                            fontSize: 18.0,
-                            fontFamily: 'OutfitMedium',
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              right: MediaQuery.of(context).size.width * 0.2,
-                              top: 4),
-                          child: Divider(
-                            color: CustomColors.primaryWhite,
-                            thickness: 1.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SelectStylePage(
-                            styleImage: '',
-                            styleThemeTitle: '',
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.primaryCream,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32.0, vertical: 8.0),
-                      textStyle: const TextStyle(
-                        fontSize: 16.0,
-                        fontFamily: "OutfitMedium",
-                      ),
-                    ),
-                    child: const Text(
-                      'Create your own style',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'OutfitSemiBold',
-                        color: CustomColors.primaryBlack,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -231,7 +247,7 @@ class _HomeContentState extends State<HomeContent> {
     return carousel.CarouselSlider.builder(
       options: carousel.CarouselOptions(
         autoPlay: false,
-        viewportFraction: 0.6,
+        viewportFraction: 0.69,
         enableInfiniteScroll: true,
         disableCenter: true,
         onPageChanged: (index, reason) {
@@ -301,7 +317,7 @@ class _HomeContentState extends State<HomeContent> {
                         (theme['title'] ?? '').toUpperCase(),
                         style: const TextStyle(
                           color: CustomColors.secondaryBrown,
-                          fontSize: 12,
+                          fontSize: 16,
                           fontFamily: "OutfitMedium",
                         ),
                         textAlign: TextAlign.center,
@@ -311,7 +327,7 @@ class _HomeContentState extends State<HomeContent> {
                         'Tap to learn more',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontFamily: "OutfitRegular",
+                          fontFamily: "OutfitLight",
                           fontSize: 12.0,
                         ),
                         textAlign: TextAlign.center,

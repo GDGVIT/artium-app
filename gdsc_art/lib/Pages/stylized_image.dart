@@ -63,9 +63,11 @@ class _StylizedImageState extends State<StylizedImage> {
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xff141414),
+        surfaceTintColor: Colors.transparent,
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -138,9 +140,10 @@ class _StylizedImageState extends State<StylizedImage> {
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Name",
+                                "Name your Art!",
                                 style: TextStyle(
-                                  color: CustomColors.primaryCream,
+                                  fontSize: 20,
+                                  color: CustomColors.primaryWhite,
                                   fontFamily: "OutfitRegular",
                                 ),
                               ),
@@ -204,7 +207,8 @@ class _StylizedImageState extends State<StylizedImage> {
                                     child: Text(
                                       "Theme",
                                       style: TextStyle(
-                                        color: CustomColors.primaryCream,
+                                        fontSize: 20,
+                                        color: CustomColors.primaryWhite,
                                         fontFamily: "OutfitRegular",
                                       ),
                                     ),
@@ -287,7 +291,8 @@ class _StylizedImageState extends State<StylizedImage> {
                               child: Text(
                                 "Description",
                                 style: TextStyle(
-                                  color: CustomColors.primaryCream,
+                                  fontSize: 20,
+                                  color: CustomColors.primaryWhite,
                                   fontFamily: "OutfitRegular",
                                 ),
                               ),
@@ -385,6 +390,7 @@ class _StylizedImageState extends State<StylizedImage> {
                         )
                       ],
                     ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
