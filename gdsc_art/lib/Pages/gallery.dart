@@ -58,69 +58,99 @@ class _GalleryState extends State<Gallery> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.primaryBlack,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await Provider.of<GalleryProvider>(context, listen: false)
-              .refreshGallery();
-        },
-        child: Consumer<GalleryProvider>(
-          builder: (context, provider, _) {
-            if (provider.isInitialLoading) {
-              return _buildShimmerGrid();
-            }
+    final height = MediaQuery.of(context).size.height;
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0D0C0D),
+            Color(0xFF1A181A),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              top: height * 0.125,
+              right: 0,
+              child: Image.asset('images/general_right.png'),
+            ),
+            Positioned(
+              left: 0,
+              bottom: height * 0.125,
+              child: Image.asset('images/general_left.png'),
+            ),
+            RefreshIndicator(
+              onRefresh: () async {
+                await Provider.of<GalleryProvider>(context, listen: false)
+                    .refreshGallery();
+              },
+              child: Consumer<GalleryProvider>(
+                builder: (context, provider, _) {
+                  if (provider.isInitialLoading) {
+                    return _buildShimmerGrid();
+                  }
 
-            return SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    child: MasonryGridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      itemCount: provider.arts.length +
-                          (provider.hasMore
-                              ? min(provider.remainingItems, provider.limit)
-                              : 0),
-                      itemBuilder: (context, index) {
-                        if (index >= provider.arts.length) {
-                          final isEven = index.isEven;
-                          final randomAspectRatio = isEven
-                              ? (0.8 + (index % 3) * 0.1)
-                              : (1.2 + (index % 3) * 0.1);
+                  return SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: MasonryGridView.count(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            itemCount: provider.arts.length +
+                                (provider.hasMore
+                                    ? min(
+                                        provider.remainingItems, provider.limit)
+                                    : 0),
+                            itemBuilder: (context, index) {
+                              if (index >= provider.arts.length) {
+                                final isEven = index.isEven;
+                                final randomAspectRatio = isEven
+                                    ? (0.8 + (index % 3) * 0.1)
+                                    : (1.2 + (index % 3) * 0.1);
 
-                          return ShimmerGalleryItem(
-                            aspectRatio: randomAspectRatio,
-                          );
-                        }
-                        final art = provider.arts[index];
-                        return GalleryContainer(
-                          imageUrl: art.imageUrl,
-                          title: art.title,
-                          name: art.artist.name,
-                          likes: art.likes,
-                          aspectRatio: art.aspectRatio ?? 1.0,
-                        );
-                      },
+                                return ShimmerGalleryItem(
+                                  aspectRatio: randomAspectRatio,
+                                );
+                              }
+                              final art = provider.arts[index];
+                              return GalleryContainer(
+                                imageUrl: art.imageUrl,
+                                title: art.title,
+                                name: art.artist.name,
+                                likes: art.likes,
+                                aspectRatio: art.aspectRatio ?? 1.0,
+                              );
+                            },
+                          ),
+                        ),
+                        if (!provider.hasMore && provider.arts.isNotEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              "You've reached the end!",
+                              style:
+                                  TextStyle(color: CustomColors.primaryWhite),
+                            ),
+                          ),
+                      ],
                     ),
-                  ),
-                  if (!provider.hasMore && provider.arts.isNotEmpty)
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        "You've reached the end!",
-                        style: TextStyle(color: CustomColors.primaryWhite),
-                      ),
-                    ),
-                ],
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

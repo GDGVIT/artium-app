@@ -115,6 +115,7 @@ class GalleryContainer extends StatelessWidget {
                                 color: CustomColors.primaryCream,
                                 size: 20,
                               ),
+                              borderRadius: BorderRadius.circular(32),
                               onSelected: (value) {
                                 if (value == 'publish' && onPublish != null) {
                                   onPublish!();

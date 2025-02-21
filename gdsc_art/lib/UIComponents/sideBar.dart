@@ -23,74 +23,98 @@ class Sidebar extends StatelessWidget {
     final user = userNotifier.user;
 
     return SafeArea(
-      child: SizedBox(
-        child: Drawer(
-          width: MediaQuery.of(context).size.width * 0.6,
-          child: Container(
-            color: CustomColors.primaryBlack,
-            child: Column(
-              children: [
-                user?.name != "Guest" ? _buildProfileHeader(user) : Container(),
-                user?.name != "Guest"
-                    ? const Divider(
-                        color: CustomColors.primaryBrown,
-                        thickness: 2,
-                      )
-                    : Container(),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      _createDrawerItem(
-                          context,
-                          0,
-                          'Create',
-                          'images/createIcon.png',
-                          selectedIndex,
-                          onItemSelected,
-                          user),
-                      _createDrawerItem(
-                          context,
-                          1,
-                          'Themes',
-                          'images/themeoftheday.png',
-                          selectedIndex,
-                          onItemSelected,
-                          user),
-                      _createDrawerItem(
-                          context,
-                          2,
-                          'About',
-                          'images/aboutgdsc.png',
-                          selectedIndex,
-                          onItemSelected,
-                          user),
-                      _createDrawerItem(
-                          context,
-                          3,
-                          'View Gallery',
-                          'images/gallery.png',
-                          selectedIndex,
-                          onItemSelected,
-                          user),
-                      _createDrawerItem(
-                          context,
-                          4,
-                          'MyAccount',
-                          'images/account.png',
-                          selectedIndex,
-                          onItemSelected,
-                          user),
-                    ],
+      child: Drawer(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: Container(
+          color: CustomColors.primaryBlack,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Image.asset(
+                  'images/drawer_top_right.png',
+                  height: 350,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Image.asset('images/drawer_bottom.png'),
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.12,
                   ),
-                ),
-                const Divider(
-                  color: CustomColors.primaryBrown,
-                  thickness: 2,
-                ),
-                _buildSignOutOrLoginTile(context, userNotifier, user),
-                const SizedBox(height: 10),
-              ],
-            ),
+                  user?.name != "Guest"
+                      ? _buildProfileHeader(user)
+                      : Container(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: ListView(
+                        children: [
+                          _createDrawerItem(
+                              context,
+                              0,
+                              'Create',
+                              'images/createIcon.png',
+                              selectedIndex,
+                              onItemSelected,
+                              user),
+                          _createDrawerItem(
+                              context,
+                              1,
+                              'Themes',
+                              'images/themeoftheday.png',
+                              selectedIndex,
+                              onItemSelected,
+                              user),
+                          _createDrawerItem(
+                              context,
+                              2,
+                              'About',
+                              'images/aboutgdsc.png',
+                              selectedIndex,
+                              onItemSelected,
+                              user),
+                          _createDrawerItem(
+                              context,
+                              3,
+                              'View Gallery',
+                              'images/gallery.png',
+                              selectedIndex,
+                              onItemSelected,
+                              user),
+                          _createDrawerItem(
+                              context,
+                              4,
+                              'MyAccount',
+                              'images/account.png',
+                              selectedIndex,
+                              onItemSelected,
+                              user),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Divider(
+                      color: CustomColors.primaryCream.withOpacity(0.25),
+                      thickness: 1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child:
+                        _buildSignOutOrLoginTile(context, userNotifier, user),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -122,38 +146,41 @@ class Sidebar extends StatelessWidget {
           profileImage = const AssetImage('images/userprofile.png');
         }
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
+        return Container(
+          padding: const EdgeInsets.all(16.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
-                radius: 30,
+                radius: 35,
                 backgroundImage: profileImage,
               ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  user?.name == 'Guest'
-                      ? const Text(
-                          'Welcome Back!',
-                          style: TextStyle(
-                            color: CustomColors.secondaryBrown,
-                            fontFamily: "OutfitMedium",
-                            fontSize: 20,
-                          ),
-                        )
-                      : Container(),
-                  Text(
-                    user?.name ?? 'Guest',
-                    style: const TextStyle(
-                      color: CustomColors.secondaryBrown,
-                      fontFamily: "OutfitMedium",
-                      fontSize: 20,
-                    ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'Welcome,\n',
+                        style: TextStyle(
+                          color: CustomColors.primaryCream,
+                          fontSize: 24,
+                          fontFamily: 'OutfitRegular',
+                        ),
+                      ),
+                      TextSpan(
+                        text: '${user?.name ?? 'Guest'}!',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'OutfitRegular',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -176,7 +203,7 @@ class Sidebar extends StatelessWidget {
         title,
         style: TextStyle(
           fontSize: 18,
-          fontFamily: "OutfitMedium",
+          fontFamily: "OutfitRegular",
           color: CustomColors.primaryWhite,
           decoration: index == selectedIndex
               ? TextDecoration.underline
@@ -203,8 +230,8 @@ class Sidebar extends StatelessWidget {
           'Login',
           style: TextStyle(
             fontSize: 20,
-            fontFamily: "OutfitMedium",
-            color: CustomColors.primaryWhite,
+            fontFamily: "OutfitRegular",
+            color: CustomColors.primaryCream,
           ),
         ),
         onTap: () {
@@ -220,11 +247,11 @@ class Sidebar extends StatelessWidget {
           child: Image.asset('images/logout.png'),
         ),
         title: const Text(
-          'Signout',
+          'Sign out',
           style: TextStyle(
             fontSize: 20,
-            fontFamily: "OutfitMedium",
-            color: CustomColors.primaryWhite,
+            fontFamily: "OutfitRegular",
+            color: CustomColors.primaryCream,
           ),
         ),
         onTap: () {

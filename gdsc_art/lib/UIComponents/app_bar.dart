@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gdsc_artwork/Constants/Colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -11,15 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomColors.primaryBlack,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: (0.1)),
-            spreadRadius: 0,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: Colors.transparent,
       ),
       child: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -27,11 +20,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0,
         centerTitle: isCentered,
         title: Text(
-          title,
+          title == 'Art Gallery' ? '' : title,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 24.0,
-            fontFamily: 'OutfitMedium',
+            fontFamily: 'OutfitRegular',
           ),
         ),
         shape: const RoundedRectangleBorder(
@@ -40,16 +33,36 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             bottomRight: Radius.circular(16),
           ),
         ),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.menu, color: CustomColors.primaryWhite),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: CustomColors.primaryWhite),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
           },
         ),
+        actions: [
+          if (title == 'Art Gallery')
+            Padding(
+              padding: const EdgeInsets.only(right: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SvgPicture.asset('images/logo.svg'),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  const Text(
+                    'Artium',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: 'Outfit',
+                      color: CustomColors.primaryWhite,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                ],
+              ),
+            )
+        ],
       ),
     );
   }

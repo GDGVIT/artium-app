@@ -96,9 +96,11 @@ class _SelectImagePageState extends State<SelectImagePage> {
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        centerTitle: true,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Color(0xff141414),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -125,21 +127,21 @@ class _SelectImagePageState extends State<SelectImagePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    const Text(
-                      "Primary Image",
+                    Text(
+                      "Primary Image".toUpperCase(),
                       style: TextStyle(
                         color: CustomColors.primaryCream,
                         fontFamily: "OutfitRegular",
-                        fontSize: 25,
+                        fontSize: 24,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 6),
                     const Text(
                       "Select an image to stylize",
                       style: TextStyle(
                         color: CustomColors.primaryBrown,
                         fontFamily: "OutfitRegular",
-                        fontSize: 12,
+                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 15),
