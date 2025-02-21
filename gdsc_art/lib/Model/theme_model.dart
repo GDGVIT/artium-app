@@ -1,3 +1,5 @@
+import 'package:gdsc_artwork/Model/history_model.dart';
+
 class ThemeModel {
   final String id;
   final String title;
@@ -8,6 +10,7 @@ class ThemeModel {
   final String workTitle;
   final List<String> workImages;
   final String workDescription;
+  final List<HistoryModel> history;
 
   ThemeModel({
     required this.id,
@@ -19,6 +22,7 @@ class ThemeModel {
     required this.workTitle,
     required this.workImages,
     required this.workDescription,
+    required this.history,
   });
 
   factory ThemeModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,9 @@ class ThemeModel {
       workTitle: json['work_title'],
       workImages: List<String>.from(json['work_images']),
       workDescription: json['work_description'],
+      history: (json['history'] as List)
+          .map((history) => HistoryModel.fromJson(history))
+          .toList(),
     );
   }
 }

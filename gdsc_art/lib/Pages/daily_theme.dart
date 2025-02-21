@@ -27,50 +27,66 @@ class _DailyThemeState extends State<DailyTheme> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.primaryBlack,
-      body: Consumer<ThemeProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0D0C0D),
+            Color(0xFF1A181A),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Consumer<ThemeProvider>(
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (provider.hasError) {
-            return Center(
-              child: Text(
-                provider.errorMessage ?? 'Error loading theme',
-                style: const TextStyle(color: CustomColors.primaryWhite),
-              ),
-            );
-          }
+            if (provider.hasError) {
+              return Center(
+                child: Text(
+                  provider.errorMessage ?? 'Error loading theme',
+                  style: const TextStyle(color: CustomColors.primaryWhite),
+                ),
+              );
+            }
 
-          final theme = provider.theme;
-          if (theme == null) return const SizedBox();
+            final theme = provider.theme;
+            if (theme == null) return const SizedBox();
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+            return SingleChildScrollView(
               child: Column(
                 children: [
-                  if (!_showLearnMore) ...[
-                    const Text(
-                      'THEME OF THE DAY',
-                      style: TextStyle(
-                        color: CustomColors.primaryCream,
-                        fontFamily: "OutfitRegular",
-                        fontSize: 24,
+                  if (!_showLearnMore)
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Theme of the Day',
+                            style: TextStyle(
+                              color: CustomColors.primaryCream,
+                              fontFamily: "OutfitMedium",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 24,
+                            ),
+                          ),
+                          const SizedBox(height: 7.0),
+                          Text(
+                            theme.title.toUpperCase(),
+                            style: const TextStyle(
+                              color: CustomColors.primaryBrown,
+                              fontFamily: "OutfitRegular",
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 5.0),
-                    Text(
-                      theme.title,
-                      style: const TextStyle(
-                        color: CustomColors.primaryBrown,
-                        fontFamily: "OutfitRegular",
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
                   if (_showLearnMore)
                     Row(
                       children: [
@@ -84,7 +100,7 @@ class _DailyThemeState extends State<DailyTheme> {
                         ),
                         Expanded(
                           child: Text(
-                            theme.title,
+                            theme.title.toUpperCase(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: CustomColors.primaryCream,
@@ -99,41 +115,241 @@ class _DailyThemeState extends State<DailyTheme> {
                   const SizedBox(height: 20.0),
                   ThemeCarousel(images: theme.themeImages),
                   const SizedBox(height: 45.0),
-                  InfoBoxWithButtons(
-                    title: theme.title,
-                    description: theme.description,
-                    onUseStyle: () {},
-                    onLearnMore: () {
-                      setState(() => _showLearnMore = !_showLearnMore);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: InfoBoxWithButtons(
+                      title: theme.title,
+                      description: theme.description,
+                      onUseStyle: () {},
+                      onLearnMore: () {
+                        if (theme.history.isNotEmpty) {
+                          setState(() => _showLearnMore = true);
+                        }
+                      },
+                      showLearnMore: theme.history.isNotEmpty,
+                    ),
                   ),
                   if (_showLearnMore) ...[
                     const SizedBox(height: 100.0),
-                    LearnMore(
-                      imagePath: theme.workImages.first,
-                      title: theme.workTitle,
-                      description: theme.workDescription,
-                      infoLink: theme.infoLink,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: LearnMore(
+                        imagePath: theme.workImages.first,
+                        title: theme.workTitle,
+                        description: theme.workDescription,
+                        infoLink: theme.infoLink,
+                      ),
+                    ),
+                    SizedBox(height: 62.0),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [
+                            0.0,
+                            1.0,
+                          ],
+                          colors: [
+                            CustomColors.primaryBrown,
+                            CustomColors.secondaryCream
+                          ],
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0,
+                            left: 6,
+                            child: Image.asset('images/swirl1.png'),
+                          ),
+                          Positioned(
+                            top: 67,
+                            right: 0,
+                            child: Image.asset('images/swirl2.png'),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 396,
+                            child: Image.asset('images/swirl3.png'),
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 823,
+                            child: Image.asset('images/swirl4.png'),
+                          ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 24.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'historic pieces of\n${theme.history[0].artist.name}'
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                          color: Color(0xff161516),
+                                          fontFamily: "OutfitSemiBold",
+                                          fontSize: 24,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.25),
+                                        child: const Divider(
+                                          color: Color(0xff161516),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                for (var history in theme.history) ...[
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(32),
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.secondaryBlack,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            child: FadeInImage.assetNetwork(
+                                              placeholder:
+                                                  'images/sampleLogo.png',
+                                              image: '$baseUrl${history.src}',
+                                              height: 231,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                              imageErrorBuilder: (context,
+                                                      error, stackTrace) =>
+                                                  Container(
+                                                height: 231,
+                                                width: double.infinity,
+                                                color: Colors.grey[300],
+                                                child: const Icon(Icons.error),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 16, bottom: 12.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  history.artist.name
+                                                      .toUpperCase(),
+                                                  style: const TextStyle(
+                                                    fontFamily: 'OutfitRegular',
+                                                    color: CustomColors
+                                                        .primaryCream,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  history.artist.period,
+                                                  style: const TextStyle(
+                                                    fontFamily: 'OutfitRegular',
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: theme.workTitle,
+                                                  style: const TextStyle(
+                                                    color: CustomColors
+                                                        .primaryCream,
+                                                    fontFamily: 'OutfitMedium',
+                                                    fontSize: 16,
+                                                    fontStyle: FontStyle.italic,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    decorationThickness: 2,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ', ${history.art.year}',
+                                                  style: const TextStyle(
+                                                    color: CustomColors
+                                                        .primaryCream,
+                                                    fontFamily: 'OutfitLight',
+                                                    fontSize: 16,
+                                                    fontStyle: FontStyle.italic,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    decorationThickness: 2,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                ]
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                   if (!_showLearnMore) ...[
                     const SizedBox(height: 40.0),
-                    const Text(
-                      "OTHER THEMES",
-                      style: TextStyle(
-                        color: CustomColors.primaryWhite,
-                        fontFamily: "OutfitRegular",
-                        fontSize: 24,
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff141414),
+                          borderRadius: BorderRadius.circular(32)),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+                      child: Column(
+                        children: [
+                          const Text(
+                            "OTHER THEMES",
+                            style: TextStyle(
+                              color: Color(0xffEAD0B3),
+                              fontFamily: "OutfitMedium",
+                              fontSize: 24,
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          const OtherThemes(),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 20.0),
-                    const OtherThemes(),
                   ],
                 ],
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -244,28 +460,63 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
   }) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18.0),
-      child: ColorFiltered(
-        colorFilter: ColorFilter.mode(
-          Colors.black.withOpacity(0.2),
-          BlendMode.darken,
-        ),
-        child: Opacity(
-          opacity: opacity,
-          child: FadeInImage.assetNetwork(
-            placeholder: 'images/sampleLogo.png',
-            image: '$baseUrl$imageUrl',
-            height: height,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            imageErrorBuilder: (context, error, stackTrace) => Container(
-              height: height,
-              color: Colors.grey[300],
-              child: const Icon(Icons.error),
+      child: Stack(
+        children: [
+          ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.2),
+              BlendMode.darken,
             ),
-            fadeInDuration: const Duration(milliseconds: 300),
-            placeholderFit: BoxFit.cover,
+            child: Opacity(
+              opacity: opacity,
+              child: FadeInImage.assetNetwork(
+                placeholder: 'images/sampleLogo.png',
+                image: '$baseUrl$imageUrl',
+                height: height,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) => Container(
+                  height: height,
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.error),
+                ),
+                fadeInDuration: const Duration(milliseconds: 300),
+                placeholderFit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.8),
+                  ],
+                  stops: const [0.8, 1.0],
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: const Alignment(-0.5, -0.5),
+                  end: const Alignment(1.0, 1.0),
+                  colors: [
+                    Colors.transparent,
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.9),
+                  ],
+                  stops: const [0.0, 0.6, 1.0],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -309,7 +560,7 @@ class _OtherThemesState extends State<OtherThemes> {
               itemBuilder: (context, index) {
                 final theme = themes[index];
                 return Card(
-                  color: Colors.black,
+                  color: Color(0xff141414),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
@@ -322,6 +573,7 @@ class _OtherThemesState extends State<OtherThemes> {
                           child: ClipRRect(
                             borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(16.0),
+                              bottom: Radius.circular(16),
                             ),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'images/sampleLogo.png',
@@ -367,6 +619,7 @@ class InfoBoxWithButtons extends StatelessWidget {
   final String description;
   final VoidCallback onUseStyle;
   final VoidCallback onLearnMore;
+  final bool showLearnMore;
 
   const InfoBoxWithButtons({
     super.key,
@@ -374,12 +627,13 @@ class InfoBoxWithButtons extends StatelessWidget {
     required this.description,
     required this.onUseStyle,
     required this.onLearnMore,
+    required this.showLearnMore,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
         color: CustomColors.secondaryBlack,
         borderRadius: BorderRadius.circular(12.0),
@@ -387,14 +641,14 @@ class InfoBoxWithButtons extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            title,
+            title.toUpperCase(),
             style: const TextStyle(
               color: CustomColors.primaryWhite,
               fontSize: 19.0,
               fontFamily: 'OutfitBold',
             ),
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 20.0),
           Text(
             description,
             style: const TextStyle(
@@ -403,35 +657,49 @@ class InfoBoxWithButtons extends StatelessWidget {
               fontFamily: 'OutfitRegular',
             ),
           ),
-          const SizedBox(height: 20.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: onUseStyle,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.primaryCream,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+          if (showLearnMore) ...[
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: onUseStyle,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.primaryCream,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Use this style',
+                    style: TextStyle(
+                      color: CustomColors.secondaryBlack,
+                      fontFamily: 'OutfitSemiBold',
+                    ),
                   ),
                 ),
-                child: const Text('Use this style'),
-              ),
-              ElevatedButton(
-                onPressed: onLearnMore,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.secondaryBlack,
-                  foregroundColor: CustomColors.primaryCream,
-                  side: const BorderSide(color: CustomColors.primaryCream),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                ElevatedButton(
+                  onPressed: onLearnMore,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.secondaryBlack,
+                    foregroundColor: CustomColors.primaryCream,
+                    side: const BorderSide(color: CustomColors.primaryCream),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Learn more',
+                    style: TextStyle(
+                      color: CustomColors.primaryCream,
+                      fontFamily: 'OutfitSemiBold',
+                    ),
                   ),
                 ),
-                child: const Text('Learn more'),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ]
         ],
       ),
     );
@@ -456,7 +724,7 @@ class LearnMore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomColors.tertiaryBlack,
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Stack(
@@ -466,7 +734,7 @@ class LearnMore extends StatelessWidget {
             margin: const EdgeInsets.only(top: 200),
             padding: const EdgeInsets.all(16.0),
             decoration: const BoxDecoration(
-              color: CustomColors.tertiaryBlack,
+              color: CustomColors.secondaryBlack,
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
             child: Column(
@@ -500,21 +768,21 @@ class LearnMore extends StatelessWidget {
                       await launchUrl(Uri.parse(infoLink));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.primaryCream,
-                      foregroundColor: CustomColors.primaryBlack,
+                      backgroundColor: CustomColors.secondaryBlack,
+                      foregroundColor: CustomColors.primaryCream,
+                      side: const BorderSide(color: CustomColors.primaryCream),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24.0,
-                        vertical: 12.0,
+                        side: BorderSide(
+                          width: 2,
+                        ),
                       ),
                     ),
                     child: const Text(
-                      'Learn More',
+                      'Learn more',
                       style: TextStyle(
-                        fontFamily: 'OutfitMedium',
-                        fontSize: 14.0,
+                        color: CustomColors.primaryCream,
+                        fontFamily: 'OutfitSemiBold',
                       ),
                     ),
                   ),
@@ -533,7 +801,6 @@ class LearnMore extends StatelessWidget {
                 placeholder: 'images/sampleLogo.png',
                 image: baseUrl! + imagePath,
                 height: 300,
-                width: double.infinity,
                 fit: BoxFit.cover,
                 imageErrorBuilder: (context, error, stackTrace) => Container(
                   height: 300,

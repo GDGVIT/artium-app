@@ -69,7 +69,7 @@ class _HomeContentState extends State<HomeContent> {
                         'Discover',
                         style: TextStyle(
                           color: CustomColors.secondaryCream,
-                          fontSize: 28.0,
+                          fontSize: 24.0,
                           fontFamily: 'OutfitMedium',
                         ),
                       ),
@@ -77,7 +77,7 @@ class _HomeContentState extends State<HomeContent> {
                       Text('art styles.',
                           style: TextStyle(
                             color: CustomColors.primaryWhite,
-                            fontSize: 28.0,
+                            fontSize: 24.0,
                             fontFamily: 'OutfitMedium',
                           )),
                     ],
@@ -90,7 +90,7 @@ class _HomeContentState extends State<HomeContent> {
                         'Stylize',
                         style: TextStyle(
                           color: CustomColors.primaryBrown,
-                          fontSize: 28.0,
+                          fontSize: 24.0,
                           fontFamily: 'OutfitMedium',
                         ),
                       ),
@@ -98,7 +98,7 @@ class _HomeContentState extends State<HomeContent> {
                       Text('images.',
                           style: TextStyle(
                             color: CustomColors.primaryWhite,
-                            fontSize: 28.0,
+                            fontSize: 24.0,
                             fontFamily: 'OutfitMedium',
                           )),
                     ],
@@ -149,33 +149,41 @@ class _HomeContentState extends State<HomeContent> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Container(
-                          height: 2.0,
-                          color: CustomColors.primaryBrown,
-                          margin: const EdgeInsets.only(left: 50.0),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.2,
+                              top: 4),
+                          child: Divider(
+                            color: CustomColors.primaryWhite,
+                            thickness: 1.0,
+                          ),
                         ),
                       ),
-                      Container(
+                      Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: const Text(
+                        child: Text(
                           'or',
                           style: TextStyle(
-                            color: CustomColors.primaryBrown,
+                            color: CustomColors.primaryWhite,
                             fontSize: 18.0,
                             fontFamily: 'OutfitMedium',
                           ),
                         ),
                       ),
                       Expanded(
-                        child: Container(
-                          height: 2.0,
-                          color: CustomColors.primaryBrown,
-                          margin: const EdgeInsets.only(right: 50.0),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              right: MediaQuery.of(context).size.width * 0.2,
+                              top: 4),
+                          child: Divider(
+                            color: CustomColors.primaryWhite,
+                            thickness: 1.0,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -192,16 +200,23 @@ class _HomeContentState extends State<HomeContent> {
                       backgroundColor: CustomColors.primaryCream,
                       foregroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 25.0, vertical: 10.0),
+                          horizontal: 32.0, vertical: 8.0),
                       textStyle: const TextStyle(
                         fontSize: 16.0,
                         fontFamily: "OutfitMedium",
                       ),
                     ),
-                    child: const Text('Create Your Own Style'),
+                    child: const Text(
+                      'Create your own style',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'OutfitSemiBold',
+                        color: CustomColors.primaryBlack,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -215,89 +230,97 @@ class _HomeContentState extends State<HomeContent> {
   Widget buildImageSlider(List<Map<String, String>> themeData) {
     return carousel.CarouselSlider.builder(
       options: carousel.CarouselOptions(
-          autoPlay: false,
-          viewportFraction: 0.65,
-          enableInfiniteScroll: true,
-          disableCenter: true,
-          onPageChanged: (index, reason) {
-            setState(() {
-              currentImageIndex = index;
-            });
-          },
-          enlargeCenterPage: true),
+        autoPlay: false,
+        viewportFraction: 0.6,
+        enableInfiniteScroll: true,
+        disableCenter: true,
+        onPageChanged: (index, reason) {
+          setState(() {
+            currentImageIndex = index;
+          });
+        },
+        enlargeCenterPage: true,
+        enlargeFactor: 0.35,
+      ),
       itemCount: themeData.length,
       itemBuilder: (context, index, realIndex) {
         final theme = themeData[index];
-        return Container(
-          height: 350,
-          margin: const EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
-                ),
-                child: theme['image']!.startsWith('http')
-                    ? Image.network(
-                        theme['image']!,
-                        fit: BoxFit.cover,
-                        height: 180.0,
-                        width: double.infinity,
-                        errorBuilder: (_, __, ___) => Image.asset(
-                          StaticThemeData.defaultThemes[index]['image']!,
+        final isCurrent = index == currentImageIndex;
+
+        return AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: isCurrent ? 1.0 : 0.25,
+          child: Container(
+            height: 350,
+            margin: const EdgeInsets.symmetric(horizontal: 2.0),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                  child: theme['image']!.startsWith('http')
+                      ? Image.network(
+                          theme['image']!,
+                          fit: BoxFit.cover,
+                          height: 180.0,
+                          width: double.infinity,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            StaticThemeData.defaultThemes[index]['image']!,
+                            fit: BoxFit.cover,
+                            height: 180.0,
+                            width: double.infinity,
+                          ),
+                        )
+                      : Image.asset(
+                          theme['image']!,
                           fit: BoxFit.cover,
                           height: 180.0,
                           width: double.infinity,
                         ),
-                      )
-                    : Image.asset(
-                        theme['image']!,
-                        fit: BoxFit.cover,
-                        height: 180.0,
-                        width: double.infinity,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(12.0),
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF222122),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        (theme['title'] ?? '').toUpperCase(),
+                        style: const TextStyle(
+                          color: CustomColors.secondaryBrown,
+                          fontSize: 12,
+                          fontFamily: "OutfitMedium",
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(12.0),
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF222122),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20.0),
-                    bottomRight: Radius.circular(20.0),
+                      const SizedBox(height: 4.0),
+                      Text(
+                        'Tap to learn more',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: "OutfitRegular",
+                          fontSize: 12.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Text(
-                      theme['title'] ?? '',
-                      style: const TextStyle(
-                        color: CustomColors.secondaryBrown,
-                        fontSize: 16.0,
-                        fontFamily: "OutfitMedium",
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 4.0),
-                    Text(
-                      'Tap to learn more',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: "OutfitRegular",
-                        fontSize: 12.0,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
