@@ -1,4 +1,4 @@
-import 'package:artium/Pages/splash.dart';
+// import 'package:artium/Pages/splash.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:artium/Auth/auth_view_page.dart';

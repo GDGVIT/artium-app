@@ -102,7 +102,7 @@ class Sidebar extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Divider(
-                      color: CustomColors.primaryCream.withOpacity(0.25),
+                      color: CustomColors.primaryCream.withValues(alpha: 0.25),
                       thickness: 1,
                     ),
                   ),

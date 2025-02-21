@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:artium/Constants/common_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart' hide CarouselController;
 import 'package:artium/Constants/base_url.dart';
 import 'package:artium/Constants/colors.dart';
 import 'package:artium/Pages/select_style_page.dart';
-import 'package:artium/UIComponents/sidebar.dart';
+import 'package:artium/UIComponents/side_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel;
 import 'package:artium/UIComponents/art_style_info_box.dart';
 import 'package:provider/provider.dart';
@@ -78,7 +79,7 @@ class _HomeContentState extends State<HomeContent> {
         });
       }
     } catch (e) {
-      print('Error loading themes: $e');
+      log('Error loading themes: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -394,11 +395,10 @@ class _HomeContentState extends State<HomeContent> {
           height: 8.0,
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: currentImageIndex == entry.key
-                ? CustomColors.primaryCream
-                : CustomColors.primaryCream.withOpacity(0.5),
-          ),
+              shape: BoxShape.circle,
+              color: currentImageIndex == entry.key
+                  ? CustomColors.primaryCream
+                  : CustomColors.primaryCream.withValues(alpha: 0.5)),
         );
       }).toList(),
     );

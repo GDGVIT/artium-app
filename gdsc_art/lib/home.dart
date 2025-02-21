@@ -5,7 +5,7 @@ import 'package:artium/Pages/account.dart';
 import 'package:artium/Pages/daily_theme.dart';
 import 'package:artium/Pages/gallery.dart';
 import 'package:artium/UIComponents/app_bar.dart';
-import 'package:artium/UIComponents/sideBar.dart';
+import 'package:artium/UIComponents/side_bar.dart';
 import 'package:artium/Pages/home_content.dart';
 
 class Home extends StatefulWidget {
