@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserNotifier extends ChangeNotifier {
   User? _user;
@@ -10,8 +11,11 @@ class UserNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearUser() {
+  void clearUser() async {
     _user = null;
+    await SharedPreferences.getInstance().then((prefs) {
+      prefs.clear();
+    });
     notifyListeners();
   }
 }
