@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gdsc_artwork/Auth/auth_view_page.dart';
 import 'package:gdsc_artwork/Providers/create_art_provider.dart';
+import 'package:gdsc_artwork/Providers/user_data_provider.dart';
 import 'package:gdsc_artwork/home.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding.dart';
 import 'package:gdsc_artwork/Pages/OnBoarding/welcome.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginAndSignupProvider()),
         ChangeNotifierProvider(create: (_) => GalleryProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => CreateArtProvider())
+        ChangeNotifierProvider(create: (_) => CreateArtProvider()),
+        ChangeNotifierProvider(create: (_) => UserDataProvider())
       ],
       child: MaterialApp(
         title: 'Art Gallery',

@@ -60,8 +60,6 @@ class _StylizedImageState extends State<StylizedImage> {
 
   @override
   Widget build(BuildContext context) {
-    print('object');
-    print(widget.styleThemeTitle);
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(

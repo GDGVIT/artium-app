@@ -60,7 +60,7 @@ class CreateArtProvider with ChangeNotifier {
       return _stylizedImage;
     } catch (e) {
       _error = e.toString();
-      print(_error);
+      log(_error!);
       return false;
     } finally {
       _isLoading = false;
