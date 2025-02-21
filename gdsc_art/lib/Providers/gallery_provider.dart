@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
-import 'package:gdsc_artwork/Model/gallery_model.dart';
-import 'package:gdsc_artwork/Repo/gallery.dart';
+import 'package:artium/Constants/base_url.dart';
+import 'package:artium/Model/gallery_model.dart';
+import 'package:artium/Repo/gallery.dart';
 
 String? baseUrl = BaseUrl.baseUrl;
 

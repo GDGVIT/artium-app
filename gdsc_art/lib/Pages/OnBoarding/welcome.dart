@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gdsc_artwork/UIComponents/header.dart';
+import 'package:artium/UIComponents/header.dart';
 import '../../Constants/colors.dart';
 
 class Welcome extends StatelessWidget {

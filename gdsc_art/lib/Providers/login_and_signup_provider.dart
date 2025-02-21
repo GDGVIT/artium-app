@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
-import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/Repo/auth.dart';
+import 'package:artium/Constants/base_url.dart';
+import 'package:artium/Constants/common_toast.dart';
+import 'package:artium/Repo/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'user_notifier.dart';

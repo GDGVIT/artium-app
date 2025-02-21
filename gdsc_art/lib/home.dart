@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Pages/about.dart';
-import 'package:gdsc_artwork/Pages/account.dart';
+import 'package:artium/Pages/about.dart';
+import 'package:artium/Pages/account.dart';
 
-import 'package:gdsc_artwork/Pages/daily_theme.dart';
-import 'package:gdsc_artwork/Pages/gallery.dart';
-import 'package:gdsc_artwork/UIComponents/app_bar.dart';
-import 'package:gdsc_artwork/UIComponents/sideBar.dart';
-import 'package:gdsc_artwork/Pages/home_content.dart';
+import 'package:artium/Pages/daily_theme.dart';
+import 'package:artium/Pages/gallery.dart';
+import 'package:artium/UIComponents/app_bar.dart';
+import 'package:artium/UIComponents/sideBar.dart';
+import 'package:artium/Pages/home_content.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/colors.dart';
-import 'package:gdsc_artwork/UIComponents/dynamic_aspect_ratio_image.dart';
+import 'package:artium/Constants/colors.dart';
+import 'package:artium/UIComponents/dynamic_aspect_ratio_image.dart';
 
 class GalleryContainer extends StatelessWidget {
   final String imageUrl;

@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:gdsc_artwork/Constants/colors.dart';
-import 'package:gdsc_artwork/Providers/gallery_provider.dart';
-import 'package:gdsc_artwork/UIComponents/gallery_container.dart';
-import 'package:gdsc_artwork/UIComponents/shimmer_gallery_item.dart';
+import 'package:artium/Constants/colors.dart';
+import 'package:artium/Providers/gallery_provider.dart';
+import 'package:artium/UIComponents/gallery_container.dart';
+import 'package:artium/UIComponents/shimmer_gallery_item.dart';
 import 'package:provider/provider.dart';
 
 class Gallery extends StatefulWidget {

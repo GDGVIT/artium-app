@@ -1,4 +1,4 @@
-# gdsc_artwork
+# artium
 
 A new Flutter project.
 

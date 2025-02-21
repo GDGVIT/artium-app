@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/common_toast.dart';
+import 'package:artium/Constants/common_toast.dart';
 import 'package:provider/provider.dart';
 import '../Constants/colors.dart';
 import '../Providers/create_art_provider.dart';

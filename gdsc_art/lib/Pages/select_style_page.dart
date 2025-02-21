@@ -1,11 +1,11 @@
 import 'dart:developer';
 
+import 'package:artium/Constants/base_url.dart';
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
-import 'package:gdsc_artwork/Pages/select_image_page.dart';
+import 'package:artium/Pages/select_image_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:gdsc_artwork/Constants/colors.dart';
+import '../Constants/colors.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 String? baseUrl = BaseUrl.baseUrl;

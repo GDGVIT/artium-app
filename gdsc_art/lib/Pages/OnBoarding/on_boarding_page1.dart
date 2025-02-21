@@ -93,7 +93,7 @@ class OnBoardingPage1 extends StatelessWidget {
                       text: 'Discover ',
                       style: TextStyle(
                         color: CustomColors.primaryCream,
-                        fontFamily: 'Outfit',
+                        fontFamily: 'OutfitLight',
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
                       ),
@@ -102,7 +102,7 @@ class OnBoardingPage1 extends StatelessWidget {
                       text: 'historic',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Outfit',
+                        fontFamily: 'OutfitLight',
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
                       ),
@@ -117,7 +117,7 @@ class OnBoardingPage1 extends StatelessWidget {
                     'and contemporary',
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Outfit',
+                      fontFamily: 'OutfitLight',
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
@@ -128,7 +128,7 @@ class OnBoardingPage1 extends StatelessWidget {
                 'art styles.',
                 style: TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Outfit',
+                  fontFamily: 'OutfitLight',
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
                 ),
@@ -210,7 +210,7 @@ class OnBoardingPage1 extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      height: size.height * 0.45,
+                      top: size.height * 0.0001,
                       child: Transform.scale(
                         scale: 1,
                         child: const ArtCard(
@@ -244,8 +244,15 @@ class ArtCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: 260,
+      decoration: BoxDecoration(boxShadow: [
+        const BoxShadow(
+          color: Color.fromRGBO(22, 21, 22, 0.55),
+          offset: Offset(-5, 10),
+          blurRadius: 3.6,
+        ),
+      ]),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Opacity(
@@ -276,6 +283,7 @@ class ArtCard extends StatelessWidget {
                     style: const TextStyle(
                       color: CustomColors.secondaryCream,
                       fontSize: 12,
+                      fontFamily: 'OutfitRegular',
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1.2,
                     ),

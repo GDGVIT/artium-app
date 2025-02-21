@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/Colors.dart';
+import 'package:artium/Constants/Colors.dart';
 
 class TextFieldComponent extends StatelessWidget {
   final String labelText;
   final TextEditingController controller;
   final bool obscureText;
 
-  const TextFieldComponent({super.key, 
+  const TextFieldComponent({
+    super.key,
     required this.labelText,
     required this.controller,
     this.obscureText = false,

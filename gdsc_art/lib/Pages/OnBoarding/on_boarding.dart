@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding_page1.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding_page2.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding_page3.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding_page4.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding_page5.dart';
+import 'package:artium/Pages/OnBoarding/on_boarding_page1.dart';
+import 'package:artium/Pages/OnBoarding/on_boarding_page2.dart';
+import 'package:artium/Pages/OnBoarding/on_boarding_page3.dart';
+import 'package:artium/Pages/OnBoarding/on_boarding_page4.dart';
+import 'package:artium/Pages/OnBoarding/on_boarding_page5.dart';
 import '../../Constants/colors.dart';
 
 class OnBoarding extends StatefulWidget {
@@ -29,27 +29,27 @@ class _OnBoardingState extends State<OnBoarding> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/auth'),
-              child: const Text(
-                'Skip',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'OutfitRegular',
-                  color: CustomColors.primaryCream,
-                ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pushReplacementNamed(context, '/auth'),
+            child: const Text(
+              'Skip',
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'OutfitRegular',
+                color: CustomColors.primaryCream,
               ),
             ),
-          ],
-          leading: Row(
+          ),
+        ],
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 24.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset('images/logo.svg'),
-              ),
+              SvgPicture.asset('images/logo.svg'),
               SizedBox(
                 width: 12,
               ),
@@ -63,7 +63,9 @@ class _OnBoardingState extends State<OnBoarding> {
                 ),
               ),
             ],
-          )),
+          ),
+        ),
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(

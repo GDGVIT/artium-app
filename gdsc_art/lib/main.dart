@@ -1,16 +1,17 @@
+import 'package:artium/Pages/splash.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gdsc_artwork/Auth/auth_view_page.dart';
-import 'package:gdsc_artwork/Providers/create_art_provider.dart';
-import 'package:gdsc_artwork/Providers/user_data_provider.dart';
-import 'package:gdsc_artwork/home.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/on_boarding.dart';
-import 'package:gdsc_artwork/Pages/OnBoarding/welcome.dart';
-import 'package:gdsc_artwork/Pages/account.dart';
-import 'package:gdsc_artwork/Providers/gallery_provider.dart';
-import 'package:gdsc_artwork/Providers/login_and_signup_provider.dart';
-import 'package:gdsc_artwork/Providers/theme_provider.dart';
-import 'package:gdsc_artwork/Providers/user_notifier.dart';
+import 'package:artium/Auth/auth_view_page.dart';
+import 'package:artium/Providers/create_art_provider.dart';
+import 'package:artium/Providers/user_data_provider.dart';
+import 'package:artium/home.dart';
+import 'package:artium/Pages/OnBoarding/on_boarding.dart';
+import 'package:artium/Pages/OnBoarding/welcome.dart';
+import 'package:artium/Pages/account.dart';
+import 'package:artium/Providers/gallery_provider.dart';
+import 'package:artium/Providers/login_and_signup_provider.dart';
+import 'package:artium/Providers/theme_provider.dart';
+import 'package:artium/Providers/user_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

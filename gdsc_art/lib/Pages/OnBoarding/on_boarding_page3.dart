@@ -87,7 +87,7 @@ class OnBoardingPage3 extends StatelessWidget {
                     text: 'Stylize ',
                     style: TextStyle(
                       color: CustomColors.primaryCream,
-                      fontFamily: 'Outfit',
+                      fontFamily: 'OutfitLight',
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
@@ -96,7 +96,7 @@ class OnBoardingPage3 extends StatelessWidget {
                     text: 'any image in',
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Outfit',
+                      fontFamily: 'OutfitLight',
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
@@ -111,7 +111,7 @@ class OnBoardingPage3 extends StatelessWidget {
                   "your favorite artist's",
                   style: TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Outfit',
+                    fontFamily: 'OutfitLight',
                     fontSize: 32,
                     fontWeight: FontWeight.w600,
                   ),
@@ -122,7 +122,7 @@ class OnBoardingPage3 extends StatelessWidget {
               'style',
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Outfit',
+                fontFamily: 'OutfitLight',
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
               ),
@@ -138,7 +138,7 @@ class OnBoardingPage3 extends StatelessWidget {
               ' - or your own style.',
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Outfit',
+                fontFamily: 'OutfitLight',
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
               ),
@@ -184,8 +184,13 @@ class ImageLayoutView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text('+',
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
+              const Text(
+                '+',
+                style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontFamily: 'OutfitRegular'),
+              ),
               const SizedBox(height: 8),
               Container(
                 width: 100,

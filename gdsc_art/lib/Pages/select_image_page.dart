@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/Pages/stylized_image.dart';
+import 'package:artium/Constants/common_toast.dart';
+import 'package:artium/Pages/stylized_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../Constants/colors.dart';

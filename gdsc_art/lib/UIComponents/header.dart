@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gdsc_artwork/Constants/colors.dart';
+import 'package:artium/Constants/colors.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key});

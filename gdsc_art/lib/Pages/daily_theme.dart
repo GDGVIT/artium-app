@@ -1,5 +1,8 @@
+// import 'package:card_swiper/card_swiper.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
+import 'package:artium/Constants/base_url.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constants/colors.dart';
