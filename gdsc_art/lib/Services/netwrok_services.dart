@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 abstract class BaseApiServices {
   Future<dynamic> postApi(String url, dynamic data);
   Future<dynamic> getApi(String url);
+  Future<dynamic> deleteApi(String url, String token); // Add this line
 }
 
 class NetworkApiServices extends BaseApiServices {
@@ -61,6 +62,29 @@ class NetworkApiServices extends BaseApiServices {
     try {
       log("Sending GET request to $url");
       http.Response response = await http.get(Uri.parse(url));
+      responseJson = apiResponse(response);
+      log("Response received: $responseJson");
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+
+    return responseJson;
+  }
+
+  @override
+  Future deleteApi(String url, String token) async {
+    dynamic responseJson;
+
+    try {
+      log("Sending DELETE request to $url");
+      http.Response response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
       responseJson = apiResponse(response);
       log("Response received: $responseJson");
     } catch (e) {

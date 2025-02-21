@@ -6,6 +6,7 @@ class GalleryModel {
   final String description;
   final ArtistModel artist;
   double? aspectRatio;
+  bool? reviewed;
 
   GalleryModel({
     required this.id,
@@ -15,6 +16,7 @@ class GalleryModel {
     required this.description,
     required this.artist,
     this.aspectRatio,
+    this.reviewed,
   });
 
   factory GalleryModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class GalleryModel {
       imageUrl: json['image'],
       description: json['description'],
       artist: ArtistModel.fromJson(json['artist']),
+      reviewed: json['reviewed'],
     );
   }
 }

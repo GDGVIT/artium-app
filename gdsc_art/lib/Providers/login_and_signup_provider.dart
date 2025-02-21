@@ -26,7 +26,7 @@ class LoginAndSignupProvider with ChangeNotifier {
     await prefs.setString('userImage', user.image ?? '');
   }
 
-  Future<void> userLog(dynamic data, BuildContext context) async {
+  Future<void> userlog(dynamic data, BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
