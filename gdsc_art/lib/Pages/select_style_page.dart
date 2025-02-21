@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Pages/select_image_page.dart';
+import 'package:artium/Pages/select_image_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../Constants/colors.dart';

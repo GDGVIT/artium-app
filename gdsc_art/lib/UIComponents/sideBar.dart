@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
+import 'package:artium/Constants/base_url.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../Constants/Colors.dart';
-import 'package:gdsc_artwork/Providers/user_notifier.dart';
+import 'package:artium/Providers/user_notifier.dart';
 
 String? baseUrl = BaseUrl.baseUrl;
 

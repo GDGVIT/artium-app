@@ -68,7 +68,7 @@ class OnBoardingPage2 extends StatelessWidget {
                       text: 'Explore ',
                       style: TextStyle(
                         color: CustomColors.primaryCream,
-                        fontFamily: 'Outfit',
+                        fontFamily: 'OutfitLight',
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
                       ),
@@ -77,7 +77,7 @@ class OnBoardingPage2 extends StatelessWidget {
                       text: 'artists and',
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Outfit',
+                        fontFamily: 'OutfitLight',
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
                       ),
@@ -92,7 +92,7 @@ class OnBoardingPage2 extends StatelessWidget {
                     'their iconic pieces.',
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Outfit',
+                      fontFamily: 'OutfitLight',
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
@@ -130,7 +130,7 @@ class OnBoardingPage2 extends StatelessWidget {
                               'VINCENT VAN GOGH',
                               style: TextStyle(
                                 color: CustomColors.primaryCream,
-                                fontFamily: 'Outfit',
+                                fontFamily: 'OutfitRegular',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -139,7 +139,7 @@ class OnBoardingPage2 extends StatelessWidget {
                               'Dutch, 1853 - 1890',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Outfit',
+                                fontFamily: 'OutfitRegular',
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -161,7 +161,8 @@ class OnBoardingPage2 extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.transparent,
                                 fontSize: 12,
-                                fontFamily: 'Outfit',
+                                fontFamily: 'OutfitRegular',
+                                fontStyle: FontStyle.italic,
                               ),
                             ),
                             Spacer()

@@ -1,4 +1,4 @@
-package com.example.gdsc_artwork
+package com.example.artium
 
 import io.flutter.embedding.android.FlutterActivity
 

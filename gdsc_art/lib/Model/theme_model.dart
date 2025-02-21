@@ -1,4 +1,4 @@
-import 'package:gdsc_artwork/Model/history_model.dart';
+import 'package:artium/Model/history_model.dart';
 
 class ThemeModel {
   final String id;

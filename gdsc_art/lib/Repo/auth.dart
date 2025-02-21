@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:gdsc_artwork/Constants/base_url.dart';
-import 'package:gdsc_artwork/Services/netwrok_services.dart';
+import 'package:artium/Constants/base_url.dart';
+import 'package:artium/Services/netwrok_services.dart';
 
 class AppRepo {
   final BaseApiServices _apiServices = NetworkApiServices();

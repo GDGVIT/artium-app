@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:gdsc_artwork/Constants/base_url.dart';
+import 'package:artium/Constants/base_url.dart';
 import 'package:http/http.dart' as http;
 
 class CreateArtRepo {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/UIComponents/shimmer_gallery_item.dart';
+import 'package:artium/UIComponents/shimmer_gallery_item.dart';
 
 class DynamicAspectRatioImage extends StatefulWidget {
   final String imageUrl;

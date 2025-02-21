@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/Colors.dart';
+import 'package:artium/Constants/Colors.dart';
 
 class About extends StatelessWidget {
   const About({super.key});

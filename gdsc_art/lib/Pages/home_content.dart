@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart' hide CarouselController;
-import 'package:gdsc_artwork/Constants/base_url.dart';
-import 'package:gdsc_artwork/Constants/colors.dart';
-import 'package:gdsc_artwork/Pages/select_style_page.dart';
-import 'package:gdsc_artwork/UIComponents/sidebar.dart';
+import 'package:artium/Constants/base_url.dart';
+import 'package:artium/Constants/colors.dart';
+import 'package:artium/Pages/select_style_page.dart';
+import 'package:artium/UIComponents/sidebar.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel;
-import 'package:gdsc_artwork/UIComponents/art_style_info_box.dart';
+import 'package:artium/UIComponents/art_style_info_box.dart';
 import 'package:provider/provider.dart';
-import 'package:gdsc_artwork/Providers/theme_provider.dart';
-import 'package:gdsc_artwork/Data/theme_data.dart';
+import 'package:artium/Providers/theme_provider.dart';
+import 'package:artium/Data/theme_data.dart';
 
 String? baseUrl = BaseUrl.baseUrl;
 

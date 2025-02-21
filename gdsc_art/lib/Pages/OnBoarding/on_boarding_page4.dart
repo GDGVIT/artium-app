@@ -25,7 +25,6 @@ class OnBoardingPage4 extends StatelessWidget {
               'images/onb4-1.svg',
             ),
           ),
-
           Positioned(
             top: size.height * 0.18,
             left: 0,
@@ -41,7 +40,7 @@ class OnBoardingPage4 extends StatelessWidget {
                         text: 'Publish ',
                         style: TextStyle(
                           color: CustomColors.primaryCream,
-                          fontFamily: 'Outfit',
+                          fontFamily: 'OutfitLight',
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
                         ),
@@ -50,7 +49,7 @@ class OnBoardingPage4 extends StatelessWidget {
                         text: 'your',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Outfit',
+                          fontFamily: 'OutfitLight',
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
                         ),
@@ -65,7 +64,7 @@ class OnBoardingPage4 extends StatelessWidget {
                       "creations in ours",
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Outfit',
+                        fontFamily: 'OutfitLight',
                         fontSize: 32,
                         fontWeight: FontWeight.w600,
                       ),
@@ -80,7 +79,7 @@ class OnBoardingPage4 extends StatelessWidget {
                         text: 'gallery ',
                         style: TextStyle(
                           color: CustomColors.primaryCream,
-                          fontFamily: 'Outfit',
+                          fontFamily: 'OutfitLight',
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
                         ),
@@ -89,7 +88,7 @@ class OnBoardingPage4 extends StatelessWidget {
                         text: 'for the world',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Outfit',
+                          fontFamily: 'OutfitLight',
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
                         ),
@@ -101,7 +100,7 @@ class OnBoardingPage4 extends StatelessWidget {
                   'to see.',
                   style: TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Outfit',
+                    fontFamily: 'OutfitLight',
                     fontSize: 32,
                     fontWeight: FontWeight.w600,
                   ),
@@ -113,11 +112,9 @@ class OnBoardingPage4 extends StatelessWidget {
             top: size.height * 0.52,
             left: 0,
             right: 0,
-            child: Center(
-              child: Image.asset(
-                'images/onb4-2.png',
-                fit: BoxFit.cover,
-              ),
+            child: Image.asset(
+              'images/onb4-2.png',
+              fit: BoxFit.cover,
             ),
           ),
         ],

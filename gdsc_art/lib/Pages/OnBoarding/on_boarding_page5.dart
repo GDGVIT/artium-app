@@ -75,7 +75,7 @@ class OnBoardingPage5 extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha:(0.2)),
+                    color: Colors.black.withValues(alpha: (0.2)),
                     blurRadius: 15,
                     spreadRadius: 5,
                     offset: const Offset(0, 5),
@@ -125,7 +125,7 @@ class OnBoardingPage5 extends StatelessWidget {
                     child: const Text(
                       'Start Creating',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontFamily: 'OutfitMedium',
                       ),
                     ),
@@ -155,7 +155,7 @@ class OnBoardingPage2Text extends StatelessWidget {
                 text: "Like ",
                 style: TextStyle(
                   color: CustomColors.primaryCream,
-                  fontFamily: 'Outfit',
+                  fontFamily: 'OutfitLight',
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
                 ),
@@ -164,7 +164,7 @@ class OnBoardingPage2Text extends StatelessWidget {
                 text: "others'",
                 style: TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Outfit',
+                  fontFamily: 'OutfitLight',
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
                 ),
@@ -179,7 +179,7 @@ class OnBoardingPage2Text extends StatelessWidget {
               "creations and get",
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Outfit',
+                fontFamily: 'OutfitLight',
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
               ),
@@ -190,7 +190,7 @@ class OnBoardingPage2Text extends StatelessWidget {
           'inspired.',
           style: TextStyle(
             color: CustomColors.primaryCream,
-            fontFamily: 'Outfit',
+            fontFamily: 'OutfitLight',
             fontSize: 32,
             fontWeight: FontWeight.w600,
           ),

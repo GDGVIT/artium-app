@@ -2,7 +2,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
+import 'package:artium/Constants/base_url.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Constants/colors.dart';
@@ -303,19 +303,30 @@ class _DailyThemeState extends State<DailyTheme> {
                                                     children: [
                                                       TextSpan(
                                                         text: theme.workTitle,
-                                                        style: const TextStyle(
-                                                          color: CustomColors
-                                                              .primaryCream,
-                                                          fontFamily:
-                                                              'OutfitMedium',
-                                                          fontSize: 16,
-                                                          fontStyle:
-                                                              FontStyle.italic,
+                                                        style: TextStyle(
+                                                          shadows: [
+                                                            Shadow(
+                                                              color: CustomColors
+                                                                  .primaryCream,
+                                                              offset:
+                                                                  Offset(0, -5),
+                                                            )
+                                                          ],
                                                           decoration:
                                                               TextDecoration
                                                                   .underline,
-                                                          decorationThickness:
-                                                              2,
+                                                          decorationColor:
+                                                              CustomColors
+                                                                  .primaryCream,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors
+                                                              .transparent,
+                                                          fontSize: 12,
+                                                          fontFamily:
+                                                              'OutfitRegular',
+                                                          fontStyle:
+                                                              FontStyle.italic,
                                                         ),
                                                       ),
                                                       TextSpan(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/auth_btn.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/login_signup_toggle.dart';
-import 'package:gdsc_artwork/Auth/AuthUICompnents/text_feild_component.dart';
-import 'package:gdsc_artwork/Constants/Colors.dart';
-import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/Providers/login_and_signup_provider.dart';
+import 'package:artium/Auth/AuthUICompnents/auth_btn.dart';
+import 'package:artium/Auth/AuthUICompnents/login_signup_toggle.dart';
+import 'package:artium/Auth/AuthUICompnents/text_feild_component.dart';
+import 'package:artium/Constants/Colors.dart';
+import 'package:artium/Constants/common_toast.dart';
+import 'package:artium/Providers/login_and_signup_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';

@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:gdsc_artwork/Constants/Colors.dart';
-import 'package:gdsc_artwork/Constants/base_url.dart';
-import 'package:gdsc_artwork/Constants/common_toast.dart';
-import 'package:gdsc_artwork/Model/gallery_model.dart';
-import 'package:gdsc_artwork/Providers/create_art_provider.dart';
-import 'package:gdsc_artwork/Providers/user_data_provider.dart';
-import 'package:gdsc_artwork/UIComponents/gallery_container.dart';
-import 'package:gdsc_artwork/UIComponents/shimmer_gallery_item.dart';
+import 'package:artium/Constants/Colors.dart';
+import 'package:artium/Constants/base_url.dart';
+import 'package:artium/Constants/common_toast.dart';
+import 'package:artium/Model/gallery_model.dart';
+import 'package:artium/Providers/create_art_provider.dart';
+import 'package:artium/Providers/user_data_provider.dart';
+import 'package:artium/UIComponents/gallery_container.dart';
+import 'package:artium/UIComponents/shimmer_gallery_item.dart';
 import 'package:provider/provider.dart';
 
 class Account extends StatefulWidget {
