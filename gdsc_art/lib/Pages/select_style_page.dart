@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Pages/select_image_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../Constants/colors.dart';
+import 'package:gdsc_artwork/Constants/colors.dart';
 import 'package:super_tooltip/super_tooltip.dart';
+
+String? baseUrl = BaseUrl.baseUrl;
 
 class SelectStylePage extends StatefulWidget {
   final dynamic styleImage;
@@ -35,7 +38,7 @@ class _SelectStylePageState extends State<SelectStylePage> {
 
   String? _getImageUrl() {
     if (widget.styleImage is String) {
-      return 'http://10.0.2.2:8000${widget.styleImage}';
+      return '$baseUrl${widget.styleImage}';
     }
     return null;
   }
@@ -43,7 +46,6 @@ class _SelectStylePageState extends State<SelectStylePage> {
   @override
   Widget build(BuildContext context) {
     bool isImageSelected = _image != null;
-
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(
@@ -206,8 +208,7 @@ class _SelectStylePageState extends State<SelectStylePage> {
                                   MaterialPageRoute(
                                     builder: (context) => SelectImagePage(
                                       styleImage: styleBase64,
-                                      styleThemeTitle:
-                                          widget.styleThemeTitle ?? '',
+                                      styleThemeTitle: widget.styleThemeTitle,
                                     ),
                                   ),
                                 );

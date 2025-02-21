@@ -323,15 +323,6 @@ class _HomeContentState extends State<HomeContent> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 4.0),
-                      Text(
-                        'Tap to learn more',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: "OutfitLight",
-                          fontSize: 12.0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
                     ],
                   ),
                 ),

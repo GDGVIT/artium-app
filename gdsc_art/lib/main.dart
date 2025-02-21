@@ -33,10 +33,19 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserNotifier()),
         ChangeNotifierProvider(create: (_) => LoginAndSignupProvider()),
-        ChangeNotifierProvider(create: (_) => GalleryProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(
+          create: (_) => GalleryProvider(),
+          lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+          lazy: true,
+        ),
         ChangeNotifierProvider(create: (_) => CreateArtProvider()),
-        ChangeNotifierProvider(create: (_) => UserDataProvider())
+        ChangeNotifierProvider(
+          create: (_) => UserDataProvider(),
+          lazy: true,
+        )
       ],
       child: MaterialApp(
         title: 'Art Gallery',
