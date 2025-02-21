@@ -29,7 +29,6 @@ class _SelectImagePageState extends State<SelectImagePage> {
   File? _image;
   double contentSize = 50.0;
   double stylizationStrength = 50.0;
-
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -92,7 +91,6 @@ class _SelectImagePageState extends State<SelectImagePage> {
   @override
   Widget build(BuildContext context) {
     bool isImageSelected = _image != null;
-
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(

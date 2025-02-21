@@ -94,6 +94,7 @@ class CreateArtProvider with ChangeNotifier {
         _artSlug = response['art']['slug'];
         return true;
       }
+      return false;
     } catch (e) {
       log(e.toString());
       return false;

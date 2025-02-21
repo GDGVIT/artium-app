@@ -303,30 +303,19 @@ class _DailyThemeState extends State<DailyTheme> {
                                                     children: [
                                                       TextSpan(
                                                         text: theme.workTitle,
-                                                        style: TextStyle(
-                                                          shadows: [
-                                                            Shadow(
-                                                              color: CustomColors
-                                                                  .primaryCream,
-                                                              offset:
-                                                                  Offset(0, -5),
-                                                            )
-                                                          ],
+                                                        style: const TextStyle(
+                                                          color: CustomColors
+                                                              .primaryCream,
+                                                          fontFamily:
+                                                              'OutfitMedium',
+                                                          fontSize: 16,
+                                                          fontStyle:
+                                                              FontStyle.italic,
                                                           decoration:
                                                               TextDecoration
                                                                   .underline,
-                                                          decorationColor:
-                                                              CustomColors
-                                                                  .primaryCream,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors
-                                                              .transparent,
-                                                          fontSize: 12,
-                                                          fontFamily:
-                                                              'OutfitRegular',
-                                                          fontStyle:
-                                                              FontStyle.italic,
+                                                          decorationThickness:
+                                                              2,
                                                         ),
                                                       ),
                                                       TextSpan(

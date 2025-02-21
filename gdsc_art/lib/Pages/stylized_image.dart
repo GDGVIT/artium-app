@@ -31,10 +31,11 @@ class _StylizedImageState extends State<StylizedImage> {
   void _handleSave() async {
     if (titleController.text.isEmpty) return;
     if (descriptionController.text.isEmpty) return;
-
     final provider = context.read<CreateArtProvider>();
     final success = await provider.saveArt(
-      theme: widget.styleThemeTitle == '' ? themeController.text : '',
+      theme: widget.styleThemeTitle == ''
+          ? themeController.text
+          : widget.styleThemeTitle!,
       title: titleController.text,
       description: descriptionController.text,
       context: context,
