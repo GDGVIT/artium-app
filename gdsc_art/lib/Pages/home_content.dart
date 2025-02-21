@@ -13,6 +13,7 @@ import 'package:artium/UIComponents/art_style_info_box.dart';
 import 'package:provider/provider.dart';
 import 'package:artium/Providers/theme_provider.dart';
 import 'package:artium/Data/theme_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String? baseUrl = BaseUrl.baseUrl;
 
@@ -24,8 +25,10 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
+  bool isAuth = false;
   int currentImageIndex = 0;
   late Future<void> themesFuture;
+  late SharedPreferences prefs;
   bool _isLoading = true;
   final List<String> _loadingTexts = [
     'Connecting to server...',
@@ -42,8 +45,21 @@ class _HomeContentState extends State<HomeContent> {
   @override
   void initState() {
     super.initState();
+    checkAuthStatus();
     _startLoadingAnimation();
     themesFuture = _initializeThemes();
+  }
+
+  Future<void> checkAuthStatus() async {
+    try {
+      prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      setState(() {
+        isAuth = token != null;
+      });
+    } catch (e) {
+      print('Error checking auth status: $e');
+    }
   }
 
   void _startLoadingAnimation() {
@@ -201,6 +217,7 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
+  // Update the _buildImageSliderItem method
   Widget _buildImageSliderItem(Map<String, String> theme, bool isCurrent) {
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
@@ -234,18 +251,68 @@ class _HomeContentState extends State<HomeContent> {
                           ),
                         ),
                       ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        StaticThemeData.defaultThemes[0]['image']!,
-                        fit: BoxFit.cover,
-                        height: 180.0,
-                        width: double.infinity,
-                      ),
+                      errorWidget: (context, url, error) {
+                        // Show offline fallback image
+                        return Container(
+                          color: const Color(0xFF222122),
+                          height: 180.0,
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.wifi_off_rounded,
+                                color: CustomColors.primaryCream,
+                                size: 32,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Unable to load image',
+                                style: TextStyle(
+                                  color: CustomColors.primaryCream
+                                      .withOpacity(0.7),
+                                  fontSize: 14,
+                                  fontFamily: 'OutfitRegular',
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     )
                   : Image.asset(
                       theme['image']!,
                       fit: BoxFit.cover,
                       height: 180.0,
                       width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Show offline fallback for asset images too
+                        return Container(
+                          color: const Color(0xFF222122),
+                          height: 180.0,
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.image_not_supported_rounded,
+                                color: CustomColors.primaryCream,
+                                size: 32,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Image not available',
+                                style: TextStyle(
+                                  color: CustomColors.primaryCream
+                                      .withOpacity(0.7),
+                                  fontSize: 14,
+                                  fontFamily: 'OutfitRegular',
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
             ),
             Container(
@@ -259,7 +326,7 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ),
               child: Text(
-                (theme['title'] ?? '').toUpperCase(),
+                (theme['title'] ?? 'Style Unavailable').toUpperCase(),
                 style: const TextStyle(
                   color: CustomColors.secondaryBrown,
                   fontSize: 16,
@@ -406,20 +473,70 @@ class _HomeContentState extends State<HomeContent> {
 
   Widget _buildInfoBox(
       List<Map<String, String>> themeData, ThemeProvider themeProvider) {
+    // if (!isAuth) {
+    //   return ArtStyleInfoBox(
+    //     title: 'Login Required',
+    //     description: 'Please login to create and stylize images.',
+    //     onPressed: () {
+    //       Navigator.pushNamed(context, '/login');
+    //     },
+    //   );
+    // }
+    if (showStatic ||
+        themeData.isEmpty ||
+        currentImageIndex >= themeData.length) {
+      return ArtStyleInfoBox(
+        title:
+            themeData.isNotEmpty ? themeData[0]['title'] ?? '' : 'Offline Mode',
+        description: 'Please connect to internet to create and stylize images.',
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Please check your internet connection to continue',
+                style: TextStyle(
+                  color: CustomColors.primaryCream,
+                  fontFamily: 'OutfitRegular',
+                ),
+              ),
+              backgroundColor: Color(0xFF333333),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        },
+      );
+    }
+
     return ArtStyleInfoBox(
       title: themeData[currentImageIndex]['title'] ?? '',
       description: themeData[currentImageIndex]['description'] ?? '',
       onPressed: () {
-        final currentTheme = themeProvider.randomThemes[currentImageIndex];
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SelectStylePage(
-              styleImage: currentTheme.themeImages.first,
-              styleThemeTitle: currentTheme.title,
+        try {
+          final currentTheme = themeProvider.randomThemes[currentImageIndex];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SelectStylePage(
+                styleImage: currentTheme.themeImages.first,
+                styleThemeTitle: currentTheme.title,
+              ),
             ),
-          ),
-        );
+          );
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Unable to load style. Please check your connection.',
+                style: TextStyle(
+                  color: CustomColors.primaryCream,
+                  fontFamily: 'OutfitRegular',
+                ),
+              ),
+              backgroundColor: Color(0xFF333333),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
       },
     );
   }
@@ -471,19 +588,53 @@ class _HomeContentState extends State<HomeContent> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SelectStylePage(
-                styleImage: '',
-                styleThemeTitle: '',
-              ),
-            ),
-          );
-        },
+        onPressed: !isAuth
+            ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Please login to create styles',
+                      style: TextStyle(
+                        color: CustomColors.primaryCream,
+                        fontFamily: 'OutfitRegular',
+                      ),
+                    ),
+                    backgroundColor: Color(0xFF333333),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+              }
+            : () {
+                if (showStatic) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Please check your internet connection',
+                        style: TextStyle(
+                          color: CustomColors.primaryCream,
+                          fontFamily: 'OutfitRegular',
+                        ),
+                      ),
+                      backgroundColor: Color(0xFF333333),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SelectStylePage(
+                      styleImage: '',
+                      styleThemeTitle: '',
+                    ),
+                  ),
+                );
+              },
         style: ElevatedButton.styleFrom(
-          backgroundColor: CustomColors.primaryCream,
+          backgroundColor: isAuth
+              ? CustomColors.primaryCream
+              : CustomColors.primaryCream.withOpacity(0.5),
           foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -493,9 +644,9 @@ class _HomeContentState extends State<HomeContent> {
             vertical: 8.0,
           ),
         ),
-        child: const Text(
-          'Create your own style',
-          style: TextStyle(
+        child: Text(
+          isAuth ? 'Create your own style' : 'Login to create',
+          style: const TextStyle(
             fontSize: 16,
             fontFamily: 'OutfitSemiBold',
             color: CustomColors.primaryBlack,
