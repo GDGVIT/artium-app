@@ -58,7 +58,7 @@ class _HomeContentState extends State<HomeContent> {
         isAuth = token != null;
       });
     } catch (e) {
-      print('Error checking auth status: $e');
+      log('Error checking auth status: $e');
     }
   }
 
@@ -270,7 +270,7 @@ class _HomeContentState extends State<HomeContent> {
                                 'Unable to load image',
                                 style: TextStyle(
                                   color: CustomColors.primaryCream
-                                      .withOpacity(0.7),
+                                      .withValues(alpha: .7),
                                   fontSize: 14,
                                   fontFamily: 'OutfitRegular',
                                 ),
@@ -304,7 +304,7 @@ class _HomeContentState extends State<HomeContent> {
                                 'Image not available',
                                 style: TextStyle(
                                   color: CustomColors.primaryCream
-                                      .withOpacity(0.7),
+                                      .withValues(alpha: .7),
                                   fontSize: 14,
                                   fontFamily: 'OutfitRegular',
                                 ),
@@ -634,7 +634,7 @@ class _HomeContentState extends State<HomeContent> {
         style: ElevatedButton.styleFrom(
           backgroundColor: isAuth
               ? CustomColors.primaryCream
-              : CustomColors.primaryCream.withOpacity(0.5),
+              : CustomColors.primaryCream.withValues(alpha: .5),
           foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
