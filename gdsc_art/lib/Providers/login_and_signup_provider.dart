@@ -45,6 +45,7 @@ class LoginAndSignupProvider with ChangeNotifier {
           response['token'],
           User.fromJson(response['user']),
         );
+        if (!context.mounted) return;
         Provider.of<UserNotifier>(context, listen: false).setUser(user);
 
         Navigator.pushReplacementNamed(context, '/home');
@@ -137,7 +138,7 @@ class LoginAndSignupProvider with ChangeNotifier {
           commonToast(responseData['message']);
           isLoadingOtp = false;
           notifyListeners();
-
+          if (!context.mounted) return false;
           Navigator.pushReplacementNamed(context, '/auth');
           return true;
         } else {
@@ -201,6 +202,7 @@ class LoginAndSignupProvider with ChangeNotifier {
         final responseBody = jsonDecode(response.body);
         if (responseBody['success'] == true) {
           commonToast('Password reset successfully');
+          if (!context.mounted) return;
           Navigator.pushNamed(context, '/home');
         } else {
           commonToast(responseBody['message']);

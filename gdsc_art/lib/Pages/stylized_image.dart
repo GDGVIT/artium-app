@@ -53,6 +53,7 @@ class _StylizedImageState extends State<StylizedImage> {
       final publishSuccess = await provider.publishArt(context);
       if (publishSuccess) {
         commonToast('Art submitted for review!');
+        if (!mounted) return;
         Navigator.pushReplacementNamed(context, '/home');
       }
     }

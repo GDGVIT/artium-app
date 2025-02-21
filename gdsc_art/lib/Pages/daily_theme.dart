@@ -441,7 +441,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
                     shape: BoxShape.circle,
                     color: _currentPage == index
                         ? CustomColors.primaryCream
-                        : CustomColors.primaryCream.withOpacity(0.5),
+                        : CustomColors.primaryCream.withValues(alpha:(0.5)),
                   ),
                 ),
               ),
@@ -464,7 +464,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
         children: [
           ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.2),
+              Colors.black.withValues(alpha:(0.2)),
               BlendMode.darken,
             ),
             child: Opacity(
@@ -493,7 +493,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
                   end: Alignment.centerRight,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.8),
+                    Colors.black.withValues(alpha:(0.8)),
                   ],
                   stops: const [0.8, 1.0],
                 ),
@@ -509,7 +509,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
                   colors: [
                     Colors.transparent,
                     Colors.transparent,
-                    Colors.black.withOpacity(0.9),
+                    Colors.black.withValues(alpha:(0.9)),
                   ],
                   stops: const [0.0, 0.6, 1.0],
                 ),

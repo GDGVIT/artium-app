@@ -104,7 +104,8 @@ class _OnBoardingState extends State<OnBoarding> {
                         shape: BoxShape.circle,
                         color: _currentPage == index
                             ? CustomColors.primaryWhite
-                            : CustomColors.primaryWhite.withOpacity(0.5),
+                            : CustomColors.primaryWhite
+                                .withValues(alpha: (0.5)),
                       ),
                     ),
                   ),

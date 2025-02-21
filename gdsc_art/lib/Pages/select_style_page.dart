@@ -114,7 +114,7 @@ class _SelectStylePageState extends State<SelectStylePage> {
                                 Icon(
                                   Icons.add_photo_alternate_outlined,
                                   size: 48,
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: Colors.white.withValues(alpha: (0.7)),
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
@@ -122,7 +122,8 @@ class _SelectStylePageState extends State<SelectStylePage> {
                                       ? "or Click to upload own style"
                                       : "Click to change image",
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
+                                    color:
+                                        Colors.white.withValues(alpha: (0.7)),
                                     fontFamily: "OutfitRegular",
                                     fontSize: 16,
                                   ),

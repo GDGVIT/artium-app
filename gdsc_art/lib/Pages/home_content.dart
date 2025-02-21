@@ -121,7 +121,7 @@ class _HomeContentState extends State<HomeContent> {
                             shape: BoxShape.circle,
                             color: currentImageIndex == entry.key
                                 ? Colors.grey
-                                : Colors.grey.withOpacity(0.5),
+                                : Colors.grey.withValues(alpha: (0.5)),
                           ),
                         ),
                       );

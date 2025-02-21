@@ -45,7 +45,8 @@ class _SelectImagePageState extends State<SelectImagePage> {
     if (widget.styleImage is File) {
       return base64Encode(await widget.styleImage.readAsBytes());
     } else if (widget.styleImage is String) {
-      final response = await http.get(Uri.parse('${BaseUrl.baseUrl}${widget.styleImage}'));
+      final response =
+          await http.get(Uri.parse('${BaseUrl.baseUrl}${widget.styleImage}'));
       if (response.statusCode == 200) {
         return base64Encode(response.bodyBytes);
       }
@@ -64,7 +65,7 @@ class _SelectImagePageState extends State<SelectImagePage> {
       final provider = context.read<CreateArtProvider>();
       final contentImageBase64 = base64Encode(await _image!.readAsBytes());
       final styleImageBase64 = await _getStyleImageBase64();
-
+      if (!mounted) return;
       final success = await provider.stylizeImage(
         contentImage: contentImageBase64,
         styleImage: styleImageBase64,
@@ -72,6 +73,7 @@ class _SelectImagePageState extends State<SelectImagePage> {
       );
 
       if (success is String) {
+        if (!mounted) return;
         Navigator.push(
           context,
           MaterialPageRoute(

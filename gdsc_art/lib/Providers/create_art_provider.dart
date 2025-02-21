@@ -25,7 +25,9 @@ class CreateArtProvider with ChangeNotifier {
   Future<bool> checkAuth(BuildContext context) async {
     final token = await _getToken();
     if (token == null) {
-      Navigator.pushReplacementNamed(context, '/auth');
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/auth');
+      }
       return false;
     }
     return true;
