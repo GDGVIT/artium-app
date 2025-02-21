@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../Model/theme_model.dart';
 import '../Repo/theme.dart';
@@ -53,7 +55,7 @@ class ThemeProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      debugPrint(e.toString());
+      log(e.toString());
     }
   }
 }

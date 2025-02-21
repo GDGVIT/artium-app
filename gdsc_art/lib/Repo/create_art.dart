@@ -52,9 +52,7 @@ class CreateArtRepo {
           'description': description,
         }),
       );
-      print(response.body);
       if (response.statusCode == 201) {
-        print(response.body);
         return jsonDecode(response.body);
       }
     } catch (e) {
@@ -74,9 +72,7 @@ class CreateArtRepo {
           'Authorization': 'Bearer $token',
         },
       );
-      print(response.body);
       if (response.statusCode == 200) {
-        print(response.body);
         return jsonDecode(response.body);
       }
     } catch (e) {
