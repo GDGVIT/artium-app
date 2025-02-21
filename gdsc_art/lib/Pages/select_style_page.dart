@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:gdsc_artwork/Pages/select_image_page.dart';
@@ -37,8 +39,9 @@ class _SelectStylePageState extends State<SelectStylePage> {
   }
 
   String? _getImageUrl() {
-    if (widget.styleImage is String) {
-      return '$baseUrl${widget.styleImage}';
+    if (widget.styleImage != '') {
+      final url = '$baseUrl${widget.styleImage}';
+      return url;
     }
     return null;
   }
@@ -109,6 +112,10 @@ class _SelectStylePageState extends State<SelectStylePage> {
                                       image: NetworkImage(_getImageUrl()!),
                                       fit: BoxFit.cover,
                                       opacity: 0.3,
+                                      // Add error handling
+                                      onError: (exception, stackTrace) {
+                                        log('Error loading image: $exception');
+                                      },
                                     )
                                   : null,
                             ),

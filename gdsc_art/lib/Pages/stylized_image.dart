@@ -32,9 +32,10 @@ class _StylizedImageState extends State<StylizedImage> {
     if (titleController.text.isEmpty) return;
     if (descriptionController.text.isEmpty) return;
     final provider = context.read<CreateArtProvider>();
-    print(widget.styleThemeTitle);
     final success = await provider.saveArt(
-      theme: widget.styleThemeTitle ?? themeController.text,
+      theme: widget.styleThemeTitle == ''
+          ? themeController.text
+          : widget.styleThemeTitle!,
       title: titleController.text,
       description: descriptionController.text,
       context: context,
@@ -61,7 +62,6 @@ class _StylizedImageState extends State<StylizedImage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.styleThemeTitle);
     return Scaffold(
       backgroundColor: const Color(0xFF1B1A1A),
       appBar: AppBar(

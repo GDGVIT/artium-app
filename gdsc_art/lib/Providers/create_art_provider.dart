@@ -90,11 +90,6 @@ class CreateArtProvider with ChangeNotifier {
         title: title,
         description: description,
       );
-      print(token);
-      print(theme);
-      print(image);
-      print(title);
-      print(description);
       if (response['status'] == 'success') {
         _artSlug = response['art']['slug'];
         return true;

@@ -1,6 +1,3 @@
-// import 'package:card_swiper/card_swiper.dart';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:provider/provider.dart';
