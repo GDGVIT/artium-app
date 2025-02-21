@@ -6,82 +6,110 @@ class About extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: CustomColors.primaryBlack,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    final height = MediaQuery.of(context).size.height;
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0D0C0D),
+            Color(0xFF1A181A),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          fit: StackFit.expand,
           children: [
-            const SizedBox(height: 40.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: RichText(
-                text: const TextSpan(
-                  text: 'What kind of ',
-                  style: TextStyle(
-                      color: CustomColors.primaryWhite,
-                      fontSize: 24,
-                      fontFamily: "OutfitRegular",
-                      fontWeight: FontWeight.bold),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'technology ',
-                      style: TextStyle(
-                          fontFamily: "OutfitRegular",
-                          color: CustomColors.primaryCream,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(text: '\n did we use?'),
-                  ],
-                ),
-              ),
+            Positioned(
+              top: height * 0.125,
+              right: 0,
+              child: Image.asset('images/general_right.png'),
             ),
-            const SizedBox(height: 30.0),
-            const Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Text(
-                'Our project utilizes Neural Style Transfer (NST), powered by a pre-trained VGG19 network. NST combines the content of one image with the artistic style of another, using convolutional neural networks, Gram matrices, and loss functions to create unique, visually captivating images that blend structure and texture.',
-                style: TextStyle(
-                  color: CustomColors.primaryWhite,
-                  fontSize: 16,
-                  fontFamily: "OutfitRegular",
-                ),
-              ),
+            Positioned(
+              left: 0,
+              bottom: height * 0.125,
+              child: Image.asset('images/general_left.png'),
             ),
-            const SizedBox(height: 40.0),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: Image.asset('images/rec-1.png'),
+                  const SizedBox(height: 40.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'What kind of ',
+                        style: TextStyle(
+                            color: CustomColors.primaryWhite,
+                            fontSize: 24,
+                            fontFamily: "OutfitRegular",
+                            fontWeight: FontWeight.bold),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'technology ',
+                            style: TextStyle(
+                                fontFamily: "OutfitRegular",
+                                color: CustomColors.primaryCream,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: '\n did we use?'),
+                        ],
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 20.0),
-                  const Text(
-                    '+',
-                    style: TextStyle(
-                        color: CustomColors.primaryWhite, fontSize: 20),
+                  const SizedBox(height: 30.0),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      'Our project utilizes Neural Style Transfer (NST), powered by a pre-trained VGG19 network. NST combines the content of one image with the artistic style of another, using convolutional neural networks, Gram matrices, and loss functions to create unique, visually captivating images that blend structure and texture.',
+                      style: TextStyle(
+                        color: CustomColors.primaryWhite,
+                        fontSize: 16,
+                        fontFamily: "OutfitRegular",
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 20.0),
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: Image.asset('images/rec-3.png'),
-                  ),
-                  const SizedBox(width: 20.0),
-                  const Text(
-                    "=",
-                    style: TextStyle(
-                        color: CustomColors.primaryWhite, fontSize: 20),
-                  ),
-                  const SizedBox(width: 20.0),
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: Image.asset('images/rec-2.png'),
+                  const SizedBox(height: 40.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: Image.asset('images/rec-1.png'),
+                        ),
+                        const SizedBox(width: 20.0),
+                        const Text(
+                          '+',
+                          style: TextStyle(
+                              color: CustomColors.primaryWhite, fontSize: 20),
+                        ),
+                        const SizedBox(width: 20.0),
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: Image.asset('images/rec-3.png'),
+                        ),
+                        const SizedBox(width: 20.0),
+                        const Text(
+                          "=",
+                          style: TextStyle(
+                              color: CustomColors.primaryWhite, fontSize: 20),
+                        ),
+                        const SizedBox(width: 20.0),
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: Image.asset('images/rec-2.png'),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

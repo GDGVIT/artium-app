@@ -157,6 +157,8 @@ class Sidebar extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   text: TextSpan(
                     children: [
                       const TextSpan(

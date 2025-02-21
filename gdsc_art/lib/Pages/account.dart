@@ -293,61 +293,77 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return Consumer<UserDataProvider>(
       builder: (context, provider, _) {
-        return Scaffold(
-          backgroundColor: CustomColors.primaryBlack,
-          body: Stack(
-            children: [
-              Column(
-                children: [
-                  const SizedBox(height: 5.0),
-                  _buildUserDetails(provider),
-                  const SizedBox(height: 10.0),
-                  _buildPageIndicators(),
-                  const SizedBox(height: 10.0),
-                  Expanded(
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          currentPageIndex = index;
-                        });
-                      },
-                      children: [
-                        _buildArtsSection(provider, false),
-                        _buildArtsSection(provider, true),
-                      ],
+        return Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF0D0C0D),
+                Color(0xFF1A181A),
+              ],
+            ),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                Column(
+                  children: [
+                    const SizedBox(height: 5.0),
+                    _buildUserDetails(provider),
+                    const SizedBox(height: 10.0),
+                    _buildPageIndicators(),
+                    const SizedBox(height: 10.0),
+                    Expanded(
+                      child: PageView(
+                        controller: _pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            currentPageIndex = index;
+                          });
+                        },
+                        children: [
+                          _buildArtsSection(provider, false),
+                          _buildArtsSection(provider, true),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                if (isPressed)
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: 0.7,
+                    child: Container(
+                      color: Colors.black,
                     ),
                   ),
-                ],
-              ),
-              if (isPressed)
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: 0.7,
-                  child: Container(
-                    color: Colors.black,
+                if (selectedIndex != null)
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0,
+                    left: MediaQuery.of(context).size.width * 0,
+                    child: _buildIOSBackButton(),
                   ),
-                ),
-              if (selectedIndex != null)
-                Positioned(
-                  top: MediaQuery.of(context).size.height * 0,
-                  left: MediaQuery.of(context).size.width * 0,
-                  child: _buildIOSBackButton(),
-                ),
-              if (selectedIndex != null)
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  top: isPressed ? MediaQuery.of(context).size.height * 0.1 : 0,
-                  left:
-                      isPressed ? MediaQuery.of(context).size.width * 0.05 : 0,
-                  right:
-                      isPressed ? MediaQuery.of(context).size.width * 0.05 : 0,
-                  child: _buildExpandedContainer(
-                    context,
-                    provider.arts[selectedIndex!],
+                if (selectedIndex != null)
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 300),
+                    top: isPressed
+                        ? MediaQuery.of(context).size.height * 0.1
+                        : 0,
+                    left: isPressed
+                        ? MediaQuery.of(context).size.width * 0.05
+                        : 0,
+                    right: isPressed
+                        ? MediaQuery.of(context).size.width * 0.05
+                        : 0,
+                    child: _buildExpandedContainer(
+                      context,
+                      provider.arts[selectedIndex!],
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -451,7 +467,7 @@ class _AccountState extends State<Account> {
 
   Widget _buildUserDetails(UserDataProvider provider) {
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24),
       decoration: BoxDecoration(
         color: CustomColors.primaryBlack,
         borderRadius: BorderRadius.circular(12.0),
@@ -485,7 +501,7 @@ class _AccountState extends State<Account> {
                 Text(
                   provider.userName ?? 'Guest',
                   style: const TextStyle(
-                    color: CustomColors.secondaryCream,
+                    color: CustomColors.primaryCream,
                     fontSize: 19.0,
                     fontFamily: 'OutfitMedium',
                   ),
@@ -494,7 +510,7 @@ class _AccountState extends State<Account> {
                   provider.userEmail ?? 'guest@gmail.com',
                   style: TextStyle(
                     fontSize: 13.0,
-                    color: Colors.grey[600],
+                    color: CustomColors.primaryCream.withOpacity(.5),
                     fontFamily: 'OutfitRegular',
                   ),
                 ),

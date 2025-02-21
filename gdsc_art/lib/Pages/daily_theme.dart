@@ -1,4 +1,6 @@
 // import 'package:card_swiper/card_swiper.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gdsc_artwork/Constants/base_url.dart';
 import 'package:provider/provider.dart';
@@ -473,7 +475,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
                     shape: BoxShape.circle,
                     color: _currentPage == index
                         ? CustomColors.primaryCream
-                        : CustomColors.primaryCream.withValues(alpha:(0.5)),
+                        : CustomColors.primaryCream.withValues(alpha: (0.5)),
                   ),
                 ),
               ),
@@ -496,7 +498,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
         children: [
           ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha:(0.2)),
+              Colors.black.withValues(alpha: (0.2)),
               BlendMode.darken,
             ),
             child: Opacity(
@@ -525,7 +527,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
                   end: Alignment.centerRight,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha:(0.8)),
+                    Colors.black.withValues(alpha: (0.8)),
                   ],
                   stops: const [0.8, 1.0],
                 ),
@@ -541,7 +543,7 @@ class _ThemeCarouselState extends State<ThemeCarousel> {
                   colors: [
                     Colors.transparent,
                     Colors.transparent,
-                    Colors.black.withValues(alpha:(0.9)),
+                    Colors.black.withValues(alpha: (0.9)),
                   ],
                   stops: const [0.0, 0.6, 1.0],
                 ),
@@ -576,69 +578,67 @@ class _OtherThemesState extends State<OtherThemes> {
       builder: (context, provider, _) {
         final themes = provider.randomThemes;
 
-        return SizedBox(
-          height: 600,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: themes.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.9,
-              ),
-              itemBuilder: (context, index) {
-                final theme = themes[index];
-                return Card(
-                  color: Color(0xff141414),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.all(6),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(16.0),
-                              bottom: Radius.circular(16),
-                            ),
-                            child: FadeInImage.assetNetwork(
-                              placeholder: 'images/sampleLogo.png',
-                              image: baseUrl! + theme.themeImages.first,
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey[800],
-                                  child: const Icon(Icons.error,
-                                      color: Colors.white),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            theme.title,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: CustomColors.primaryCream,
-                              fontFamily: "OutfitMedium",
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: themes.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+              childAspectRatio: 0.9,
             ),
+            itemBuilder: (context, index) {
+              final theme = themes[index];
+              return Card(
+                color: const Color(0xff141414),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.all(6),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16.0),
+                            bottom: Radius.circular(16),
+                          ),
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'images/sampleLogo.png',
+                            image: baseUrl! + theme.themeImages.first,
+                            fit: BoxFit.cover,
+                            imageErrorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[800],
+                                child: const Icon(Icons.error,
+                                    color: Colors.white),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          theme.title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: CustomColors.primaryCream,
+                            fontFamily: "OutfitMedium",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
