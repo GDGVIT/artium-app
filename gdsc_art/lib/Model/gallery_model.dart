@@ -5,6 +5,7 @@ class GalleryModel {
   final String imageUrl;
   final String description;
   final ArtistModel artist;
+  final String? slug;
   double? aspectRatio;
   bool? reviewed;
 
@@ -15,6 +16,7 @@ class GalleryModel {
     required this.imageUrl,
     required this.description,
     required this.artist,
+    this.slug,
     this.aspectRatio,
     this.reviewed,
   });
@@ -28,6 +30,7 @@ class GalleryModel {
       description: json['description'],
       artist: ArtistModel.fromJson(json['artist']),
       reviewed: json['reviewed'],
+      slug: json['slug'],
     );
   }
 }

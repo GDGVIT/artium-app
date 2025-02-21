@@ -24,7 +24,7 @@ class UserRepo {
 
   Future<dynamic> deleteArt(String artSlug, String token) async {
     try {
-      String url = "$baseURL/art/delete/$artSlug";
+      String url = "$baseURL/art/$artSlug";
       final response = await _apiServices.deleteApi(url, token);
       return response;
     } catch (e) {

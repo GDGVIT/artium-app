@@ -25,7 +25,9 @@ class CreateArtProvider with ChangeNotifier {
   Future<bool> checkAuth(BuildContext context) async {
     final token = await _getToken();
     if (token == null) {
-      Navigator.pushReplacementNamed(context, '/auth');
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/auth');
+      }
       return false;
     }
     return true;
@@ -101,9 +103,8 @@ class CreateArtProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> publishArt(BuildContext context) async {
+  Future<bool> publishArt(BuildContext context, {String? artSlug}) async {
     if (!await checkAuth(context)) return false;
-    if (_artSlug == null) return false;
 
     try {
       _isLoading = true;
@@ -112,7 +113,7 @@ class CreateArtProvider with ChangeNotifier {
       final token = await _getToken();
       await _repo.publishArt(
         token: token!,
-        artSlug: _artSlug!,
+        artSlug: (_artSlug ?? artSlug)!,
       );
 
       return true;

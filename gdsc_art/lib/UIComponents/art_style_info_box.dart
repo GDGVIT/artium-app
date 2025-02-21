@@ -37,7 +37,7 @@ class ArtStyleInfoBox extends StatelessWidget {
           const SizedBox(height: 4.0),
           Container(
             height: 1.0,
-            color: CustomColors.primaryWhite.withOpacity(0.5),
+            color: CustomColors.primaryWhite.withValues(alpha: (0.5)),
             margin: const EdgeInsets.symmetric(vertical: 8.0),
           ),
           const SizedBox(height: 4.0),
