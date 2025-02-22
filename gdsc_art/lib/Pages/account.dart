@@ -56,9 +56,12 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     _scrollController.addListener(_onScrollUpdated);
     _startLoadingAnimation();
     _expandController = AnimationController(
@@ -130,6 +133,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _tabController.dispose();
     _loadingTimer?.cancel();
     _scrollController.dispose();
     _pageController.dispose();
@@ -355,7 +359,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
     return Container(
       margin: EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: Color(0xff363336),
+        color: Color(0xff141414),
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -436,7 +440,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                         color: const Color(0xFF5B5B5B),
                         icon: const Icon(
                           Icons.more_vert,
-                          color: CustomColors.primaryCream,
+                          color: CustomColors.primaryWhite,
                           size: 24,
                         ),
                         shape: RoundedRectangleBorder(
@@ -555,16 +559,23 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                     const SizedBox(height: 5.0),
                     _buildUserDetails(provider),
                     const SizedBox(height: 10.0),
-                    _buildPageIndicators(),
-                    const SizedBox(height: 10.0),
+                    TabBar(
+                      controller: _tabController,
+                      indicatorColor: CustomColors.primaryCream,
+                      labelColor: CustomColors.primaryCream,
+                      unselectedLabelColor: Colors.grey,
+                      labelStyle: const TextStyle(
+                        fontSize: 19.0,
+                        fontFamily: 'OutfitMedium',
+                      ),
+                      tabs: const [
+                        Tab(text: 'Saved'),
+                        Tab(text: 'Published'),
+                      ],
+                    ),
                     Expanded(
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            currentPageIndex = index;
-                          });
-                        },
+                      child: TabBarView(
+                        controller: _tabController,
                         children: [
                           _buildArtsSection(provider, false),
                           _buildArtsSection(provider, true),
@@ -847,67 +858,6 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildPageIndicators() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            _buildTabButton("Saved", 0),
-            _buildTabButton("Published", 1),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 2.0,
-                color: currentPageIndex == 0
-                    ? CustomColors.primaryCream
-                    : Colors.transparent,
-              ),
-            ),
-            Expanded(
-              child: Container(
-                height: 2.0,
-                color: currentPageIndex == 1
-                    ? CustomColors.primaryCream
-                    : Colors.transparent,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTabButton(String title, int index) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          child: Text(
-            title,
-            style: TextStyle(
-              color: currentPageIndex == index
-                  ? CustomColors.primaryCream
-                  : Colors.grey,
-              fontSize: 19.0,
-              fontFamily: 'OutfitMedium',
-            ),
-          ),
-        ),
       ),
     );
   }

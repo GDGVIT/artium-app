@@ -56,18 +56,20 @@ class GalleryContainer extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: isAccountPage ? 8.0 : 0),
-                            child: Text(
-                              title,
-                              style: const TextStyle(
-                                color: CustomColors.primaryCream,
-                                fontFamily: "OutfitBold",
-                                fontSize: 16,
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: isAccountPage ? 8.0 : 0),
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                  color: CustomColors.primaryCream,
+                                  fontFamily: "OutfitBold",
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
                           ),
                           if (isAccountPage)
@@ -75,7 +77,7 @@ class GalleryContainer extends StatelessWidget {
                               color: const Color(0xFF5B5B5B),
                               icon: const Icon(
                                 Icons.more_vert,
-                                color: CustomColors.primaryCream,
+                                color: CustomColors.primaryWhite,
                                 size: 20,
                               ),
                               shape: RoundedRectangleBorder(
@@ -137,8 +139,8 @@ class GalleryContainer extends StatelessWidget {
                             ),
                         ],
                       ),
-                      const SizedBox(height: 4.0),
-                      if (!isAccountPage)
+                      if (!isAccountPage) ...[
+                        const SizedBox(height: 4.0),
                         Row(
                           children: [
                             CircleAvatar(
@@ -160,7 +162,7 @@ class GalleryContainer extends StatelessWidget {
                                 style: const TextStyle(
                                   color: CustomColors.primaryWhite,
                                   fontFamily: "OutfitMedium",
-                                  fontSize: 14,
+                                  fontSize: 12,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -171,20 +173,21 @@ class GalleryContainer extends StatelessWidget {
                                   const Icon(
                                     Icons.favorite,
                                     color: Colors.red,
-                                    size: 14,
+                                    size: 12,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '$likes',
                                     style: const TextStyle(
                                       color: CustomColors.primaryWhite,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
                               ),
                           ],
                         ),
+                      ],
                     ],
                   ),
                 ),
