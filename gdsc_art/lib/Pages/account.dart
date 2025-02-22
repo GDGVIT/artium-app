@@ -359,7 +359,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: .2),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -839,7 +839,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                   provider.userEmail ?? 'guest@gmail.com',
                   style: TextStyle(
                     fontSize: 13.0,
-                    color: CustomColors.primaryCream.withOpacity(0.5),
+                    color: CustomColors.primaryCream.withValues(alpha: .5),
                     fontFamily: 'OutfitRegular',
                   ),
                 ),
@@ -886,17 +886,26 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
 
   Widget _buildTabButton(String title, int index) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        alignment: Alignment.center,
-        child: Text(
-          title,
-          style: TextStyle(
-            color: currentPageIndex == index
-                ? CustomColors.primaryCream
-                : Colors.grey,
-            fontSize: 19.0,
-            fontFamily: 'OutfitMedium',
+      child: GestureDetector(
+        onTap: () {
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: currentPageIndex == index
+                  ? CustomColors.primaryCream
+                  : Colors.grey,
+              fontSize: 19.0,
+              fontFamily: 'OutfitMedium',
+            ),
           ),
         ),
       ),
