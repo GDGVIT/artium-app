@@ -17,15 +17,75 @@ class DailyTheme extends StatefulWidget {
   State<DailyTheme> createState() => _DailyThemeState();
 }
 
-class _DailyThemeState extends State<DailyTheme> {
+class _DailyThemeState extends State<DailyTheme>
+    with SingleTickerProviderStateMixin {
   bool _showLearnMore = false;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<Offset> _reverseSlideAnimation;
+  late Animation<double> _buttonsFadeAnimation;
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0.0, 0.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+
+    _reverseSlideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(0.0, -0.2),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+
+    _buttonsFadeAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ThemeProvider>().fetchThemeOfDay();
     });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleLearnMore(bool show) {
+    if (show) {
+      _animationController.forward().then((_) {
+        setState(() => _showLearnMore = true);
+      });
+    } else {
+      setState(() => _showLearnMore = false);
+      _animationController.reverse();
+    }
   }
 
   @override
@@ -69,59 +129,78 @@ class _DailyThemeState extends State<DailyTheme> {
                     child: Column(
                       children: [
                         if (!_showLearnMore)
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Theme of the Day',
-                                  style: TextStyle(
-                                    color: CustomColors.primaryCream,
-                                    fontFamily: "OutfitMedium",
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 24,
-                                  ),
+                          FadeTransition(
+                            opacity: ReverseAnimation(_fadeAnimation),
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset.zero,
+                                end: const Offset(0.0, -0.2),
+                              ).animate(CurvedAnimation(
+                                parent: _animationController,
+                                curve: Curves.easeOutCubic,
+                              )),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      'Theme of the Day',
+                                      style: TextStyle(
+                                        color: CustomColors.primaryCream,
+                                        fontFamily: "OutfitMedium",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 7.0),
+                                    Text(
+                                      theme.title.toUpperCase(),
+                                      style: const TextStyle(
+                                        color: CustomColors.primaryBrown,
+                                        fontFamily: "OutfitRegular",
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 7.0),
-                                Text(
-                                  theme.title.toUpperCase(),
-                                  style: const TextStyle(
-                                    color: CustomColors.primaryBrown,
-                                    fontFamily: "OutfitRegular",
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         if (_showLearnMore)
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () =>
-                                    setState(() => _showLearnMore = false),
-                                icon: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: CustomColors.primaryCream,
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: SlideTransition(
+                              position: _slideAnimation,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 16.0, right: 16, top: 16),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () => _toggleLearnMore(false),
+                                      icon: const Icon(
+                                        Icons.arrow_back_ios,
+                                        color: CustomColors.primaryCream,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        theme.title.toUpperCase(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: CustomColors.primaryCream,
+                                          fontFamily: "OutfitBold",
+                                          fontSize: 26,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 48.0),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                child: Text(
-                                  theme.title.toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: CustomColors.primaryCream,
-                                    fontFamily: "OutfitBold",
-                                    fontSize: 26,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 48.0),
-                            ],
+                            ),
                           ),
                         const SizedBox(height: 20.0),
-                        // CardSwiperCarousel(images: theme.themeImages),
-                        // ThemeCarousel(images: theme.themeImages),
                         ThemeCarouselV2(images: theme.themeImages),
                         const SizedBox(height: 45.0),
                         Padding(
@@ -130,12 +209,10 @@ class _DailyThemeState extends State<DailyTheme> {
                             title: theme.title,
                             description: theme.description,
                             onUseStyle: () {},
-                            onLearnMore: () {
-                              if (theme.history.isNotEmpty) {
-                                setState(() => _showLearnMore = true);
-                              }
-                            },
-                            showLearnMore: theme.history.isNotEmpty,
+                            onLearnMore: () => _toggleLearnMore(true),
+                            isLearnMoreMode: _showLearnMore,
+                            buttonsAnimation: _buttonsFadeAnimation,
+                            reverseSlideAnimation: _reverseSlideAnimation,
                           ),
                         ),
                         if (_showLearnMore) ...[
@@ -151,206 +228,214 @@ class _DailyThemeState extends State<DailyTheme> {
                             ),
                           ),
                           SizedBox(height: 62.0),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(32),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                stops: [
-                                  0.0,
-                                  1.0,
-                                ],
-                                colors: [
-                                  CustomColors.primaryBrown,
-                                  CustomColors.secondaryCream
-                                ],
+                          if (theme.history.isNotEmpty)
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  stops: [
+                                    0.0,
+                                    1.0,
+                                  ],
+                                  colors: [
+                                    CustomColors.primaryBrown,
+                                    CustomColors.secondaryCream
+                                  ],
+                                ),
                               ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 0,
-                                  left: 6,
-                                  child: Image.asset('images/swirl1.png'),
-                                ),
-                                Positioned(
-                                  top: 67,
-                                  right: 0,
-                                  child: Image.asset('images/swirl2.png'),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  top: 396,
-                                  child: Image.asset('images/swirl3.png'),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  top: 823,
-                                  child: Image.asset('images/swirl4.png'),
-                                ),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 24.0),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              'historic pieces of\n${theme.history[0].artist.name}'
-                                                  .toUpperCase(),
-                                              style: const TextStyle(
-                                                color: Color(0xff161516),
-                                                fontFamily: "OutfitSemiBold",
-                                                fontSize: 24,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.25),
-                                              child: const Divider(
-                                                color: Color(0xff161516),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      for (var history in theme.history) ...[
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    left: 6,
+                                    child: Image.asset('images/swirl1.png'),
+                                  ),
+                                  Positioned(
+                                    top: 67,
+                                    right: 0,
+                                    child: Image.asset('images/swirl2.png'),
+                                  ),
+                                  Positioned(
+                                    left: 0,
+                                    top: 396,
+                                    child: Image.asset('images/swirl3.png'),
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    top: 823,
+                                    child: Image.asset('images/swirl4.png'),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Column(
+                                      children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 12.0),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(32),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  CustomColors.secondaryBlack,
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(18),
-                                                  child:
-                                                      FadeInImage.assetNetwork(
-                                                    placeholder:
-                                                        'images/sampleLogo.png',
-                                                    image:
-                                                        '$baseUrl${history.src}',
-                                                    height: 231,
-                                                    width: double.infinity,
-                                                    fit: BoxFit.cover,
-                                                    imageErrorBuilder: (context,
-                                                            error,
-                                                            stackTrace) =>
-                                                        Container(
+                                              vertical: 24.0),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'historic pieces of\n${theme.history[0].artist.name}'
+                                                    .toUpperCase(),
+                                                style: const TextStyle(
+                                                  color: Color(0xff161516),
+                                                  fontFamily: "OutfitSemiBold",
+                                                  fontSize: 24,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25),
+                                                child: const Divider(
+                                                  color: Color(0xff161516),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        for (var history in theme.history) ...[
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12.0),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(32),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    CustomColors.secondaryBlack,
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18),
+                                                    child: FadeInImage
+                                                        .assetNetwork(
+                                                      placeholder:
+                                                          'images/sampleLogo.png',
+                                                      image:
+                                                          '$baseUrl${history.src}',
                                                       height: 231,
                                                       width: double.infinity,
-                                                      color: Colors.grey[300],
-                                                      child: const Icon(
-                                                          Icons.error),
+                                                      fit: BoxFit.cover,
+                                                      imageErrorBuilder:
+                                                          (context, error,
+                                                                  stackTrace) =>
+                                                              Container(
+                                                        height: 231,
+                                                        width: double.infinity,
+                                                        color: Colors.grey[300],
+                                                        child: const Icon(
+                                                            Icons.error),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 16,
-                                                          bottom: 12.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        history.artist.name
-                                                            .toUpperCase(),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              'OutfitRegular',
-                                                          color: CustomColors
-                                                              .primaryCream,
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                          history.artist.period,
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 16,
+                                                            bottom: 12.0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          history.artist.name
+                                                              .toUpperCase(),
                                                           style:
                                                               const TextStyle(
                                                             fontFamily:
                                                                 'OutfitRegular',
-                                                            color: Colors.white,
-                                                            fontSize: 12,
-                                                          ))
-                                                    ],
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: theme.workTitle,
-                                                        style: const TextStyle(
-                                                          color: CustomColors
-                                                              .primaryCream,
-                                                          fontFamily:
-                                                              'OutfitMedium',
-                                                          fontSize: 16,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                          decorationThickness:
-                                                              2,
+                                                            color: CustomColors
+                                                                .primaryCream,
+                                                            fontSize: 16,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            ', ${history.art.year}',
-                                                        style: const TextStyle(
-                                                          color: CustomColors
-                                                              .primaryCream,
-                                                          fontFamily:
-                                                              'OutfitLight',
-                                                          fontSize: 16,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                          decorationThickness:
-                                                              2,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                        Text(
+                                                            history
+                                                                .artist.period,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  'OutfitRegular',
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12,
+                                                            ))
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: theme.workTitle,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: CustomColors
+                                                                .primaryCream,
+                                                            fontFamily:
+                                                                'OutfitMedium',
+                                                            fontSize: 16,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            decorationThickness:
+                                                                2,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              ', ${history.art.year}',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: CustomColors
+                                                                .primaryCream,
+                                                            fontFamily:
+                                                                'OutfitLight',
+                                                            fontSize: 16,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            decorationThickness:
+                                                                2,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 16.0),
-                                      ]
-                                    ],
+                                          const SizedBox(height: 16.0),
+                                        ]
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
                         ],
                         if (!_showLearnMore) ...[
                           const SizedBox(height: 40.0),
@@ -651,7 +736,9 @@ class InfoBoxWithButtons extends StatelessWidget {
   final String description;
   final VoidCallback onUseStyle;
   final VoidCallback onLearnMore;
-  final bool showLearnMore;
+  final bool isLearnMoreMode;
+  final Animation<double>? buttonsAnimation;
+  final Animation<Offset>? reverseSlideAnimation;
 
   const InfoBoxWithButtons({
     super.key,
@@ -659,12 +746,16 @@ class InfoBoxWithButtons extends StatelessWidget {
     required this.description,
     required this.onUseStyle,
     required this.onLearnMore,
-    required this.showLearnMore,
+    this.isLearnMoreMode = false,
+    this.buttonsAnimation,
+    this.reverseSlideAnimation,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOutCubic,
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
         color: CustomColors.secondaryBlack,
@@ -672,66 +763,85 @@ class InfoBoxWithButtons extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            title.toUpperCase(),
-            style: const TextStyle(
-              color: CustomColors.primaryWhite,
-              fontSize: 19.0,
-              fontFamily: 'OutfitBold',
+          AnimatedSlide(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubic,
+            offset: isLearnMoreMode ? const Offset(0, -0.1) : Offset.zero,
+            child: Text(
+              title.toUpperCase(),
+              style: const TextStyle(
+                color: CustomColors.primaryWhite,
+                fontSize: 19.0,
+                fontFamily: 'OutfitBold',
+              ),
             ),
           ),
           const SizedBox(height: 20.0),
-          Text(
-            description,
-            style: const TextStyle(
-              color: CustomColors.primaryWhite,
-              fontSize: 13.0,
-              fontFamily: 'OutfitRegular',
+          AnimatedSlide(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubic,
+            offset: isLearnMoreMode ? const Offset(0, -0.1) : Offset.zero,
+            child: Text(
+              description,
+              maxLines: 4,
+              style: const TextStyle(
+                color: CustomColors.primaryWhite,
+                fontSize: 13.0,
+                fontFamily: 'OutfitRegular',
+              ),
             ),
           ),
-          if (showLearnMore) ...[
+          if (!isLearnMoreMode) ...[
             const SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: onUseStyle,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.primaryCream,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+            FadeTransition(
+              opacity: buttonsAnimation ?? const AlwaysStoppedAnimation(1.0),
+              child: SlideTransition(
+                position: reverseSlideAnimation ??
+                    const AlwaysStoppedAnimation(Offset.zero),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: onUseStyle,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.primaryCream,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Use this style',
+                        style: TextStyle(
+                          color: CustomColors.secondaryBlack,
+                          fontFamily: 'OutfitSemiBold',
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Use this style',
-                    style: TextStyle(
-                      color: CustomColors.secondaryBlack,
-                      fontFamily: 'OutfitSemiBold',
+                    ElevatedButton(
+                      onPressed: onLearnMore,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.secondaryBlack,
+                        foregroundColor: CustomColors.primaryCream,
+                        side:
+                            const BorderSide(color: CustomColors.primaryCream),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Learn more',
+                        style: TextStyle(
+                          color: CustomColors.primaryCream,
+                          fontFamily: 'OutfitSemiBold',
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: onLearnMore,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.secondaryBlack,
-                    foregroundColor: CustomColors.primaryCream,
-                    side: const BorderSide(color: CustomColors.primaryCream),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Learn more',
-                    style: TextStyle(
-                      color: CustomColors.primaryCream,
-                      fontFamily: 'OutfitSemiBold',
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ]
+          ],
         ],
       ),
     );
@@ -860,11 +970,14 @@ class ThemeCarouselV2 extends StatefulWidget {
 class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
   late final PageController _controller;
   int _currentPage = 0;
+  int? _previousPage;
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
+    _controller = PageController(
+      initialPage: widget.images.length * 500,
+    );
   }
 
   @override
@@ -882,23 +995,33 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
           PageView.builder(
             controller: _controller,
             scrollDirection: Axis.vertical,
-            itemCount: widget.images.length,
+            itemCount: null,
             onPageChanged: (index) {
-              setState(() => _currentPage = index);
+              setState(() {
+                _currentPage = index % widget.images.length;
+                if (_previousPage != null) {
+                  if (index > _previousPage!) {
+                    _currentPage = index % widget.images.length;
+                  } else {
+                    _currentPage = index % widget.images.length;
+                  }
+                }
+                _previousPage = index;
+              });
             },
             itemBuilder: (context, index) {
+              final imageIndex = index % widget.images.length;
               return AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {
                   double offset = 0.0;
                   if (_controller.position.haveDimensions) {
-                    offset = _controller.page! - index;
+                    offset = (_controller.page! - index).abs();
                   }
 
-                  offset = offset.clamp(-1.0, 1.0);
-
-                  final scale = 1 - (offset.abs() * 0.3);
-                  final opacity = 1 - (offset.abs() * 0.5);
+                  offset = offset.clamp(0.0, 1.0);
+                  final scale = 1 - (offset * 0.3);
+                  final opacity = 1 - (offset * 0.5);
 
                   return Opacity(
                     opacity: opacity,
@@ -908,7 +1031,7 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
                     ),
                   );
                 },
-                child: _buildLayeredImage(widget.images[index]),
+                child: _buildLayeredImage(widget.images[imageIndex]),
               );
             },
           ),
@@ -954,7 +1077,7 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
           children: [
             ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2),
+                Colors.black.withValues(alpha: 0.2),
                 BlendMode.darken,
               ),
               child: FadeInImage.assetNetwork(
@@ -973,7 +1096,7 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
                     end: Alignment.centerRight,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withOpacity(0.8),
+                      Colors.black.withValues(alpha: 0.8),
                     ],
                     stops: const [0.8, 1.0],
                   ),
@@ -989,9 +1112,9 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
                     colors: [
                       Colors.transparent,
                       Colors.transparent,
-                      Colors.black.withOpacity(0.9),
+                      Colors.black.withValues(alpha: 0.9),
                     ],
-                    stops: const [0.0, 0.6, 1.0],
+                    stops: const [0.0, 0.5, 1.0],
                   ),
                 ),
               ),
@@ -1002,108 +1125,3 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
     );
   }
 }
-
-// class CardSwiperCarousel extends StatefulWidget {
-//   final List<String> images;
-//   const CardSwiperCarousel({super.key, required this.images});
-
-//   @override
-//   State<CardSwiperCarousel> createState() => _CardSwiperCarouselState();
-// }
-
-// class _CardSwiperCarouselState extends State<CardSwiperCarousel> {
-//   final SwiperController _controller = SwiperController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 355.0,
-//       child: Swiper(
-//         allowImplicitScrolling: true,
-//         itemCount: widget.images.length,
-//         controller: _controller,
-//         axisDirection: AxisDirection.up,
-//         viewportFraction: 0.6,
-//         scale: 0.8,
-//         itemHeight: 355.0,
-//         itemWidth: MediaQuery.of(context).size.width,
-//         scrollDirection: Axis.vertical,
-//         itemBuilder: (context, index) {
-//           return _buildLayeredImage(widget.images[index]);
-//         },
-//         layout: SwiperLayout.STACK,
-//         pagination: SwiperPagination(
-//           alignment: Alignment.centerRight,
-//           margin: const EdgeInsets.only(right: 10),
-//           builder: DotSwiperPaginationBuilder(
-//             color: CustomColors.primaryCream.withOpacity(0.5),
-//             activeColor: CustomColors.primaryCream,
-//             size: 8.0,
-//             activeSize: 8.0,
-//             space: 4.0,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildLayeredImage(String imageUrl) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(18),
-//       ),
-//       child: ClipRRect(
-//         borderRadius: BorderRadius.circular(18),
-//         child: Stack(
-//           fit: StackFit.expand,
-//           children: [
-//             ColorFiltered(
-//               colorFilter: ColorFilter.mode(
-//                 Colors.black.withOpacity(0.2),
-//                 BlendMode.darken,
-//               ),
-//               child: FadeInImage.assetNetwork(
-//                 placeholder: 'images/sampleLogo.png',
-//                 image: '$baseUrl$imageUrl',
-//                 fit: BoxFit.cover,
-//                 width: double.infinity,
-//                 height: double.infinity,
-//               ),
-//             ),
-//             Positioned.fill(
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   gradient: LinearGradient(
-//                     begin: Alignment.centerLeft,
-//                     end: Alignment.centerRight,
-//                     colors: [
-//                       Colors.transparent,
-//                       Colors.black.withOpacity(0.8),
-//                     ],
-//                     stops: const [0.8, 1.0],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Positioned.fill(
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   gradient: LinearGradient(
-//                     begin: const Alignment(-0.5, -0.5),
-//                     end: const Alignment(1.0, 1.0),
-//                     colors: [
-//                       Colors.transparent,
-//                       Colors.transparent,
-//                       Colors.black.withOpacity(0.9),
-//                     ],
-//                     stops: const [0.0, 0.6, 1.0],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

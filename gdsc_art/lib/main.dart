@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Outfit',
         ),
-        initialRoute: isLoggedIn ? '/home' : '/welcome',
+        home: SplashScreen(isLoggedIn: isLoggedIn),
         routes: {
           '/auth': (context) => const AuthPage(),
           '/home': (context) => const Home(),

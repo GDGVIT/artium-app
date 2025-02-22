@@ -111,7 +111,7 @@ class _AccountState extends State<Account> {
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -189,6 +189,7 @@ class _AccountState extends State<Account> {
                                 .then((success) {
                               if (success) {
                                 commonToast('Art submitted for review!');
+                                if (!context.mounted) return;
                                 Provider.of<UserDataProvider>(context,
                                         listen: false)
                                     .fetchArts(refresh: true);
@@ -202,6 +203,7 @@ class _AccountState extends State<Account> {
                                 .then((success) {
                               if (success) {
                                 commonToast('Art Deleted Successfully');
+                                if (!context.mounted) return;
                                 Provider.of<UserDataProvider>(context,
                                         listen: false)
                                     .fetchArts(refresh: true);
@@ -510,7 +512,7 @@ class _AccountState extends State<Account> {
                   provider.userEmail ?? 'guest@gmail.com',
                   style: TextStyle(
                     fontSize: 13.0,
-                    color: CustomColors.primaryCream.withOpacity(.5),
+                    color: CustomColors.primaryCream.withValues(alpha: 0.5),
                     fontFamily: 'OutfitRegular',
                   ),
                 ),

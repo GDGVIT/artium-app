@@ -75,14 +75,12 @@ class _GalleryState extends State<Gallery> {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            Positioned(
-              top: height * 0.125,
-              right: 0,
+            Align(
+              alignment: Alignment(1, -0.9),
               child: Image.asset('images/general_right.png'),
             ),
-            Positioned(
-              left: 0,
-              bottom: height * 0.125,
+            Align(
+              alignment: Alignment(-1, .91),
               child: Image.asset('images/general_left.png'),
             ),
             RefreshIndicator(
