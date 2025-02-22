@@ -568,6 +568,8 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                         fontSize: 19.0,
                         fontFamily: 'OutfitMedium',
                       ),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorWeight: 3,
                       tabs: const [
                         Tab(text: 'Saved'),
                         Tab(text: 'Published'),
