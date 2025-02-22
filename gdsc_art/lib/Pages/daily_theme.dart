@@ -1,5 +1,4 @@
 // import 'package:card_swiper/card_swiper.dart';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:artium/Constants/base_url.dart';

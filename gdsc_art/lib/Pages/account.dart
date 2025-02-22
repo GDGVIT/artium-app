@@ -601,37 +601,16 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                         AnimatedBuilder(
                           animation: _expandController,
                           builder: (context, child) {
+                            final screenSize = MediaQuery.of(context).size;
                             final width =
                                 _originalRect.width * _scaleAnimation.value;
                             final scaledOffset = _slideAnimation.value;
 
-                            if (selectedIndex! % 2 != 0) {
-                              return Positioned(
-                                left: _originalRect.left +
-                                    (_originalRect.width * scaledOffset.dx) /
-                                        ((selectedIndex! % 2 != 0) ? .5 : 1),
-                                top: _originalRect.top +
-                                    (_originalRect.height * scaledOffset.dy),
-                                width: width,
-                                child: FadeTransition(
-                                  opacity: _fadeAnimation,
-                                  child: Transform(
-                                    transform: Matrix4.identity()
-                                      ..setEntry(3, 2, 0.001)
-                                      ..rotateX(_rotationAnimation.value),
-                                    alignment: Alignment.topCenter,
-                                    child: _buildExpandedContainer(
-                                      context,
-                                      provider.arts[selectedIndex!],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
+                            final targetCenterX =
+                                (screenSize.width - width) / 2;
+
                             return Positioned(
-                              left: _originalRect.left +
-                                  (_originalRect.width * scaledOffset.dx) /
-                                      ((selectedIndex! % 2 == 0) ? 24 : 1),
+                              left: targetCenterX,
                               top: _originalRect.top +
                                   (_originalRect.height * scaledOffset.dy),
                               width: width,

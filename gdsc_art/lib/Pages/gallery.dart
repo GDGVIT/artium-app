@@ -1,9 +1,7 @@
 import 'dart:math';
 import 'dart:async';
 
-import 'package:artium/Constants/base_url.dart';
 import 'package:artium/Model/gallery_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:artium/Constants/colors.dart';
@@ -541,41 +539,15 @@ class _GalleryState extends State<Gallery> with TickerProviderStateMixin {
                             AnimatedBuilder(
                               animation: _expandController,
                               builder: (context, child) {
+                                final screenSize = MediaQuery.of(context).size;
                                 final width =
                                     _originalRect.width * _scaleAnimation.value;
                                 final scaledOffset = _slideAnimation.value;
+                                final targetCenterX =
+                                    (screenSize.width - width) / 2;
 
-                                if (selectedIndex! % 2 != 0) {
-                                  return Positioned(
-                                    left: _originalRect.left +
-                                        (_originalRect.width *
-                                                scaledOffset.dx) /
-                                            ((selectedIndex! % 2 != 0)
-                                                ? .5
-                                                : 1),
-                                    top: _originalRect.top +
-                                        (_originalRect.height *
-                                            scaledOffset.dy),
-                                    width: width,
-                                    child: FadeTransition(
-                                      opacity: _fadeAnimation,
-                                      child: Transform(
-                                        transform: Matrix4.identity()
-                                          ..setEntry(3, 2, 0.001)
-                                          ..rotateX(_rotationAnimation.value),
-                                        alignment: Alignment.topCenter,
-                                        child: _buildExpandedContainer(
-                                          context,
-                                          provider.arts[selectedIndex!],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
                                 return Positioned(
-                                  left: _originalRect.left +
-                                      (_originalRect.width * scaledOffset.dx) /
-                                          ((selectedIndex! % 2 == 0) ? 24 : 1),
+                                  left: targetCenterX,
                                   top: _originalRect.top +
                                       (_originalRect.height * scaledOffset.dy),
                                   width: width,
