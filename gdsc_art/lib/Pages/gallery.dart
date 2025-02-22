@@ -168,7 +168,7 @@ class _GalleryState extends State<Gallery> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    // final height = MediaQuery.of(context).size.height;
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -265,22 +265,22 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
-  Widget _buildShimmerGrid() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: MasonryGridView.count(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: 10,
-        itemBuilder: (context, index) => ShimmerGalleryItem(
-          aspectRatio: index.isEven
-              ? 0.8 + (index % 3) * 0.1 + (index % 3) * 0.1
-              : 1.2 + (index % 3) * 0.1 + (index % 3) * 0.1,
-        ),
-      ),
-    );
-  }
+  // Widget _buildShimmerGrid() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(16.0),
+  //     child: MasonryGridView.count(
+  //       crossAxisCount: 2,
+  //       mainAxisSpacing: 10,
+  //       crossAxisSpacing: 10,
+  //       shrinkWrap: true,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       itemCount: 10,
+  //       itemBuilder: (context, index) => ShimmerGalleryItem(
+  //         aspectRatio: index.isEven
+  //             ? 0.8 + (index % 3) * 0.1 + (index % 3) * 0.1
+  //             : 1.2 + (index % 3) * 0.1 + (index % 3) * 0.1,
+  //       ),
+  //     ),
+  //   );
+  // }
 }

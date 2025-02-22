@@ -218,7 +218,7 @@ class _AccountState extends State<Account> {
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: .2),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -661,7 +661,7 @@ class _AccountState extends State<Account> {
                   provider.userEmail ?? 'guest@gmail.com',
                   style: TextStyle(
                     fontSize: 13.0,
-                    color: CustomColors.primaryCream.withOpacity(0.5),
+                    color: CustomColors.primaryCream.withValues(alpha: .5),
                     fontFamily: 'OutfitRegular',
                   ),
                 ),
@@ -734,18 +734,18 @@ class _AccountState extends State<Account> {
     );
   }
 
-  Widget _buildShimmerGrid() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: MasonryGridView.count(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        itemCount: 6,
-        itemBuilder: (context, index) => ShimmerGalleryItem(
-          aspectRatio: index.isEven ? 0.8 : 1.2,
-        ),
-      ),
-    );
-  }
+  // Widget _buildShimmerGrid() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(16.0),
+  //     child: MasonryGridView.count(
+  //       crossAxisCount: 2,
+  //       mainAxisSpacing: 10,
+  //       crossAxisSpacing: 10,
+  //       itemCount: 6,
+  //       itemBuilder: (context, index) => ShimmerGalleryItem(
+  //         aspectRatio: index.isEven ? 0.8 : 1.2,
+  //       ),
+  //     ),
+  //   );
+  // }
 }

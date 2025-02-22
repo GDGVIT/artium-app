@@ -1,6 +1,3 @@
-// import 'package:card_swiper/card_swiper.dart';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:artium/Constants/base_url.dart';
 import 'package:provider/provider.dart';
@@ -1113,7 +1110,7 @@ class _ThemeCarouselV2State extends State<ThemeCarouselV2> {
                       shape: BoxShape.circle,
                       color: _currentPage == index
                           ? CustomColors.primaryCream
-                          : CustomColors.primaryCream.withOpacity(0.5),
+                          : CustomColors.primaryCream.withValues(alpha: .5),
                     ),
                   ),
                 ),
