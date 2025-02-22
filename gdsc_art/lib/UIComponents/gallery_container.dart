@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:artium/Constants/colors.dart';
 import 'package:artium/UIComponents/dynamic_aspect_ratio_image.dart';
@@ -80,7 +78,9 @@ class GalleryContainer extends StatelessWidget {
                                 color: CustomColors.primaryCream,
                                 size: 20,
                               ),
-                              borderRadius: BorderRadius.circular(32),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
                               onSelected: (value) {
                                 if (value == 'publish' && onPublish != null) {
                                   onPublish!();
@@ -105,7 +105,9 @@ class GalleryContainer extends StatelessWidget {
                                         const Text(
                                           'Publish',
                                           style: TextStyle(
-                                              color: CustomColors.primaryCream),
+                                            color: CustomColors.primaryCream,
+                                            fontFamily: 'OutfitSemiBold',
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -124,7 +126,9 @@ class GalleryContainer extends StatelessWidget {
                                       const Text(
                                         'Delete',
                                         style: TextStyle(
-                                            color: CustomColors.primaryCream),
+                                          color: CustomColors.primaryCream,
+                                          fontFamily: 'OutfitSemiBold',
+                                        ),
                                       ),
                                     ],
                                   ),
