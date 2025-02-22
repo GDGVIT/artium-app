@@ -359,7 +359,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
     return Container(
       margin: EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: Color(0xff141414),
+        color: Color(0xff363336),
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -540,16 +540,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
     return Consumer<UserDataProvider>(
       builder: (context, provider, _) {
         return Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF0D0C0D),
-                Color(0xFF1A181A),
-              ],
-            ),
-          ),
+          decoration: const BoxDecoration(color: Color(0xff0D0B0A)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
@@ -563,7 +554,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                       controller: _tabController,
                       indicatorColor: CustomColors.primaryCream,
                       labelColor: CustomColors.primaryCream,
-                      unselectedLabelColor: Colors.grey,
+                      unselectedLabelColor: Colors.white,
                       labelStyle: const TextStyle(
                         fontSize: 19.0,
                         fontFamily: 'OutfitMedium',

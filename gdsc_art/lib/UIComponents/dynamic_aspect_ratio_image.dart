@@ -70,9 +70,7 @@ class _DynamicAspectRatioImageState extends State<DynamicAspectRatioImage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: (widget.isGallery)
-          ? EdgeInsets.only(top: 8, left: 8, right: 8)
-          : EdgeInsets.zero,
+      padding: EdgeInsets.only(top: 8, left: 8, right: 8),
       child: AspectRatio(
         aspectRatio: _aspectRatio ?? widget.defaultAspectRatio,
         child: _isLoading

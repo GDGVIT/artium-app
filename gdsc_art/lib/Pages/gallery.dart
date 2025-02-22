@@ -399,6 +399,55 @@ class _GalleryState extends State<Gallery> with TickerProviderStateMixin {
                       fontSize: 18,
                     ),
                   ),
+                  const SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0, bottom: 8),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 12.0,
+                          backgroundColor: CustomColors.primaryWhite,
+                          child: Text(
+                            art.artist.name[0].toUpperCase(),
+                            style: const TextStyle(
+                              color: CustomColors.primaryBlack,
+                              fontFamily: "OutfitBold",
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            art.artist.name,
+                            style: const TextStyle(
+                              color: CustomColors.primaryWhite,
+                              fontFamily: "OutfitMedium",
+                              fontSize: 14,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${art.likes}',
+                              style: const TextStyle(
+                                color: CustomColors.primaryWhite,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

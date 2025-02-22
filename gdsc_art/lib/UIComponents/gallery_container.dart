@@ -32,7 +32,7 @@ class GalleryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomColors.tertiaryBlack,
+        color: Color(0xff363336),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Stack(
@@ -50,6 +50,7 @@ class GalleryContainer extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(!isAccountPage ? 8.0 : 0),
+                  color: Color(0xff363336),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
