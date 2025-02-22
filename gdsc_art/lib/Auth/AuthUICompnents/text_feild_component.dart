@@ -24,7 +24,7 @@ class TextFieldComponent extends StatelessWidget {
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: TextStyle(color: Colors.grey[600]),
+          labelStyle: TextStyle(color: CustomColors.primaryCream),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: CustomColors.primaryBrown),
             borderRadius: BorderRadius.circular(10),

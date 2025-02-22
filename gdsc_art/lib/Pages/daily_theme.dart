@@ -232,208 +232,269 @@ class _DailyThemeState extends State<DailyTheme>
                             Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(32),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(32),
+                                  topRight: Radius.circular(32),
+                                ),
                                 gradient: LinearGradient(
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
-                                  stops: [
-                                    0.0,
-                                    1.0,
-                                  ],
-                                  colors: [
+                                  stops: const [0.0, 1.0],
+                                  colors: const [
                                     CustomColors.primaryBrown,
                                     CustomColors.secondaryCream
                                   ],
                                 ),
                               ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    top: 0,
-                                    left: 6,
-                                    child: Image.asset('images/swirl1.png'),
-                                  ),
-                                  Positioned(
-                                    top: 67,
-                                    right: 0,
-                                    child: Image.asset('images/swirl2.png'),
-                                  ),
-                                  Positioned(
-                                    left: 0,
-                                    top: 396,
-                                    child: Image.asset('images/swirl3.png'),
-                                  ),
-                                  Positioned(
-                                    right: 0,
-                                    top: 823,
-                                    child: Image.asset('images/swirl4.png'),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 24.0),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                'historic pieces of\n${theme.history[0].artist.name}'
-                                                    .toUpperCase(),
-                                                style: const TextStyle(
-                                                  color: Color(0xff161516),
-                                                  fontFamily: "OutfitSemiBold",
-                                                  fontSize: 24,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.25),
-                                                child: const Divider(
-                                                  color: Color(0xff161516),
-                                                ),
-                                              )
-                                            ],
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final height = constraints.maxHeight;
+                                  return Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Positioned(
+                                        top: height * 0.01,
+                                        left: 0,
+                                        child: SizedBox(
+                                          height: height * 0.15,
+                                          child: Image.asset(
+                                            'images/swirl1.png',
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
-                                        for (var history in theme.history) ...[
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12.0),
-                                            child: Container(
-                                              padding: const EdgeInsets.all(32),
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    CustomColors.secondaryBlack,
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                              ),
+                                      ),
+                                      Positioned(
+                                        top: height * 0.15,
+                                        right: 0,
+                                        child: SizedBox(
+                                          height: height * 0.15,
+                                          child: Image.asset(
+                                            'images/swirl2.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 0,
+                                        top: height * 0.45,
+                                        child: SizedBox(
+                                          height: height * 0.15,
+                                          child: Image.asset(
+                                            'images/swirl3.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 0,
+                                        top: height * 0.75,
+                                        child: SizedBox(
+                                          height: height * 0.15,
+                                          child: Image.asset(
+                                            'images/swirl4.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 24.0),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18),
-                                                    child: FadeInImage
-                                                        .assetNetwork(
-                                                      placeholder:
-                                                          'images/sampleLogo.png',
-                                                      image:
-                                                          '$baseUrl${history.src}',
-                                                      height: 231,
-                                                      width: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                      imageErrorBuilder:
-                                                          (context, error,
-                                                                  stackTrace) =>
-                                                              Container(
-                                                        height: 231,
-                                                        width: double.infinity,
-                                                        color: Colors.grey[300],
-                                                        child: const Icon(
-                                                            Icons.error),
-                                                      ),
+                                                  Text(
+                                                    'historic pieces of\n${theme.history[0].artist.name}'
+                                                        .toUpperCase(),
+                                                    style: const TextStyle(
+                                                      color: Color(0xff161516),
+                                                      fontFamily:
+                                                          "OutfitSemiBold",
+                                                      fontSize: 24,
                                                     ),
+                                                    textAlign: TextAlign.center,
                                                   ),
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 16,
-                                                            bottom: 12.0),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          history.artist.name
-                                                              .toUpperCase(),
-                                                          style:
-                                                              const TextStyle(
-                                                            fontFamily:
-                                                                'OutfitRegular',
-                                                            color: CustomColors
-                                                                .primaryCream,
-                                                            fontSize: 16,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                            history
-                                                                .artist.period,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontFamily:
-                                                                  'OutfitRegular',
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 12,
-                                                            ))
-                                                      ],
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.25),
+                                                    child: const Divider(
+                                                      color: Color(0xff161516),
                                                     ),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: theme.workTitle,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: CustomColors
-                                                                .primaryCream,
-                                                            fontFamily:
-                                                                'OutfitMedium',
-                                                            fontSize: 16,
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                            decorationThickness:
-                                                                2,
-                                                          ),
-                                                        ),
-                                                        TextSpan(
-                                                          text:
-                                                              ', ${history.art.year}',
-                                                          style:
-                                                              const TextStyle(
-                                                            color: CustomColors
-                                                                .primaryCream,
-                                                            fontFamily:
-                                                                'OutfitLight',
-                                                            fontSize: 16,
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                            decorationThickness:
-                                                                2,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                                  )
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 16.0),
-                                        ]
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                            for (var history
+                                                in theme.history) ...[
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12.0),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(32),
+                                                  decoration: BoxDecoration(
+                                                    color: CustomColors
+                                                        .secondaryBlack,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(18),
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          placeholder:
+                                                              'images/sampleLogo.png',
+                                                          image:
+                                                              '$baseUrl${history.src}',
+                                                          height: 231,
+                                                          width:
+                                                              double.infinity,
+                                                          fit: BoxFit.cover,
+                                                          imageErrorBuilder:
+                                                              (context, error,
+                                                                      stackTrace) =>
+                                                                  Container(
+                                                            height: 231,
+                                                            width:
+                                                                double.infinity,
+                                                            color: Colors
+                                                                .grey[300],
+                                                            child: const Icon(
+                                                                Icons.error),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 16,
+                                                                bottom: 12.0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              history
+                                                                  .artist.name
+                                                                  .toUpperCase(),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    'OutfitRegular',
+                                                                color: CustomColors
+                                                                    .primaryCream,
+                                                                fontSize: 16,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                                history.artist
+                                                                    .period,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontFamily:
+                                                                      'OutfitRegular',
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 12,
+                                                                ))
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: [
+                                                            // TextSpan(
+                                                            //   text: theme
+                                                            //       .workTitle,
+                                                            //   style:
+                                                            //       const TextStyle(
+                                                            //     color: CustomColors
+                                                            //         .primaryCream,
+                                                            //     fontFamily:
+                                                            //         'OutfitMedium',
+                                                            //     fontSize: 16,
+                                                            //     fontStyle:
+                                                            //         FontStyle
+                                                            //             .italic,
+                                                            //     decoration:
+                                                            //         TextDecoration
+                                                            //             .underline,
+                                                            //     decorationThickness:
+                                                            //         2,
+                                                            //   ),
+                                                            // ),
+                                                            TextSpan(
+                                                              text: history
+                                                                  .art.year,
+                                                              style: TextStyle(
+                                                                shadows: [
+                                                                  Shadow(
+                                                                    color: CustomColors
+                                                                        .primaryCream,
+                                                                    offset:
+                                                                        Offset(
+                                                                            0,
+                                                                            -5),
+                                                                  )
+                                                                ],
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                                decorationColor:
+                                                                    CustomColors
+                                                                        .primaryCream,
+                                                                decorationThickness:
+                                                                    2,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .transparent,
+                                                                fontSize: 16,
+                                                                fontFamily:
+                                                                    'OutfitExtraLight',
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 16.0),
+                                            ]
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                         ],

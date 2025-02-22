@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,9 @@ abstract class BaseApiServices {
 }
 
 class NetworkApiServices extends BaseApiServices {
+  // Add timeout duration constant
+  static const Duration _timeout = Duration(seconds: 30);
+
   dynamic apiResponse(http.Response response) {
     dynamic responseJson;
     try {
@@ -45,9 +49,15 @@ class NetworkApiServices extends BaseApiServices {
         Uri.parse(url),
         body: jsonEncode(data),
         headers: {"Content-Type": "application/json"},
+      ).timeout(
+        _timeout,
+        onTimeout: () => throw TimeoutException('Request timed out'),
       );
       responseJson = apiResponse(response);
       log("Response received: $responseJson");
+    } on TimeoutException {
+      log("Request timed out");
+      throw Exception("Request timed out after ${_timeout.inSeconds} seconds");
     } catch (e) {
       log(e.toString());
       rethrow;
@@ -61,9 +71,15 @@ class NetworkApiServices extends BaseApiServices {
 
     try {
       log("Sending GET request to $url");
-      http.Response response = await http.get(Uri.parse(url));
+      http.Response response = await http.get(Uri.parse(url)).timeout(
+            _timeout,
+            onTimeout: () => throw TimeoutException('Request timed out'),
+          );
       responseJson = apiResponse(response);
       log("Response received: $responseJson");
+    } on TimeoutException {
+      log("Request timed out");
+      throw Exception("Request timed out after ${_timeout.inSeconds} seconds");
     } catch (e) {
       log(e.toString());
       rethrow;
@@ -84,9 +100,15 @@ class NetworkApiServices extends BaseApiServices {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
         },
+      ).timeout(
+        _timeout,
+        onTimeout: () => throw TimeoutException('Request timed out'),
       );
       responseJson = apiResponse(response);
       log("Response received: $responseJson");
+    } on TimeoutException {
+      log("Request timed out");
+      throw Exception("Request timed out after ${_timeout.inSeconds} seconds");
     } catch (e) {
       log(e.toString());
       rethrow;

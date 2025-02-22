@@ -35,14 +35,6 @@ class _AuthPageState extends State<AuthPage> {
           showLogin
               ? LoginPage(toggleView: toggleView)
               : SignupPage(toggleView: toggleView),
-          Positioned(
-            top: 40,
-            right: 10,
-            child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
-              onPressed: skipAuth,
-            ),
-          ),
         ],
       ),
     );

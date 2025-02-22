@@ -92,21 +92,25 @@ class _LoginPageState extends State<LoginPage> {
         TextFieldComponent(
           labelText: 'Password',
           controller: passwordController,
+          obscureText: true,
         ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: TextButton(
-            onPressed: () {
-              setState(() {
-                showForgotPassword = true;
-              });
-            },
-            child: const Text(
-              'Forgot Password?',
-              style: TextStyle(
-                color: CustomColors.primaryWhite,
-                fontFamily: "OutfitRegular",
-                fontSize: 14,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
+            child: TextButton(
+              onPressed: () {
+                setState(() {
+                  showForgotPassword = true;
+                });
+              },
+              child: const Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: CustomColors.primaryWhite,
+                  fontFamily: "OutfitRegular",
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -133,12 +137,15 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         const Align(
           alignment: Alignment.bottomLeft,
-          child: Text(
-            'Reset Password',
-            style: TextStyle(
-              color: CustomColors.secondaryBrown,
-              fontFamily: "OutfitMedium",
-              fontSize: 24,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            child: Text(
+              'Reset Password',
+              style: TextStyle(
+                color: CustomColors.secondaryBrown,
+                fontFamily: "OutfitMedium",
+                fontSize: 24,
+              ),
             ),
           ),
         ),
@@ -187,18 +194,21 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 20.0),
         Align(
           alignment: Alignment.centerLeft,
-          child: TextButton(
-            onPressed: () {
-              setState(() {
-                showForgotPassword = false;
-              });
-            },
-            child: const Text(
-              'Back to Login',
-              style: TextStyle(
-                color: CustomColors.primaryWhite,
-                fontFamily: "OutfitRegular",
-                fontSize: 14,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: TextButton(
+              onPressed: () {
+                setState(() {
+                  showForgotPassword = false;
+                });
+              },
+              child: const Text(
+                'Back to Login',
+                style: TextStyle(
+                  color: CustomColors.primaryWhite,
+                  fontFamily: "OutfitRegular",
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
