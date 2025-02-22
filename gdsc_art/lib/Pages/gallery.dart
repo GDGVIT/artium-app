@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -19,10 +20,20 @@ class _GalleryState extends State<Gallery> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
 
+  final List<String> _loadingTexts = [
+    'Loading gallery...',
+    'Fetching artwork...',
+    'Almost there...',
+    'Preparing your feed...',
+  ];
+  int _currentLoadingTextIndex = 0;
+  Timer? _loadingTimer;
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScrollUpdated);
+    _startLoadingAnimation();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<GalleryProvider>(context, listen: false).fetchArts();
     });
@@ -30,6 +41,7 @@ class _GalleryState extends State<Gallery> {
 
   @override
   void dispose() {
+    _loadingTimer?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
@@ -56,6 +68,104 @@ class _GalleryState extends State<Gallery> {
     }
   }
 
+  void _startLoadingAnimation() {
+    _loadingTimer?.cancel();
+    _loadingTimer = Timer.periodic(const Duration(milliseconds: 800), (timer) {
+      if (mounted) {
+        setState(() {
+          _currentLoadingTextIndex =
+              (_currentLoadingTextIndex + 1) % _loadingTexts.length;
+        });
+      }
+    });
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(
+            color: CustomColors.primaryCream,
+          ),
+          const SizedBox(height: 24),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 400),
+            child: Text(
+              _loadingTexts[_currentLoadingTextIndex],
+              key: ValueKey<int>(_currentLoadingTextIndex),
+              style: const TextStyle(
+                color: CustomColors.primaryCream,
+                fontSize: 16,
+                fontFamily: 'OutfitRegular',
+              ),
+            ),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.0, 0.5),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error_outline_rounded,
+            color: CustomColors.primaryCream,
+            size: 48,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            Provider.of<GalleryProvider>(context, listen: false).errorMessage ??
+                'Something went wrong',
+            style: const TextStyle(
+              color: CustomColors.primaryCream,
+              fontSize: 16,
+              fontFamily: 'OutfitRegular',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<GalleryProvider>(context, listen: false)
+                  .refreshGallery();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.primaryCream,
+              foregroundColor: CustomColors.primaryBlack,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              'Try Again',
+              style: TextStyle(
+                fontFamily: 'OutfitMedium',
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -75,28 +185,27 @@ class _GalleryState extends State<Gallery> {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            Positioned(
-              top: height * 0.125,
-              right: 0,
+            Align(
+              alignment: const Alignment(1, -0.9),
               child: Image.asset('images/general_right.png'),
             ),
-            Positioned(
-              left: 0,
-              bottom: height * 0.125,
+            Align(
+              alignment: const Alignment(-1, .91),
               child: Image.asset('images/general_left.png'),
             ),
-            RefreshIndicator(
-              onRefresh: () async {
-                await Provider.of<GalleryProvider>(context, listen: false)
-                    .refreshGallery();
-              },
-              child: Consumer<GalleryProvider>(
-                builder: (context, provider, _) {
-                  if (provider.isInitialLoading) {
-                    return _buildShimmerGrid();
-                  }
+            Consumer<GalleryProvider>(
+              builder: (context, provider, _) {
+                if (provider.isInitialLoading) {
+                  return _buildLoadingIndicator();
+                }
 
-                  return SingleChildScrollView(
+                if (provider.hasError) {
+                  return _buildErrorState();
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () => provider.refreshGallery(),
+                  child: SingleChildScrollView(
                     controller: _scrollController,
                     child: Column(
                       children: [
@@ -146,9 +255,9 @@ class _GalleryState extends State<Gallery> {
                           ),
                       ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),

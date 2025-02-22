@@ -6,10 +6,12 @@ import 'package:artium/UIComponents/shimmer_gallery_item.dart';
 class DynamicAspectRatioImage extends StatefulWidget {
   final String imageUrl;
   final double defaultAspectRatio;
+  final bool isGallery;
 
   const DynamicAspectRatioImage({
     super.key,
     required this.imageUrl,
+    required this.isGallery,
     this.defaultAspectRatio = 1.0,
   });
 
@@ -67,28 +69,33 @@ class _DynamicAspectRatioImageState extends State<DynamicAspectRatioImage> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: _aspectRatio ?? widget.defaultAspectRatio,
-      child: _isLoading
-          ? ShimmerGalleryItem(aspectRatio: widget.defaultAspectRatio)
-          : _hasError
-              ? Container(
-                  color: Colors.grey[900],
-                  child: const Center(
-                    child: Icon(
-                      Icons.error_outline,
-                      color: Colors.white,
-                      size: 40,
+    return Padding(
+      padding: (widget.isGallery)
+          ? EdgeInsets.only(top: 8, left: 8, right: 8)
+          : EdgeInsets.zero,
+      child: AspectRatio(
+        aspectRatio: _aspectRatio ?? widget.defaultAspectRatio,
+        child: _isLoading
+            ? ShimmerGalleryItem(aspectRatio: widget.defaultAspectRatio)
+            : _hasError
+                ? Container(
+                    color: Colors.grey[900],
+                    child: const Center(
+                      child: Icon(
+                        Icons.error_outline,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.network(
+                      widget.imageUrl,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                )
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: Image.network(
-                    widget.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      ),
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:artium/Providers/user_data_provider.dart';
 import 'package:artium/UIComponents/gallery_container.dart';
 import 'package:artium/UIComponents/shimmer_gallery_item.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -26,13 +27,23 @@ class _AccountState extends State<Account> {
   int? selectedIndex;
   bool isPressed = false;
 
+  final List<String> _loadingTexts = [
+    'Loading your profile...',
+    'Fetching your art...',
+    'Almost there...',
+    'Preparing your gallery...',
+  ];
+  int _currentLoadingTextIndex = 0;
+  Timer? _loadingTimer;
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScrollUpdated);
+    _startLoadingAnimation();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<UserDataProvider>(context, listen: false);
-      await provider.getUserData();
+      await provider.getUserData(context);
       if (provider.userId != null) {
         await provider.fetchArts();
       }
@@ -41,6 +52,7 @@ class _AccountState extends State<Account> {
 
   @override
   void dispose() {
+    _loadingTimer?.cancel();
     _scrollController.dispose();
     _pageController.dispose();
     super.dispose();
@@ -68,20 +80,115 @@ class _AccountState extends State<Account> {
     }
   }
 
+  void _startLoadingAnimation() {
+    _loadingTimer?.cancel();
+    _loadingTimer = Timer.periodic(const Duration(milliseconds: 800), (timer) {
+      if (mounted) {
+        setState(() {
+          _currentLoadingTextIndex =
+              (_currentLoadingTextIndex + 1) % _loadingTexts.length;
+        });
+      }
+    });
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(
+            color: CustomColors.primaryCream,
+          ),
+          const SizedBox(height: 24),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 400),
+            child: Text(
+              _loadingTexts[_currentLoadingTextIndex],
+              key: ValueKey<int>(_currentLoadingTextIndex),
+              style: const TextStyle(
+                color: CustomColors.primaryCream,
+                fontSize: 16,
+                fontFamily: 'OutfitRegular',
+              ),
+            ),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.0, 0.5),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(UserDataProvider provider) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error_outline_rounded,
+            color: CustomColors.primaryCream,
+            size: 48,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            provider.errorMessage ?? 'Something went wrong',
+            style: const TextStyle(
+              color: CustomColors.primaryCream,
+              fontSize: 16,
+              fontFamily: 'OutfitRegular',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () => provider.refreshGallery(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.primaryCream,
+              foregroundColor: CustomColors.primaryBlack,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              'Try Again',
+              style: TextStyle(
+                fontFamily: 'OutfitMedium',
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildIOSBackButton() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
-          color: CustomColors.primaryCream,
+          color: CustomColors.primaryWhite,
           width: 2.0,
         ),
       ),
+      padding: const EdgeInsets.only(left: 8.0),
       child: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios,
-          color: CustomColors.primaryCream,
-          size: 20,
+          color: CustomColors.primaryWhite,
+          size: 24,
         ),
         onPressed: _onRelease,
         splashColor: Colors.transparent,
@@ -111,7 +218,7 @@ class _AccountState extends State<Account> {
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withOpacity(0.2),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -374,7 +481,11 @@ class _AccountState extends State<Account> {
 
   Widget _buildArtsSection(UserDataProvider provider, bool isPublished) {
     if (provider.isInitialLoading) {
-      return _buildShimmerGrid();
+      return _buildLoadingIndicator();
+    }
+
+    if (provider.hasError) {
+      return _buildErrorState(provider);
     }
 
     final List<GalleryModel> filteredArts = isPublished
@@ -382,88 +493,126 @@ class _AccountState extends State<Account> {
         : provider.arts;
 
     return RefreshIndicator(
-      onRefresh: () => provider.fetchArts(refresh: true),
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              child: MasonryGridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                itemCount: filteredArts.length +
-                    (provider.hasMore
-                        ? min(provider.remainingItems, provider.limit)
-                        : 0),
-                itemBuilder: (context, index) {
-                  if (index >= filteredArts.length) {
-                    return ShimmerGalleryItem(
-                      aspectRatio: index.isEven ? 0.8 : 1.2,
-                    );
-                  }
-                  final art = filteredArts[index];
-                  return GestureDetector(
-                    onTap: () => _onPress(index),
-                    child: GalleryContainer(
-                      imageUrl: BaseUrl.baseUrl! + art.imageUrl,
-                      title: art.title,
-                      name: art.artist.name,
-                      likes: art.likes,
-                      aspectRatio: art.aspectRatio ?? 1.0,
-                      showReviewStatus: false,
-                      isReviewed: art.reviewed!,
-                      isAccountPage: true,
-                      onDelete: () async {
-                        final success = await provider.deleteUserArt(art.slug!);
-
-                        if (success) {
-                          commonToast('Art Deleted Succesfully');
-                          provider.fetchArts(refresh: true);
-                        }
-                      },
-                      onPublish: !art.reviewed!
-                          ? () async {
-                              final createArtProvider =
-                                  Provider.of<CreateArtProvider>(context,
-                                      listen: false);
-                              final success = await createArtProvider
-                                  .publishArt(context, artSlug: art.id);
-                              if (success) {
-                                commonToast('Art submitted for review!');
-                                provider.fetchArts(refresh: true);
-                              }
-                            }
-                          : null,
+      onRefresh: () => provider.refreshGallery(),
+      child: filteredArts.isEmpty
+          ? ListView(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          isPublished
+                              ? 'No published arts yet'
+                              : 'No saved arts yet',
+                          style: const TextStyle(
+                            color: CustomColors.primaryCream,
+                            fontSize: 16,
+                            fontFamily: 'OutfitRegular',
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () => provider.refreshGallery(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: CustomColors.primaryCream,
+                            foregroundColor: CustomColors.primaryBlack,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'Refresh',
+                            style: TextStyle(
+                              fontFamily: 'OutfitMedium',
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
-            if (!provider.hasMore && filteredArts.isNotEmpty)
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  "You've reached the end!",
-                  style: TextStyle(color: CustomColors.primaryWhite),
-                ),
-              ),
-            if (filteredArts.isEmpty)
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    isPublished ? 'No published arts yet' : 'No saved arts yet',
-                    style: const TextStyle(color: CustomColors.primaryCream),
                   ),
                 ),
-              ),
-          ],
-        ),
-      ),
+              ],
+            )
+          : ListView(
+              controller: _scrollController,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MasonryGridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    itemCount: filteredArts.length +
+                        (provider.hasMore
+                            ? min(provider.remainingItems, provider.limit)
+                            : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= filteredArts.length) {
+                        return ShimmerGalleryItem(
+                          aspectRatio: index.isEven ? 0.8 : 1.2,
+                        );
+                      }
+                      final art = filteredArts[index];
+                      return GestureDetector(
+                        onTap: () => _onPress(index),
+                        child: GalleryContainer(
+                          imageUrl: BaseUrl.baseUrl! + art.imageUrl,
+                          title: art.title,
+                          name: art.artist.name,
+                          likes: art.likes,
+                          aspectRatio: art.aspectRatio ?? 1.0,
+                          showReviewStatus: false,
+                          isReviewed: art.reviewed!,
+                          isAccountPage: true,
+                          onDelete: () async {
+                            final success =
+                                await provider.deleteUserArt(art.slug!);
+
+                            if (success) {
+                              commonToast('Art Deleted Succesfully');
+                              provider.fetchArts(refresh: true);
+                            }
+                          },
+                          onPublish: !art.reviewed!
+                              ? () async {
+                                  final createArtProvider =
+                                      Provider.of<CreateArtProvider>(context,
+                                          listen: false);
+                                  final success = await createArtProvider
+                                      .publishArt(context, artSlug: art.id);
+                                  if (success) {
+                                    commonToast('Art submitted for review!');
+                                    provider.fetchArts(refresh: true);
+                                  }
+                                }
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                if (!provider.hasMore && filteredArts.isNotEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(
+                      child: Text(
+                        "You've reached the end!",
+                        style: TextStyle(color: CustomColors.primaryWhite),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 
@@ -512,7 +661,7 @@ class _AccountState extends State<Account> {
                   provider.userEmail ?? 'guest@gmail.com',
                   style: TextStyle(
                     fontSize: 13.0,
-                    color: CustomColors.primaryCream.withValues(alpha: 0.5),
+                    color: CustomColors.primaryCream.withOpacity(0.5),
                     fontFamily: 'OutfitRegular',
                   ),
                 ),
@@ -578,9 +727,6 @@ class _AccountState extends State<Account> {
                   : Colors.grey,
               fontSize: 19.0,
               fontFamily: 'OutfitMedium',
-              decoration: currentPageIndex == index
-                  ? TextDecoration.underline
-                  : TextDecoration.none,
             ),
           ),
         ),

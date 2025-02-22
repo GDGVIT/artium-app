@@ -590,6 +590,7 @@ class _HomeContentState extends State<HomeContent> {
       child: ElevatedButton(
         onPressed: !isAuth
             ? () {
+                ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
@@ -606,6 +607,7 @@ class _HomeContentState extends State<HomeContent> {
               }
             : () {
                 if (showStatic) {
+                  ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(

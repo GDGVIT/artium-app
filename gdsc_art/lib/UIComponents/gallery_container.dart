@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:artium/Constants/colors.dart';
 import 'package:artium/UIComponents/dynamic_aspect_ratio_image.dart';
@@ -46,67 +48,30 @@ class GalleryContainer extends StatelessWidget {
                 DynamicAspectRatioImage(
                   imageUrl: imageUrl,
                   defaultAspectRatio: aspectRatio,
+                  isGallery: !isAccountPage,
                 ),
                 Container(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(!isAccountPage ? 8.0 : 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: CustomColors.primaryCream,
-                          fontFamily: "OutfitBold",
-                          fontSize: 11,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                      const SizedBox(height: 4.0),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircleAvatar(
-                            radius: 10.0,
-                            backgroundColor: CustomColors.primaryWhite,
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: isAccountPage ? 8.0 : 0),
                             child: Text(
-                              name[0].toUpperCase(),
+                              title,
                               style: const TextStyle(
-                                color: CustomColors.primaryBlack,
+                                color: CustomColors.primaryCream,
                                 fontFamily: "OutfitBold",
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: Text(
-                              name,
-                              style: const TextStyle(
-                                color: CustomColors.primaryWhite,
-                                fontFamily: "OutfitMedium",
-                                fontSize: 12,
+                                fontSize: 16,
                               ),
                               overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ),
-                          if (!isAccountPage)
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                  size: 12,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '$likes',
-                                  style: const TextStyle(
-                                    color: CustomColors.primaryWhite,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
                           if (isAccountPage)
                             PopupMenuButton<String>(
                               color: const Color(0xFF5B5B5B),
@@ -168,6 +133,54 @@ class GalleryContainer extends StatelessWidget {
                             ),
                         ],
                       ),
+                      const SizedBox(height: 4.0),
+                      if (!isAccountPage)
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 10.0,
+                              backgroundColor: CustomColors.primaryWhite,
+                              child: Text(
+                                name[0].toUpperCase(),
+                                style: const TextStyle(
+                                  color: CustomColors.primaryBlack,
+                                  fontFamily: "OutfitBold",
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Expanded(
+                              child: Text(
+                                name,
+                                style: const TextStyle(
+                                  color: CustomColors.primaryWhite,
+                                  fontFamily: "OutfitMedium",
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (!isAccountPage)
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                    size: 14,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '$likes',
+                                    style: const TextStyle(
+                                      color: CustomColors.primaryWhite,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
                     ],
                   ),
                 ),

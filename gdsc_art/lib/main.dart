@@ -1,4 +1,5 @@
-// import 'package:artium/Pages/splash.dart';
+import 'package:artium/Constants/Colors.dart';
+import 'package:artium/Pages/splash.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:artium/Auth/auth_view_page.dart';
@@ -52,10 +53,13 @@ class MyApp extends StatelessWidget {
         title: 'Art Gallery',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: CustomColors.primaryCream,
+            brightness: Brightness.dark,
+          ),
           fontFamily: 'Outfit',
         ),
-        initialRoute: isLoggedIn ? '/home' : '/welcome',
+        home: SplashScreen(isLoggedIn: isLoggedIn),
         routes: {
           '/auth': (context) => const AuthPage(),
           '/home': (context) => const Home(),

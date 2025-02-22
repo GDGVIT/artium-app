@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:artium/Providers/user_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:artium/Constants/base_url.dart';
 import 'package:artium/Model/gallery_model.dart';
 import 'package:artium/Repo/user.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String? baseUrl = BaseUrl.baseUrl;
@@ -37,20 +39,38 @@ class UserDataProvider extends ChangeNotifier {
   int get remainingItems => _totalCount - _arts.length;
   bool get isLoading => _isLoading;
 
-  Future<void> getUserData() async {
-    _isLoading = true;
-    _hasError = false;
-    _errorMessage = null;
-    notifyListeners();
+  Future<void> getUserData(BuildContext context) async {
+    if (_isLoading) return;
 
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      token = prefs.getString('token');
-      userId = prefs.getString('userId');
-      userName = prefs.getString('userName');
-      userEmail = prefs.getString('userEmail');
-      userImage = prefs.getString('userImage');
+      final newToken = prefs.getString('token');
+      final newUserId = prefs.getString('userId');
+      final newUserName = prefs.getString('userName');
+      final newUserEmail = prefs.getString('userEmail');
+      final newUserImage = prefs.getString('userImage');
+
+      token = newToken;
+      userId = newUserId;
+      userName = newUserName;
+      userEmail = newUserEmail;
+      userImage = newUserImage;
+
+      if (newUserId != null && context.mounted) {
+        final user = User(
+          id: newUserId,
+          name: newUserName ?? '',
+          email: newUserEmail ?? '',
+          image: newUserImage,
+        );
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (context.mounted) {
+            Provider.of<UserNotifier>(context, listen: false).setUser(user);
+          }
+        });
+      }
 
       _hasError = false;
       _errorMessage = null;
