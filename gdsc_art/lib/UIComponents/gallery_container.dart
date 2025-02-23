@@ -32,7 +32,7 @@ class GalleryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomColors.tertiaryBlack,
+        color: Color(0xff363336),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Stack(
@@ -50,24 +50,27 @@ class GalleryContainer extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(!isAccountPage ? 8.0 : 0),
+                  color: Color(0xff363336),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: isAccountPage ? 8.0 : 0),
-                            child: Text(
-                              title,
-                              style: const TextStyle(
-                                color: CustomColors.primaryCream,
-                                fontFamily: "OutfitBold",
-                                fontSize: 16,
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: isAccountPage ? 8.0 : 0),
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                  color: CustomColors.primaryCream,
+                                  fontFamily: "OutfitBold",
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
                           ),
                           if (isAccountPage)
@@ -75,10 +78,12 @@ class GalleryContainer extends StatelessWidget {
                               color: const Color(0xFF5B5B5B),
                               icon: const Icon(
                                 Icons.more_vert,
-                                color: CustomColors.primaryCream,
+                                color: CustomColors.primaryWhite,
                                 size: 20,
                               ),
-                              borderRadius: BorderRadius.circular(32),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
                               onSelected: (value) {
                                 if (value == 'publish' && onPublish != null) {
                                   onPublish!();
@@ -103,7 +108,9 @@ class GalleryContainer extends StatelessWidget {
                                         const Text(
                                           'Publish',
                                           style: TextStyle(
-                                              color: CustomColors.primaryCream),
+                                            color: CustomColors.primaryCream,
+                                            fontFamily: 'OutfitSemiBold',
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -122,7 +129,9 @@ class GalleryContainer extends StatelessWidget {
                                       const Text(
                                         'Delete',
                                         style: TextStyle(
-                                            color: CustomColors.primaryCream),
+                                          color: CustomColors.primaryCream,
+                                          fontFamily: 'OutfitSemiBold',
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -131,8 +140,8 @@ class GalleryContainer extends StatelessWidget {
                             ),
                         ],
                       ),
-                      const SizedBox(height: 4.0),
-                      if (!isAccountPage)
+                      if (!isAccountPage) ...[
+                        const SizedBox(height: 4.0),
                         Row(
                           children: [
                             CircleAvatar(
@@ -154,7 +163,7 @@ class GalleryContainer extends StatelessWidget {
                                 style: const TextStyle(
                                   color: CustomColors.primaryWhite,
                                   fontFamily: "OutfitMedium",
-                                  fontSize: 14,
+                                  fontSize: 12,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -165,20 +174,21 @@ class GalleryContainer extends StatelessWidget {
                                   const Icon(
                                     Icons.favorite,
                                     color: Colors.red,
-                                    size: 14,
+                                    size: 12,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '$likes',
                                     style: const TextStyle(
                                       color: CustomColors.primaryWhite,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
                               ),
                           ],
                         ),
+                      ],
                     ],
                   ),
                 ),

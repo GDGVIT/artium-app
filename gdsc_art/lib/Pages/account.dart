@@ -19,7 +19,7 @@ class Account extends StatefulWidget {
   State<Account> createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountState extends State<Account> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final PageController _pageController = PageController();
   bool _isLoadingMore = false;
@@ -36,11 +36,92 @@ class _AccountState extends State<Account> {
   int _currentLoadingTextIndex = 0;
   Timer? _loadingTimer;
 
+  late AnimationController _expandController;
+  late Animation<double> _rotationAnimation;
+
+  late AnimationController _backgroundController;
+  late Animation<double> _backgroundOpacity;
+  late AnimationController _backButtonController;
+  late Animation<double> _backButtonOpacity;
+  late Animation<double> _backButtonSlide;
+
+  late Animation<double> _scaleAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Size _originalSize = Size.zero;
+  late Rect _originalRect = Rect.zero;
+
+  final Map<int, GlobalKey> _savedItemKeys = {};
+  final Map<int, GlobalKey> _publishedItemKeys = {};
+
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     _scrollController.addListener(_onScrollUpdated);
     _startLoadingAnimation();
+    _expandController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+    _rotationAnimation = Tween<double>(
+      begin: 0,
+      end: 0.03,
+    ).animate(CurvedAnimation(
+      parent: _expandController,
+      curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
+    ));
+    _backgroundController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _backgroundOpacity = Tween<double>(
+      begin: 0.0,
+      end: 0.85,
+    ).animate(CurvedAnimation(
+      parent: _backgroundController,
+      curve: Curves.easeOut,
+    ));
+
+    _backButtonController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    _backButtonOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _backButtonController,
+      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+    ));
+
+    _backButtonSlide = Tween<double>(
+      begin: -20.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _backButtonController,
+      curve: const Interval(0.2, 1.0, curve: Curves.easeOut),
+    ));
+
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeOut,
+    ));
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<UserDataProvider>(context, listen: false);
       await provider.getUserData(context);
@@ -52,9 +133,16 @@ class _AccountState extends State<Account> {
 
   @override
   void dispose() {
+    _tabController.dispose();
     _loadingTimer?.cancel();
     _scrollController.dispose();
     _pageController.dispose();
+    _expandController.dispose();
+    _backgroundController.dispose();
+    _backButtonController.dispose();
+    _fadeController.dispose();
+    _savedItemKeys.clear();
+    _publishedItemKeys.clear();
     super.dispose();
   }
 
@@ -175,46 +263,103 @@ class _AccountState extends State<Account> {
   }
 
   Widget _buildIOSBackButton() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: CustomColors.primaryWhite,
-          width: 2.0,
-        ),
-      ),
-      padding: const EdgeInsets.only(left: 8.0),
-      child: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: CustomColors.primaryWhite,
-          size: 24,
-        ),
-        onPressed: _onRelease,
-        splashColor: Colors.transparent,
-      ),
+    return AnimatedBuilder(
+      animation: _backButtonController,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(_backButtonSlide.value, 0),
+          child: Opacity(
+            opacity: _backButtonOpacity.value,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(
+                  color: CustomColors.primaryWhite
+                      .withValues(alpha: _backButtonOpacity.value),
+                  width: 2.0,
+                ),
+              ),
+              padding: const EdgeInsets.only(left: 8.0),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: CustomColors.primaryWhite,
+                  size: 24,
+                ),
+                onPressed: _onRelease,
+                splashColor: Colors.transparent,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
-  void _onPress(int index) {
+  void _onPress(int index, BuildContext context, RenderBox box) {
+    final RenderBox itemRenderBox = box;
+    _originalSize = itemRenderBox.size;
+    final position = itemRenderBox.localToGlobal(Offset.zero);
+    _originalRect = position & _originalSize;
+
+    final screenSize = MediaQuery.of(context).size;
+    final targetWidth = screenSize.width * 0.9;
+    final scale = targetWidth / _originalSize.width;
+
+    final targetTop = screenSize.height * 0.15;
+
+    final currentCenterX = position.dx + (_originalSize.width / 2);
+    final targetCenterX = screenSize.width / 2;
+    final horizontalOffset =
+        (targetCenterX - currentCenterX) / _originalSize.width;
+
+    _slideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(
+        horizontalOffset,
+        (targetTop - position.dy) / _originalSize.height,
+      ),
+    ).animate(CurvedAnimation(
+      parent: _expandController,
+      curve: Curves.easeOutCubic,
+    ));
+
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: scale,
+    ).animate(CurvedAnimation(
+      parent: _expandController,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
+    ));
+
     setState(() {
       isPressed = true;
       selectedIndex = index;
     });
+    _expandController.forward();
+    _backgroundController.forward();
+    _backButtonController.forward();
+    _fadeController.forward();
   }
 
   void _onRelease() {
-    setState(() {
-      isPressed = false;
-      selectedIndex = null;
+    _fadeController.reverse();
+    _backgroundController.reverse();
+    _backButtonController.reverse();
+    _expandController.reverse().then((_) {
+      setState(() {
+        isPressed = false;
+        selectedIndex = null;
+      });
     });
   }
 
   Widget _buildExpandedContainer(BuildContext context, GalleryModel art) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      margin: EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: CustomColors.tertiaryBlack,
+        color: Color(0xff363336),
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -227,16 +372,24 @@ class _AccountState extends State<Account> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [
-                AspectRatio(
-                  aspectRatio: 1.0,
-                  child: Image.network(
-                    BaseUrl.baseUrl! + art.imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 16.0, left: 16, right: 16),
+                  child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Image.network(
+                        BaseUrl.baseUrl! + art.imageUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    ),
                   ),
                 ),
                 if (art.reviewed!)
@@ -263,7 +416,11 @@ class _AccountState extends State<Account> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 0.0,
+                bottom: 8,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -283,8 +440,11 @@ class _AccountState extends State<Account> {
                         color: const Color(0xFF5B5B5B),
                         icon: const Icon(
                           Icons.more_vert,
-                          color: CustomColors.primaryCream,
+                          color: CustomColors.primaryWhite,
                           size: 24,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         onSelected: (value) {
                           if (value == 'publish' && !art.reviewed!) {
@@ -335,7 +495,9 @@ class _AccountState extends State<Account> {
                                   const Text(
                                     'Publish',
                                     style: TextStyle(
-                                        color: CustomColors.primaryCream),
+                                      color: CustomColors.primaryCream,
+                                      fontFamily: 'OutfitSemiBold',
+                                    ),
                                   ),
                                 ],
                               ),
@@ -354,38 +516,13 @@ class _AccountState extends State<Account> {
                                 const Text(
                                   'Delete',
                                   style: TextStyle(
-                                      color: CustomColors.primaryCream),
+                                      color: CustomColors.primaryCream,
+                                      fontFamily: 'OutfitSemiBold'),
                                 ),
                               ],
                             ),
                           ),
                         ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 16,
-                        backgroundColor: CustomColors.primaryWhite,
-                        child: Text(
-                          art.artist.name[0].toUpperCase(),
-                          style: const TextStyle(
-                            color: CustomColors.primaryBlack,
-                            fontFamily: "OutfitBold",
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        art.artist.name,
-                        style: const TextStyle(
-                          color: CustomColors.primaryWhite,
-                          fontFamily: "OutfitMedium",
-                          fontSize: 16,
-                        ),
                       ),
                     ],
                   ),
@@ -403,16 +540,7 @@ class _AccountState extends State<Account> {
     return Consumer<UserDataProvider>(
       builder: (context, provider, _) {
         return Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF0D0C0D),
-                Color(0xFF1A181A),
-              ],
-            ),
-          ),
+          decoration: const BoxDecoration(color: Color(0xff0D0B0A)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
@@ -422,16 +550,25 @@ class _AccountState extends State<Account> {
                     const SizedBox(height: 5.0),
                     _buildUserDetails(provider),
                     const SizedBox(height: 10.0),
-                    _buildPageIndicators(),
-                    const SizedBox(height: 10.0),
+                    TabBar(
+                      controller: _tabController,
+                      indicatorColor: CustomColors.primaryCream,
+                      labelColor: CustomColors.primaryCream,
+                      unselectedLabelColor: Colors.white,
+                      labelStyle: const TextStyle(
+                        fontSize: 19.0,
+                        fontFamily: 'OutfitMedium',
+                      ),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorWeight: 3,
+                      tabs: const [
+                        Tab(text: 'Saved'),
+                        Tab(text: 'Published'),
+                      ],
+                    ),
                     Expanded(
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            currentPageIndex = index;
-                          });
-                        },
+                      child: TabBarView(
+                        controller: _tabController,
                         children: [
                           _buildArtsSection(provider, false),
                           _buildArtsSection(provider, true),
@@ -441,34 +578,63 @@ class _AccountState extends State<Account> {
                   ],
                 ),
                 if (isPressed)
-                  AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: 0.7,
-                    child: Container(
-                      color: Colors.black,
-                    ),
+                  AnimatedBuilder(
+                    animation: _backgroundController,
+                    builder: (context, child) {
+                      return Positioned.fill(
+                        child: GestureDetector(
+                          onTap: _onRelease,
+                          child: Container(
+                            color: Colors.black
+                                .withOpacity(_backgroundOpacity.value),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 if (selectedIndex != null)
                   Positioned(
-                    top: MediaQuery.of(context).size.height * 0,
-                    left: MediaQuery.of(context).size.width * 0,
+                    top: MediaQuery.of(context).size.height * 0.025,
+                    left: MediaQuery.of(context).size.width * 0.05,
                     child: _buildIOSBackButton(),
                   ),
                 if (selectedIndex != null)
-                  AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
-                    top: isPressed
-                        ? MediaQuery.of(context).size.height * 0.1
-                        : 0,
-                    left: isPressed
-                        ? MediaQuery.of(context).size.width * 0.05
-                        : 0,
-                    right: isPressed
-                        ? MediaQuery.of(context).size.width * 0.05
-                        : 0,
-                    child: _buildExpandedContainer(
-                      context,
-                      provider.arts[selectedIndex!],
+                  Positioned.fill(
+                    child: Stack(
+                      children: [
+                        AnimatedBuilder(
+                          animation: _expandController,
+                          builder: (context, child) {
+                            final screenSize = MediaQuery.of(context).size;
+                            final width =
+                                _originalRect.width * _scaleAnimation.value;
+                            final scaledOffset = _slideAnimation.value;
+
+                            final targetCenterX =
+                                (screenSize.width - width) / 2;
+
+                            return Positioned(
+                              left: targetCenterX,
+                              top: _originalRect.top +
+                                  (_originalRect.height * scaledOffset.dy),
+                              width: width,
+                              child: FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: Transform(
+                                  transform: Matrix4.identity()
+                                    ..setEntry(3, 2, 0.001)
+                                    ..rotateX(_rotationAnimation.value),
+                                  alignment: Alignment.topCenter,
+                                  child: _buildExpandedContainer(
+                                    context,
+                                    provider.arts[selectedIndex!],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
               ],
@@ -558,13 +724,29 @@ class _AccountState extends State<Account> {
                             : 0),
                     itemBuilder: (context, index) {
                       if (index >= filteredArts.length) {
+                        final isEven = index.isEven;
+                        final randomAspectRatio = isEven
+                            ? (0.8 + (index % 3) * 0.1)
+                            : (1.2 + (index % 3) * 0.1);
+
                         return ShimmerGalleryItem(
-                          aspectRatio: index.isEven ? 0.8 : 1.2,
+                          aspectRatio: randomAspectRatio,
                         );
                       }
+
                       final art = filteredArts[index];
                       return GestureDetector(
-                        onTap: () => _onPress(index),
+                        key: (isPublished
+                            ? (_publishedItemKeys[index] ??= GlobalKey())
+                            : (_savedItemKeys[index] ??= GlobalKey())),
+                        onTapUp: (details) {
+                          final RenderBox box = (isPublished
+                                  ? _publishedItemKeys[index]!
+                                  : _savedItemKeys[index]!)
+                              .currentContext!
+                              .findRenderObject() as RenderBox;
+                          _onPress(index, context, box);
+                        },
                         child: GalleryContainer(
                           imageUrl: BaseUrl.baseUrl! + art.imageUrl,
                           title: art.title,
@@ -672,80 +854,4 @@ class _AccountState extends State<Account> {
       ),
     );
   }
-
-  Widget _buildPageIndicators() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            _buildTabButton("Saved", 0),
-            _buildTabButton("Published", 1),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 2.0,
-                color: currentPageIndex == 0
-                    ? CustomColors.primaryCream
-                    : Colors.transparent,
-              ),
-            ),
-            Expanded(
-              child: Container(
-                height: 2.0,
-                color: currentPageIndex == 1
-                    ? CustomColors.primaryCream
-                    : Colors.transparent,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTabButton(String title, int index) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          child: Text(
-            title,
-            style: TextStyle(
-              color: currentPageIndex == index
-                  ? CustomColors.primaryCream
-                  : Colors.grey,
-              fontSize: 19.0,
-              fontFamily: 'OutfitMedium',
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Widget _buildShimmerGrid() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(16.0),
-  //     child: MasonryGridView.count(
-  //       crossAxisCount: 2,
-  //       mainAxisSpacing: 10,
-  //       crossAxisSpacing: 10,
-  //       itemCount: 6,
-  //       itemBuilder: (context, index) => ShimmerGalleryItem(
-  //         aspectRatio: index.isEven ? 0.8 : 1.2,
-  //       ),
-  //     ),
-  //   );
-  // }
 }
