@@ -74,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
     });
   }
 
-  void _verifyOtp(BuildContext context) {
+  void _verifyOtp(BuildContext context) async {
     final otp =
         otpControllers.map((controller) => controller.text.trim()).join();
 
@@ -84,7 +84,17 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     final email = emailController.text.trim();
-    context.read<LoginAndSignupProvider>().verifyOtp(email, otp, context);
+    final success =
+        await context.read<LoginAndSignupProvider>().verifyOtp(email, otp);
+
+    if (success) {
+      commonToast('Signup successful');
+      setState(() {
+        showOtpSection = false;
+        showEmailPasswordSection = false;
+      });
+      widget.toggleView();
+    }
   }
 
   @override
@@ -362,16 +372,39 @@ class _SignupPageState extends State<SignupPage> {
   Widget _buildOtpSection() {
     return Column(
       children: [
-        const SizedBox(height: 20.0),
+        const SizedBox(height: 36.0),
         Center(
-          child: Text(
-            'An OTP has been sent to your email ${emailController.text}',
-            style: const TextStyle(
-              color: CustomColors.secondaryBrown,
-              fontFamily: "OutfitRegular",
-              fontSize: 16,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 36.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'An OTP has been sent to your email ',
+                style: TextStyle(
+                  color: CustomColors.primaryWhite,
+                  fontFamily: "OutfitRegular",
+                  fontSize: 16,
+                ),
+                children: [
+                  TextSpan(
+                    text: emailController.text,
+                    style: TextStyle(
+                      color: CustomColors.primaryCream,
+                      fontFamily: "OutfitRegular",
+                      fontSize: 16,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '.',
+                    style: TextStyle(
+                      color: CustomColors.primaryWhite,
+                      fontFamily: "OutfitRegular",
+                      fontSize: 16,
+                    ),
+                  )
+                ],
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
         ),
         const SizedBox(height: 30.0),

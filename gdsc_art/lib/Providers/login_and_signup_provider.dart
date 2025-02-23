@@ -123,7 +123,10 @@ class LoginAndSignupProvider with ChangeNotifier {
   }
 
   bool isLoadingOtp = false;
-  Future<bool> verifyOtp(String email, String otp, BuildContext context) async {
+  Future<bool> verifyOtp(
+    String email,
+    String otp,
+  ) async {
     isLoadingOtp = true;
     notifyListeners();
 
@@ -138,17 +141,23 @@ class LoginAndSignupProvider with ChangeNotifier {
           commonToast(responseData['message']);
           isLoadingOtp = false;
           notifyListeners();
-          if (!context.mounted) return false;
-          Navigator.pushReplacementNamed(context, '/auth');
           return true;
         } else {
-          throw Exception(responseData['message'] ?? 'Failed to verify OTP');
+          commonToast(responseData['message'] ?? 'Failed to verify OTP');
         }
       } else {
-        throw Exception('Failed to verify OTP');
+        isLoadingOtp = false;
+        final responseBody = jsonDecode(response.body);
+        if (responseBody['message'] != null) {
+          commonToast(responseBody['message']);
+        } else {
+          commonToast('Failed to verify OTP');
+        }
+        notifyListeners();
       }
+      return false;
     } catch (e) {
-      commonToast('Error during OTP verification: $e');
+      commonToast('Error during OTP verification: ${e.toString()}');
       isLoadingOtp = false;
       notifyListeners();
       return false;
@@ -165,16 +174,24 @@ class LoginAndSignupProvider with ChangeNotifier {
         url,
       );
 
+      log(response.body);
+      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        if (responseBody['success'] == true) {
+        if (responseBody['status'] == 'success') {
+          _isLoading = false;
           commonToast('OTP sent successfully');
           return true;
         } else {
           commonToast(responseBody['message']);
         }
       } else {
-        commonToast('Failed to send OTP');
+        final responseBody = jsonDecode(response.body);
+        if (responseBody['message'] != null) {
+          commonToast(responseBody['message']);
+        } else {
+          commonToast('Failed to send OTP');
+        }
       }
     } catch (e) {
       commonToast('An error occurred. Please try again.');

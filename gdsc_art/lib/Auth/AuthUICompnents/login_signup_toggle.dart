@@ -14,9 +14,9 @@ class ToggleSection extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: CustomColors.primaryBlack,
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: CustomColors.primaryBrown),
+        border: Border.all(color: CustomColors.primaryWhite),
       ),
       child: Row(
         children: [
@@ -28,9 +28,8 @@ class ToggleSection extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                  color: isLogin
-                      ? CustomColors.secondaryBrown
-                      : CustomColors.primaryBlack,
+                  color:
+                      isLogin ? CustomColors.primaryCream : Colors.transparent,
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(12),
                     bottomLeft: const Radius.circular(12),
@@ -59,9 +58,8 @@ class ToggleSection extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                  color: isLogin
-                      ? Colors.transparent
-                      : CustomColors.secondaryBrown,
+                  color:
+                      isLogin ? Colors.transparent : CustomColors.primaryCream,
                   borderRadius: BorderRadius.only(
                     topLeft: isLogin ? Radius.zero : const Radius.circular(12),
                     bottomLeft:

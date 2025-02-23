@@ -350,12 +350,14 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final email = emailController.text.trim();
-                        await provider.requestOtp(email);
+                        final success = await provider.requestOtp(email);
 
-                        setState(() {
-                          showOtpSection = true;
-                          showForgotPassword = false;
-                        });
+                        if (success) {
+                          setState(() {
+                            showOtpSection = true;
+                            showForgotPassword = false;
+                          });
+                        }
                       }
                     },
                   ),
@@ -391,16 +393,35 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 20.0),
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 36.0),
-            child: Text(
-              'A password reset code has been sent to ${emailController.text}. Enter it here to confirm your new password!',
-              style: const TextStyle(
-                color: CustomColors.primaryWhite,
-                fontFamily: "OutfitRegular",
-                fontSize: 16,
+            child: RichText(
+              text: TextSpan(
+                text: 'A password reset code has been sent to ',
+                style: TextStyle(
+                  color: CustomColors.primaryWhite,
+                  fontFamily: "OutfitRegular",
+                  fontSize: 16,
+                ),
+                children: [
+                  TextSpan(
+                    text: emailController.text,
+                    style: TextStyle(
+                      color: CustomColors.primaryCream,
+                      fontFamily: "OutfitRegular",
+                      fontSize: 16,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '. Enter it here to confirm your new password!',
+                    style: TextStyle(
+                      color: CustomColors.primaryWhite,
+                      fontFamily: "OutfitRegular",
+                      fontSize: 16,
+                    ),
+                  )
+                ],
               ),
               textAlign: TextAlign.center,
             ),
@@ -429,7 +450,7 @@ class _LoginPageState extends State<LoginPage> {
                   return;
                 }
 
-                final success = await provider.verifyOtp(email, otp, context);
+                final success = await provider.verifyOtp(email, otp);
                 if (success) {
                   setState(() {
                     showOtpSection = false;
@@ -449,24 +470,30 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         const SizedBox(height: 20.0),
         const Center(
-          child: Text(
-            'Password reset successful! Please log in with your new password.',
-            style: TextStyle(
-              color: CustomColors.secondaryBrown,
-              fontFamily: "OutfitRegular",
-              fontSize: 16,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 36.0),
+            child: Text(
+              'Your password has been reset!',
+              style: TextStyle(
+                color: CustomColors.primaryWhite,
+                fontFamily: "OutfitSemiBold",
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
         ),
         const SizedBox(height: 30.0),
-        AuthButton(
-          buttonText: 'Back to Login',
-          onPressed: () {
-            setState(() {
-              showSuccessMessage = false;
-            });
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 36.0),
+          child: AuthButton(
+            buttonText: 'Back to Login',
+            onPressed: () {
+              setState(() {
+                showSuccessMessage = false;
+              });
+            },
+          ),
         ),
       ],
     );
