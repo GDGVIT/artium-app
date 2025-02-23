@@ -12,10 +12,10 @@ class AuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
-      width: MediaQuery.of(context).size.width * 0.75,
+      width: MediaQuery.of(context).size.width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: CustomColors.secondaryBrown,
+          backgroundColor: CustomColors.primaryCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -23,7 +23,11 @@ class AuthButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           buttonText,
-          style: const TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(
+            color: Color(0xff232223),
+            fontSize: 16,
+            fontFamily: 'OutfitSemiBold',
+          ),
         ),
       ),
     );

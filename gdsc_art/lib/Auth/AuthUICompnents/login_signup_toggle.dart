@@ -12,7 +12,7 @@ class ToggleSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: CustomColors.primaryBlack,
         borderRadius: BorderRadius.circular(12.0),
@@ -43,8 +43,9 @@ class ToggleSection extends StatelessWidget {
                   'Login',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: isLogin ? Colors.black : Colors.white,
+                    color: isLogin ? Color(0xff232223) : Colors.white,
                     fontSize: 16,
+                    fontFamily: 'OutfitSemiBold',
                   ),
                 ),
               ),
@@ -59,7 +60,7 @@ class ToggleSection extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   color: isLogin
-                      ? CustomColors.primaryBlack
+                      ? Colors.transparent
                       : CustomColors.secondaryBrown,
                   borderRadius: BorderRadius.only(
                     topLeft: isLogin ? Radius.zero : const Radius.circular(12),
@@ -73,7 +74,8 @@ class ToggleSection extends StatelessWidget {
                   'Signup',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: isLogin ? Colors.white : Colors.black,
+                    color: isLogin ? Colors.white : Color(0xff232223),
+                    fontFamily: 'OutfitSemiBold',
                     fontSize: 16,
                   ),
                 ),
