@@ -586,7 +586,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
                           onTap: _onRelease,
                           child: Container(
                             color: Colors.black
-                                .withOpacity(_backgroundOpacity.value),
+                                .withValues(alpha: _backgroundOpacity.value),
                           ),
                         ),
                       );
