@@ -1,3 +1,4 @@
+import 'package:artium/Providers/user_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:artium/Constants/base_url.dart';
 import 'package:provider/provider.dart';
@@ -254,7 +255,10 @@ class Sidebar extends StatelessWidget {
             color: CustomColors.primaryCream,
           ),
         ),
-        onTap: () {
+        onTap: () async {
+          await Provider.of<UserDataProvider>(context, listen: false)
+              .clearUserData();
+          if (!context.mounted) return;
           Navigator.of(context).pop();
           _signOut(context, userNotifier);
         },
