@@ -39,6 +39,20 @@ class UserDataProvider extends ChangeNotifier {
   int get remainingItems => _totalCount - _arts.length;
   bool get isLoading => _isLoading;
 
+  Future<void> clearUserData() async {
+    token = null;
+    userId = null;
+    userName = null;
+    userEmail = null;
+    userImage = null;
+
+    _arts = [];
+    _currentPage = 1;
+    _hasMore = true;
+    _totalCount = 0;
+    notifyListeners();
+  }
+
   Future<void> getUserData(BuildContext context) async {
     if (_isLoading) return;
 

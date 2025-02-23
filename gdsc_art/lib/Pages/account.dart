@@ -58,6 +58,15 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
 
   late TabController _tabController;
 
+  void _resetState() {
+    _currentLoadingTextIndex = 0;
+    selectedIndex = null;
+    isPressed = false;
+    _savedItemKeys.clear();
+    _publishedItemKeys.clear();
+    _tabController.index = 0;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -124,6 +133,7 @@ class _AccountState extends State<Account> with TickerProviderStateMixin {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<UserDataProvider>(context, listen: false);
+      _resetState();
       await provider.getUserData(context);
       if (provider.userId != null) {
         await provider.fetchArts();
