@@ -27,7 +27,7 @@ class _StylizedImageState extends State<StylizedImage> {
   final TextEditingController themeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool saveSuccess = false;
-  bool _publishedClicked = false;
+  final _publishedClicked = false;
 
   void _handleSave() async {
     if (_formKey.currentState!.validate()) {

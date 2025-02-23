@@ -1,4 +1,4 @@
-package com.example.artium
+package com.dscvit.artium
 
 import io.flutter.embedding.android.FlutterActivity
 
