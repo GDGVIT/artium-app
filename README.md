@@ -7,10 +7,9 @@
 </p>
 	
 <p align="center">
-		<img width="400" src="https://github.com/GDGVIT/artium-app/blob/dev/gdsc_art/images/logo.svg" alt="Artium App"/>
+		<img width="400" src="https://imgur.com/9XcNObG.jpg" alt="Artium App"/>
+	
 </p>
----
-
 
 ## Features
 - [x] Landing Page/Carousel
